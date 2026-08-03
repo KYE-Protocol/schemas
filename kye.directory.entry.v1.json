@@ -1,0 +1,69 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/kye.directory.entry.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Directory Entry (v1)",
+  "description": "Public directory record for a KYE-registered entity. The minimum projection that lets a counterparty discover, classify, and verify another entity without leaking sensitive metadata. Indexed by Discovery; gated by Discoverability policy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kyeid", "class", "trust_domain", "certification_tier", "jurisdiction", "public", "indexed_at"],
+  "properties": {
+    "kyeid": {
+      "type": "string",
+      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_:-]+)*$",
+      "description": "Canonical KYEID of the entity."
+    },
+    "class": {
+      "type": "string",
+      "description": "Entity class label (e.g. 'agent', 'org', 'tool', 'model', 'role'). §0.30 graft (2026-06-08): 'agent' is a first-class canonical class with full principal identity, §52 authority binding, and §23 metering wiring — not a sub-variant of any other class."
+    },
+    "trust_domain": {
+      "type": "string",
+      "pattern": "^kye:td:[A-Za-z0-9._:-]+$",
+      "description": "KYEID of the trust domain that registered this entity."
+    },
+    "certification_tier": {
+      "type": "string",
+      "enum": ["none", "self_attested", "bronze", "silver", "gold", "platinum"],
+      "description": "Certification tier currently held by the entity. Determines downstream policy treatment."
+    },
+    "jurisdiction": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "ISO-3166 jurisdictions the entity is legally seated/registered in."
+    },
+    "public": {
+      "type": "boolean",
+      "description": "Whether the entry is publicly discoverable. False entries are only resolvable via authorised discovery."
+    },
+    "indexed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the directory last (re)indexed this entry."
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Optional human-friendly display name shown in directory UIs."
+    },
+    "endpoints": {
+      "type": "array",
+      "description": "Optional list of public endpoints (e.g. metadata, well-known) for the entity.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "url"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Endpoint kind label (e.g. 'well_known', 'metadata', 'api')."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Endpoint URL."
+          }
+        }
+      }
+    }
+  }
+}

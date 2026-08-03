@@ -1,0 +1,105 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/compliance-card.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE AI System Compliance Card",
+  "description": "Public-key-verifiable nutrition label for an AI system. Compliance Map™ projection of the KYE™ audit chain. Signed by the issuer's trust-domain key. One artefact, every audience — risk committees, EU AI Act notified bodies, SOC 2 auditors, customers, internal engineering, legal.",
+  "type": "object",
+  "required": ["schema_version", "card_id", "subject", "issuer", "issued_at", "frameworks", "freshness", "signature"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":   { "type": "string", "enum": ["kye.compliance_card.v1"] },
+    "card_id":          { "type": "string", "pattern": "^kye:card:.+" },
+    "subject": {
+      "type": "object",
+      "required": ["entity_id", "name", "class", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "entity_id":       { "type": "string", "pattern": "^kye:.+" },
+        "name":            { "type": "string" },
+        "class":           { "type": "string", "enum": ["ai_agent", "service", "human", "model", "tool", "workflow"] },
+        "version":         { "type": "string" },
+        "model_family":    { "type": "string" },
+        "trust_domain":    { "type": "string" }
+      }
+    },
+    "issuer": {
+      "type": "object",
+      "required": ["entity_id", "trust_domain", "public_key"],
+      "additionalProperties": false,
+      "properties": {
+        "entity_id":    { "type": "string", "pattern": "^kye:trust:.+" },
+        "trust_domain": { "type": "string" },
+        "public_key":   { "type": "string", "description": "Ed25519 public key (multibase or hex)" }
+      }
+    },
+    "issued_at":        { "type": "string", "format": "date-time" },
+    "expires_at":       { "type": "string", "format": "date-time" },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "delegation_chain": { "type": "array", "items": { "type": "string" } },
+        "capability_profile": { "type": "string", "pattern": "^(kye-)?[a-z][a-z0-9-]+$" },
+        "scope_summary":  { "type": "string" },
+        "freshness_seconds": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "frameworks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["framework_id", "controls_satisfied", "controls_total"],
+        "additionalProperties": false,
+        "properties": {
+          "framework_id":       { "type": "string" },
+          "framework_label":    { "type": "string" },
+          "controls_satisfied": { "type": "integer", "minimum": 0 },
+          "controls_total":     { "type": "integer", "minimum": 0 },
+          "evidence_pack_id":   { "type": "string" }
+        }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "description": "Per-pillar freshness percentages (0–100). Drives the 'audit-ready' band on the rendered card.",
+      "additionalProperties": false,
+      "properties": {
+        "audit_chain":      { "type": "integer", "minimum": 0, "maximum": 100 },
+        "self_audit":       { "type": "integer", "minimum": 0, "maximum": 100 },
+        "replay_test":      { "type": "integer", "minimum": 0, "maximum": 100 },
+        "signal_bus_uptime":{ "type": "integer", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cascade_revoke_p99_ms": { "type": "integer", "minimum": 0 },
+        "break_glass_profile":   { "type": "string", "pattern": "^(kye-)?[a-z][a-z0-9-]+$" },
+        "open_recoveries":       { "type": "integer", "minimum": 0 },
+        "last_fire_drill":       { "type": "string", "format": "date" }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "conformance_level":  { "type": "string", "enum": ["L0_declared", "L1_self_tested", "L2_self_attested", "L3_conformant", "L4_certified"] },
+        "self_attested_at":   { "type": "string", "format": "date-time" },
+        "self_tested_runs":   { "type": "string", "description": "Human-readable run summary, e.g. '38 / 38 fixtures pass'" },
+        "certification_id":   { "type": "string", "pattern": "^kye:cert:.+" }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": ["alg", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "alg":     { "type": "string", "enum": ["ed25519", "es256", "es384"] },
+        "value":   { "type": "string", "description": "Detached signature over the canonicalised card payload (excluding the signature object itself)." },
+        "key_id":  { "type": "string" }
+      }
+    }
+  }
+}

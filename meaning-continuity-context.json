@@ -1,0 +1,173 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/meaning-continuity-context.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Meaning Continuity Context",
+  "description": "Per-action canonical record produced by the KYE Meaning Continuity Engine. Captures original meaning declared by the principal, interpreted meaning produced by the actor, plus memory, context, incentive, timing and handoff state at decision time. References its parent KYEContinuityContext (continuity_id) and the proposed action it scores. See kye-meaning-continuity-v1.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "meaning_continuity_id",
+    "continuity_id",
+    "actor_entity_id",
+    "principal_entity_id",
+    "original_meaning",
+    "interpreted_meaning",
+    "meaning_continuity_result",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.meaning_continuity_context.v1" },
+    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
+    "continuity_id": { "type": "string", "pattern": "^kye:continuity:" },
+    "proposed_action_id": { "type": "string", "pattern": "^kye:proposed-action:" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "original_meaning": {
+      "type": "object",
+      "required": ["source_intent_id", "declared_meaning"],
+      "additionalProperties": false,
+      "properties": {
+        "source_intent_id": { "type": "string", "pattern": "^kye:intent:" },
+        "declared_meaning": { "type": "string" },
+        "material_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "meaning_owner_entity_id": { "type": "string" }
+      }
+    },
+    "interpreted_meaning": {
+      "type": "object",
+      "required": ["interpreted_by_entity_id", "interpreted_summary"],
+      "additionalProperties": false,
+      "properties": {
+        "interpreted_by_entity_id": { "type": "string" },
+        "interpreted_summary": { "type": "string" },
+        "retained_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "lost_constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "added_assumptions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "interpretation_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "memory_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "memory_used": { "type": "boolean" },
+        "memory_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "memory_state": { "enum": ["current", "stale", "missing", "unknown"] },
+        "memory_conflict_detected": { "type": "boolean" },
+        "memory_summary": { "type": "string" }
+      }
+    },
+    "context_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "context_refs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "context_state": { "enum": ["current", "stale", "missing", "unknown"] },
+        "context_lost": { "type": "boolean" },
+        "context_changed_since_intent": { "type": "boolean" }
+      }
+    },
+    "incentive_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commercial_incentive_detected": { "type": "boolean" },
+        "affiliate_incentive_detected": { "type": "boolean" },
+        "optimisation_goal": { "type": "string" },
+        "incentive_conflict_detected": { "type": "boolean" }
+      }
+    },
+    "timing_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "evaluated_at": { "type": "string", "format": "date-time" },
+        "delay_changed_meaning": { "type": "boolean" },
+        "state_changed_since_intent": { "type": "boolean" },
+        "time_sensitivity": { "enum": ["low", "normal", "high", "urgent"] }
+      }
+    },
+    "handoff_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "handoff_count": { "type": "integer", "minimum": 0 },
+        "handoff_chain": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "handoff_boundary_risk": { "enum": ["low", "medium", "high", "critical"] },
+        "handoff_drift_detected": { "type": "boolean" },
+        "handoff_trace_id": { "type": "string", "pattern": "^kye:handoff-trace:" }
+      }
+    },
+    "meaning_continuity_result": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "meaning_preserved",
+            "meaning_degraded",
+            "meaning_broken",
+            "meaning_unknown"
+          ]
+        },
+        "meaning_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "material_drift_detected": { "type": "boolean" },
+        "reason_codes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "recommended_decision": {
+          "enum": [
+            "meaning_preserved",
+            "meaning_degraded",
+            "meaning_broken",
+            "require_clarification",
+            "require_reconfirmation",
+            "require_human_review",
+            "pause_admission",
+            "quarantine_proposed_action",
+            "route_to_admissibility",
+            "route_to_authority_check"
+          ]
+        }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

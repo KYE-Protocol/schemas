@@ -1,0 +1,36 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/intent-trace.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Intent Trace",
+  "description": "Tracks the lifecycle from signal to action across stages: signal received, interpreted, authority checked, decision created, execution prepared, executed. Each stage carries an evidence_ref. Used by KYE Continuity Profile™.",
+  "type": "object",
+  "required": ["schema_version", "intent_trace_id", "principal_entity_id", "actor_entity_id", "trace_stages", "continuity_status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.intent_trace.v1" },
+    "intent_trace_id": { "type": "string", "pattern": "^kye:intent-trace:" },
+    "principal_entity_id": { "type": "string" },
+    "actor_entity_id": { "type": "string" },
+    "trace_stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["stage", "timestamp"],
+        "additionalProperties": false,
+        "properties": {
+          "stage": { "enum": ["signal_received", "intent_interpreted", "authority_checked", "decision_created", "execution_prepared", "execution_committed", "execution_failed"] },
+          "description": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "evidence_ref": { "type": "string" }
+        }
+      }
+    },
+    "continuity_status": { "enum": ["preserved", "degraded", "broken", "unknown", "requires_review"] },
+    "drift_events": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "audit_ref": { "type": "string" }
+  }
+}

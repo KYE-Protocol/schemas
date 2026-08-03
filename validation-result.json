@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/validation-result.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Validation Result",
+  "description": "Outcome of a runtime validation step (entity resolution, authority chain check, scope attenuation, capability authorisation, state composition). Distinct from policy-decision.json (which is the final adjudication): a validation-result is a single per-check artefact that policy-decision aggregates over.",
+  "type": "object",
+  "required": ["validation_id", "subject_entity_id", "check_kind", "outcome", "performed_at"],
+  "additionalProperties": false,
+  "properties": {
+    "validation_id":     { "type": "string", "pattern": "^kye:val:.+" },
+    "subject_entity_id": { "type": "string", "pattern": "^kye:ent:.+" },
+    "actor_entity_id":   { "type": "string", "pattern": "^kye:ent:.+" },
+    "policy_decision_id":{ "type": "string", "pattern": "^kye:pdc:.+" },
+    "correlation_id":    { "type": "string", "pattern": "^kye:cor:.+" },
+    "check_kind": {
+      "type": "string",
+      "enum": [
+        "entity_resolution",
+        "authority_chain",
+        "scope_attenuation",
+        "credential_signature",
+        "credential_revocation",
+        "attestation_freshness",
+        "capability_grant",
+        "capability_manifest",
+        "state_composition",
+        "human_oversight_gate",
+        "risk_threshold",
+        "rate_limit",
+        "idempotency_replay",
+        "transparency_inclusion"
+      ]
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["pass", "fail", "approval_required", "deferred"]
+    },
+    "reason_code": { "type": "string" },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "performed_at": { "type": "string", "format": "date-time" },
+    "duration_ms":  { "type": "integer", "minimum": 0 }
+  }
+}

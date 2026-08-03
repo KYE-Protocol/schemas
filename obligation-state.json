@@ -1,0 +1,30 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/obligation-state.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Obligation State",
+  "description": "One state-transition record on a KYEObligation. Captures the previous state, the new state, the satisfaction or breach event, evidence references and the timestamp. Append-only; the chain of KYEObligationState records IS the obligation lifecycle.",
+  "type": "object",
+  "required": ["schema_version", "obligation_id", "state", "previous_state", "state_transition", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.obligation_state.v1" },
+    "obligation_id": { "type": "string", "pattern": "^kye:obligation:" },
+    "state": { "enum": ["pending", "satisfied", "breached", "waived", "expired", "disputed", "remediated", "superseded"] },
+    "previous_state": { "enum": ["pending", "satisfied", "breached", "waived", "expired", "disputed", "remediated", "superseded"] },
+    "state_transition": { "type": "string" },
+    "satisfaction_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "event_id": { "type": "string" },
+        "approved_by_entity_id": { "type": "string" },
+        "approval_decision_id": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "breach_reason_code": { "type": "string" },
+    "evidence_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "audit_chain_ref": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

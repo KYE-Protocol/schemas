@@ -1,0 +1,29 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/governance-rule.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Governance Rule",
+  "description": "Meta-rule on who may override which rules, under what conditions, with what evidence, and for how long. Governs the change-control surface of the formal-rule registry.",
+  "type": "object",
+  "required": ["schema_version", "governance_rule_id", "display_name", "rule_scope", "who_may_override", "override_requires", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.governance_rule.v1" },
+    "governance_rule_id": { "type": "string", "pattern": "^kye:governance-rule:" },
+    "display_name": { "type": "string" },
+    "rule_scope": { "type": "string" },
+    "who_may_override": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1, "uniqueItems": true
+    },
+    "override_conditions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "override_requires": {
+      "type": "array",
+      "items": { "enum": ["reason_code", "time_bound_expiry", "second_approver", "evidence_pack", "incident_ref", "regulator_notification"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "default_override_duration_minutes": { "type": "integer", "minimum": 1 },
+    "audit_required": { "type": "boolean" },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

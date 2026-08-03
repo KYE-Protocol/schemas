@@ -1,0 +1,15 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/rail-adapter.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["adapter_id", "adapter_type", "provider_entity_id", "supported_rails", "status"],
+  "properties": {
+    "adapter_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "adapter_type": { "enum": ["bank_transfer_adapter", "card_processor_adapter", "stablecoin_adapter", "internal_ledger_adapter", "payout_provider_adapter"] },
+    "provider_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "supported_rails": { "type": "array", "items": { "type": "string" } },
+    "callback_mode": { "enum": ["signed_webhook", "polled", "push", "none"] },
+    "status": { "enum": ["active", "blocked", "deprecated"] }
+  }
+}

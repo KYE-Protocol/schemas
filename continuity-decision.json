@@ -1,0 +1,49 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/continuity-decision.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Continuity Decision",
+  "description": "Policy decision returned by KYE Continuity Profile™ runtime checks. Carries continuity_score, checked dimensions and obligations, plus refs to Decision Map™ + Evidence Pack™.",
+  "type": "object",
+  "required": ["schema_version", "decision_id", "continuity_id", "decision", "actor_entity_id", "principal_entity_id", "checked_dimensions", "decided_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.continuity_decision.v1" },
+    "decision_id": { "type": "string", "pattern": "^kye:decision:continuity_" },
+    "continuity_id": { "type": "string" },
+    "decision": { "enum": ["continuity_preserved", "continuity_degraded", "continuity_broken", "require_human_review", "require_reconfirmation", "deny", "quarantine"] },
+    "reason_code": { "type": "string" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "capability_id": { "type": "string" },
+    "checked_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intent_alignment": { "enum": ["matched", "drifted", "missing", "ambiguous"] },
+        "authority_alignment": { "enum": ["matched", "drifted", "missing"] },
+        "scope_alignment": { "enum": ["matched", "drifted", "missing"] },
+        "state_alignment": { "enum": ["matched", "drifted", "missing"] },
+        "capability_alignment": { "enum": ["matched", "drifted", "missing"] },
+        "incentive_alignment": { "enum": ["no_conflict_detected", "commercial_incentive_detected", "affiliate_incentive_detected", "commission_detected", "optimisation_conflict_detected", "policy_conflict_detected", "unknown"] },
+        "pressure_context": { "enum": ["no_pressure_detected", "urgency_detected", "coercion_suspected", "social_engineering_suspected", "external_pressure_detected"] },
+        "oversight_state": { "enum": ["not_required", "required", "completed", "broken"] }
+      }
+    },
+    "continuity_score": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "const": "0_to_1" },
+        "interpretation": { "enum": ["low_continuity", "medium_continuity", "high_continuity"] }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "decision_map_id": { "type": "string" },
+    "evidence_pack_ref": { "type": "string" },
+    "decided_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/graph-query-result.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Graph Query Result",
+  "description": "Canonical response shape for KYE Authority Graph™ traversal queries — `/v1/graph/authority-path`, `/v1/graph/delegation-path`, `/v1/graph/capability-dependencies`, `/v1/graph/blast-radius`, `/v1/graph/risk-propagation`, `/v1/graph/compliance-map`, and `POST /v1/graph:traverse`. Returns the discovered subgraph (nodes + edges) plus the query metadata that produced it. Specific traversal algorithms are part of the patent track and are not described here.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "query_id",
+    "query_type",
+    "issued_at",
+    "nodes",
+    "edges"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.graph_query_result.v1"]
+    },
+    "query_id": {
+      "type": "string",
+      "pattern": "^kye:graph-query:.+"
+    },
+    "query_type": {
+      "type": "string",
+      "enum": [
+        "authority_path",
+        "delegation_path",
+        "capability_dependency",
+        "decision_map",
+        "evidence_graph",
+        "risk_propagation",
+        "blast_radius",
+        "compliance_mapping",
+        "lineage",
+        "ownership",
+        "policy_coverage"
+      ]
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Echo of the originating request parameters (source URN, target URN, depth, filters)."
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["node_id", "node_type"],
+        "additionalProperties": false,
+        "properties": {
+          "node_id":   { "type": "string" },
+          "node_type": { "type": "string" },
+          "ref":       { "type": "string" },
+          "labels":    { "type": "array", "items": { "type": "string" } },
+          "state":     { "type": "object", "additionalProperties": { "type": "string" } }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "edge_type"],
+        "additionalProperties": false,
+        "properties": {
+          "from":         { "type": "string" },
+          "to":           { "type": "string" },
+          "edge_type":    { "type": "string" },
+          "state":        { "type": "string" },
+          "policy_refs":  { "type": "array", "items": { "type": "string" } },
+          "evidence_refs":{ "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node_count":   { "type": "integer", "minimum": 0 },
+        "edge_count":   { "type": "integer", "minimum": 0 },
+        "max_depth":    { "type": "integer", "minimum": 0 },
+        "result_status":{ "type": "string", "enum": ["complete", "truncated", "no_path", "error"] }
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

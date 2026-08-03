@@ -1,0 +1,110 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/capability-manifest.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Capability Manifest",
+  "description": "Declarative manifest registered for every capability (skill, tool, MCP tool, function, connector, prompt, workflow, playbook, runbook, model_profile, payment_action, api_operation). Drives runtime PDP gating, EU AI Act risk classification, supply-chain attestation, and dependency resolution. Companion to capability.json (the registration record). When capability_kind=skill this IS the Skill Authority Manifest: the SKILL.md description of how an agent acts, bound to whether the agent was allowed to act (purpose_binding_ref, finality_boundary, evidence_requirement, revocation).",
+  "type": "object",
+  "required": ["capability_id", "capability_kind", "name", "version", "owner_entity_id", "permitted_actions", "side_effect_level"],
+  "additionalProperties": false,
+  "properties": {
+    "capability_id": { "type": "string", "pattern": "^kye:cap:.+" },
+    "capability_kind": {
+      "type": "string",
+      "enum": ["skill", "tool", "mcp_tool", "function", "connector", "prompt", "workflow", "playbook", "runbook", "policy", "model_profile", "data_transform", "approval_flow", "payment_action", "api_operation"]
+    },
+    "name": { "type": "string" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[A-Za-z0-9.-]+)?$" },
+    "owner_entity_id": { "type": "string", "pattern": "^kye:ent:.+" },
+    "permitted_actions": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "side_effect_level": {
+      "type": "string",
+      "enum": ["none", "read_only", "low", "medium", "high", "destructive", "irreversible"]
+    },
+    "data_classes_touched": { "type": "array", "items": { "type": "string" } },
+    "risk_classification": {
+      "type": "string",
+      "enum": ["unacceptable", "high", "limited", "minimal"],
+      "description": "EU AI Act Title II classification when ai_system_id is bound."
+    },
+    "ai_system_id": { "type": "string", "pattern": "^kye:ent:.+" },
+    "annex_iii_use_cases": { "type": "array", "items": { "type": "string" } },
+    "human_oversight_required": { "type": "boolean" },
+    "transparency_disclosure_required": { "type": "boolean" },
+    "approval_state": {
+      "type": "string",
+      "enum": ["none", "required", "pending", "approved", "denied", "expired"]
+    },
+    "sampling_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_messages_per_invocation": { "type": "integer", "minimum": 0 },
+        "max_tokens_per_message":      { "type": "integer", "minimum": 0 },
+        "max_tokens_per_invocation":   { "type": "integer", "minimum": 0 },
+        "allowed_model_profiles":      { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability_id"],
+        "additionalProperties": false,
+        "properties": {
+          "capability_id":   { "type": "string", "pattern": "^kye:cap:.+" },
+          "version_pin":     { "type": "string" },
+          "version_min":     { "type": "string" }
+        }
+      }
+    },
+    "supply_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "issuer_entity_id":               { "type": "string", "pattern": "^kye:ent:.+" },
+        "build_provenance_attestation_id":{ "type": "string", "pattern": "^kye:att:.+" },
+        "source_repository":              { "type": "string", "format": "uri" },
+        "kye_sbom_hash":                  { "type": "string" }
+      }
+    },
+    "documentation_urls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+    "purpose_binding_ref": {
+      "type": "string",
+      "description": "Reference to the §12 Purpose Permission™ purpose-scope grant this capability runs under. The capability may act only for the bound purpose; an out-of-purpose invocation is refused at the PDP boundary. Resolves to a kye.purpose.request.v1 / purpose-grant identifier.",
+      "pattern": "^kye:(purpose|grant):.+"
+    },
+    "finality_boundary": {
+      "type": "string",
+      "description": "Authority Finality™ ceiling — the most consequential outcome this capability is permitted to reach. A skill that may only draft cannot commit; a skill that may only recommend cannot submit externally. Anything above the boundary is refused.",
+      "enum": ["draft", "recommendation", "commit", "external_submission", "irreversible"]
+    },
+    "evidence_requirement": {
+      "type": "object",
+      "description": "What MUST seal into the §13 Evidence Pack™ for each consequential invocation of this capability, so the action is replay-verifiable from public keys alone.",
+      "additionalProperties": false,
+      "properties": {
+        "evidence_pack_required": { "type": "boolean" },
+        "sealed_fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Field names that MUST be captured into the Evidence Pack (e.g. tool_calls, mcp_servers_called, scope_touched, decision_code, finality_reached)."
+        },
+        "replay_verifiable": { "type": "boolean", "description": "Whether the sealed pack must be re-verifiable offline from the published key set." }
+      }
+    },
+    "revocation": {
+      "type": "object",
+      "description": "Time-bound and suspendable authority — every grant carries an end, never an open-ended licence. Drives expiry sweeps and incident-time suspension with finality.",
+      "additionalProperties": false,
+      "properties": {
+        "expires_at": { "type": "string", "format": "date-time", "description": "Hard expiry; after this instant the capability is refused until re-granted." },
+        "suspendable": { "type": "boolean", "description": "Whether the capability can be suspended out-of-band (e.g. on compromise) before expiry." },
+        "revocation_state": {
+          "type": "string",
+          "enum": ["active", "suspended", "revoked", "expired"]
+        },
+        "revocation_reason": { "type": "string" }
+      }
+    }
+  }
+}

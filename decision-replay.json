@@ -1,0 +1,23 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/decision-replay.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Decision Replay",
+  "description": "Result of replaying a historical decision against the recorded state snapshot. Powers legal defensibility, incident investigation, and drift detection. Returned by POST /v1/decisions/{decision_id}:replay.",
+  "type": "object",
+  "required": ["schema_version", "replay_id", "decision_id", "original_decision", "replayed_decision", "result", "replay_mode", "replayed_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":     { "type": "string", "enum": ["kye.decision_replay.v1"] },
+    "replay_id":          { "type": "string", "pattern": "^kye:replay:.+" },
+    "decision_id":        { "type": "string", "pattern": "^kye:(decision|pdc):.+" },
+    "original_decision":  { "type": "string" },
+    "replayed_decision":  { "type": "string" },
+    "result":             { "type": "string", "enum": ["match", "mismatch", "indeterminate"] },
+    "replay_mode":        { "type": "string", "enum": ["historical_state_snapshot", "current_state", "policy_pin"] },
+    "checked_items": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "enum": ["matched", "mismatched", "missing", "valid", "invalid"] }
+    },
+    "replayed_at":        { "type": "string", "format": "date-time" }
+  }
+}

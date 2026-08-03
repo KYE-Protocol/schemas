@@ -1,0 +1,144 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/continuity-context.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Continuity Context",
+  "description": "Per-action canonical record covering original intent, interpreted intent, authority binding, state snapshot, pressure context, incentive context, execution context and continuity result. Used by KYE Continuity Profile™ runtime checks.",
+  "type": "object",
+  "required": ["schema_version", "continuity_id", "actor_entity_id", "principal_entity_id", "original_intent", "continuity_result", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.continuity_context.v1" },
+    "continuity_id": { "type": "string", "pattern": "^kye:continuity:" },
+    "request_id": { "type": "string" },
+    "correlation_id": { "type": "string" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "acting_on_behalf_of": { "type": "string" },
+    "capability_id": { "type": "string" },
+    "authority_grant_id": { "type": "string" },
+    "original_intent": {
+      "type": "object",
+      "required": ["intent_id", "intent_type", "declared_goal", "declared_by", "created_at"],
+      "additionalProperties": false,
+      "properties": {
+        "intent_id": { "type": "string" },
+        "intent_type": { "type": "string" },
+        "declared_goal": { "type": "string" },
+        "declared_by": { "type": "string" },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "interpreted_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "interpreted_by": { "type": "string" },
+        "interpreted_goal": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "material_drift_detected": { "type": "boolean" },
+        "interpretation_notes": { "type": "string" }
+      }
+    },
+    "authority_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "scope_matched": { "type": "boolean" },
+        "capability_matched": { "type": "boolean" },
+        "delegation_chain_valid": { "type": "boolean" },
+        "authority_state": { "enum": ["active", "scoped", "elevated", "frozen", "expired", "revoked"] },
+        "approval_required": { "type": "boolean" }
+      }
+    },
+    "state_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor_state": { "type": "string" },
+        "principal_state": { "type": "string" },
+        "credential_state": { "type": "string" },
+        "capability_state": { "type": "string" },
+        "risk_state": { "type": "string" },
+        "recovery_state": { "type": "string" }
+      }
+    },
+    "pressure_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "urgency_level": { "enum": ["low", "normal", "high", "critical"] },
+        "user_pressure_detected": { "type": "boolean" },
+        "external_coercion_signal": { "enum": ["not_detected", "urgency_detected", "coercion_suspected", "social_engineering_suspected", "external_pressure_detected", "conflict_signal_detected"] },
+        "social_engineering_signal": { "enum": ["not_detected", "urgency_detected", "coercion_suspected", "social_engineering_suspected", "external_pressure_detected", "conflict_signal_detected"] }
+      }
+    },
+    "incentive_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_optimisation_goal": { "type": "string" },
+        "commercial_incentive_detected": { "type": "boolean" },
+        "affiliate_or_commission_present": { "type": "boolean" },
+        "conflict_of_interest_detected": { "type": "boolean" }
+      }
+    },
+    "execution_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requested_action": { "type": "string" },
+        "merchant_id": { "type": "string" },
+        "basket_hash": { "type": "string" },
+        "amount": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": { "type": "number" },
+            "currency": { "type": "string", "minLength": 3, "maxLength": 3 }
+          }
+        },
+        "execution_state": { "enum": ["pending", "approved", "executed", "rejected", "quarantined"] }
+      }
+    },
+    "continuity_result": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["preserved", "degraded", "broken", "unknown", "requires_review"] },
+        "reason_code": { "type": "string" },
+        "material_drift_detected": { "type": "boolean" },
+        "human_review_required": { "type": "boolean" }
+      }
+    },
+    "decision_map_id": { "type": "string" },
+    "evidence_pack_ref": { "type": "string" },
+    "meaning_continuity": {
+      "type": "object",
+      "description": "Optional v1.1.0 reference to a KYEMeaningContinuityContext for this continuity record. Full record lives at meaning-continuity-context.json.",
+      "additionalProperties": false,
+      "properties": {
+        "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
+        "status": { "enum": ["meaning_preserved", "meaning_degraded", "meaning_broken", "meaning_unknown"] },
+        "meaning_score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "material_drift_detected": { "type": "boolean" },
+        "recommended_decision": {
+          "enum": [
+            "meaning_preserved",
+            "meaning_degraded",
+            "meaning_broken",
+            "require_clarification",
+            "require_reconfirmation",
+            "require_human_review",
+            "pause_admission",
+            "quarantine_proposed_action",
+            "route_to_admissibility",
+            "route_to_authority_check"
+          ]
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

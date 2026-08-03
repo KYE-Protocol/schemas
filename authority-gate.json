@@ -1,0 +1,39 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/authority-gate.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Authority Gate",
+  "description": "Runtime gate placed before high-impact delegated actions. Applies to a set of capabilities; declares trigger conditions, decision policy, required checks, required evidence and the Signal Bus events emitted on trigger / pass / fail / approval-required / quarantine.",
+  "type": "object",
+  "required": ["schema_version", "gate_id", "display_name", "gate_type", "applies_to_capabilities", "risk_level", "decision_policy", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.authority_gate.v1" },
+    "gate_id": { "type": "string", "pattern": "^kye:gate:" },
+    "display_name": { "type": "string" },
+    "gate_type": { "enum": ["payment_execution", "external_message", "contract_signature", "clinical_action", "infrastructure_command", "data_export", "credential_rotation", "evidence_export", "data_access", "custom"] },
+    "description": { "type": "string" },
+    "applies_to_capabilities": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+    "risk_level": { "enum": ["low", "medium", "high", "critical"] },
+    "trigger_conditions": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "decision_policy": {
+      "type": "object",
+      "required": ["default_decision", "allowed_decisions"],
+      "additionalProperties": false,
+      "properties": {
+        "default_decision": { "enum": ["allow", "deny", "require_approval", "require_step_up", "quarantine"] },
+        "allowed_decisions": {
+          "type": "array",
+          "items": { "enum": ["allow", "deny", "require_approval", "require_step_up", "quarantine"] },
+          "minItems": 1, "uniqueItems": true
+        }
+      }
+    },
+    "required_checks": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "required_evidence": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "signal_events": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

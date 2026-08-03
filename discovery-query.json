@@ -1,0 +1,44 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/discovery-query.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Discovery Query",
+  "description": "Policy-bound query against the KYE authority graph. Every query declares purpose, query_type, filters and result_policy. Audit-required by default.",
+  "type": "object",
+  "required": ["schema_version", "query_id", "query_type", "requested_by_entity_id", "tenant_id", "purpose", "query", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.discovery_query.v1" },
+    "query_id": { "type": "string", "pattern": "^kye:discovery-query:" },
+    "query_type": { "enum": ["entity_search", "authority_path_search", "capability_search", "evidence_search", "risk_search", "connector_search", "profile_search", "certification_search"] },
+    "requested_by_entity_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "purpose": { "enum": ["security_review", "audit", "incident_response", "compliance", "procurement_review", "operations", "investigation"] },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "filters": { "type": "object" }
+      }
+    },
+    "result_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_results": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "include_evidence_refs": { "type": "boolean" },
+        "include_decision_maps": { "type": "boolean" },
+        "mask_sensitive_fields": { "type": "boolean" }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "audit_required": { "type": "boolean" },
+        "reason_code_required": { "type": "boolean" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/meaning-drift-event.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Meaning Drift Event",
+  "description": "One signed record per detected meaning drift in a delegated agentic chain. Names the drift type, severity, the original and observed meaning fragments, the recommended decision and the recommended obligations. Hash-chained into the audit ledger and surfaced as kye.meaning_drift.detected on KYE Signal Bus. See kye-meaning-continuity-v1.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "meaning_drift_event_id",
+    "meaning_continuity_id",
+    "drift_type",
+    "severity",
+    "detected_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.meaning_drift_event.v1" },
+    "meaning_drift_event_id": { "type": "string", "pattern": "^kye:meaning-drift:" },
+    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
+    "continuity_id": { "type": "string", "pattern": "^kye:continuity:" },
+    "drift_type": {
+      "enum": [
+        "constraint_loss",
+        "context_loss",
+        "memory_conflict",
+        "timing_drift",
+        "handoff_drift",
+        "incentive_drift",
+        "state_transition_drift",
+        "interpretation_drift",
+        "assumption_injection",
+        "meaning_compression",
+        "meaning_expansion"
+      ]
+    },
+    "severity": { "enum": ["low", "medium", "high", "critical"] },
+    "detected_at": { "type": "string", "format": "date-time" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "description": { "type": "string" },
+    "affected_dimensions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "original_meaning_fragment": { "type": "object" },
+    "observed_meaning_fragment": { "type": "object" },
+    "recommended_decision": {
+      "enum": [
+        "meaning_preserved",
+        "meaning_degraded",
+        "meaning_broken",
+        "require_clarification",
+        "require_reconfirmation",
+        "require_human_review",
+        "pause_admission",
+        "quarantine_proposed_action",
+        "route_to_admissibility",
+        "route_to_authority_check"
+      ]
+    },
+    "recommended_obligations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "notify_principal",
+          "request_clarification",
+          "request_reconfirmation",
+          "prevent_commit_until_reconfirmed",
+          "pause_admission",
+          "emit_meaning_drift_event",
+          "include_in_evidence_pack",
+          "generate_evidence_pack",
+          "escalate_to_human_review",
+          "quarantine_actor"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

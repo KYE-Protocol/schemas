@@ -1,0 +1,50 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/admissibility-decision.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Admissibility Decision",
+  "description": "Signed admissibility verdict for a proposed action. Carries decision value, reason code, checked dimensions, next-step routing, obligations and reference to the admissibility-evidence record.",
+  "type": "object",
+  "required": ["schema_version", "admissibility_decision_id", "proposed_action_id", "decision", "reason_code", "checked_dimensions", "next_step", "decided_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.admissibility_decision.v1" },
+    "admissibility_decision_id": { "type": "string", "pattern": "^kye:admissibility-decision:" },
+    "proposed_action_id": { "type": "string", "pattern": "^kye:proposed-action:" },
+    "decision": { "enum": ["admit", "reject", "require_clarification", "require_human_review", "quarantine", "route_to_authority_check"] },
+    "reason_code": { "type": "string" },
+    "checked_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intent_present": { "type": "boolean" },
+        "intent_clear": { "type": "boolean" },
+        "principal_resolved": { "type": "boolean" },
+        "actor_resolved": { "type": "boolean" },
+        "accountable_owner_known": { "type": "boolean" },
+        "capability_known": { "type": "boolean" },
+        "resource_known": { "type": "boolean" },
+        "data_source_allowed": { "type": "boolean" },
+        "prohibited_action_class": { "type": "boolean" },
+        "continuity_preserved": { "type": "boolean" },
+        "formal_rule_block": { "type": "boolean" },
+        "evidence_ready": { "type": "boolean" },
+        "jurisdiction_supported": { "type": "boolean" },
+        "risk_state_acceptable": { "type": "boolean" },
+        "action_declared": { "type": "boolean", "description": "Whether kye.proposed_action.v1.action_declaration is present and the action_type + effect_class are populated. False ⇒ the action is not declared clearly enough to evaluate ⇒ require_clarification (authority cannot resolve an undeclared action)." },
+        "action_effect_declared": { "type": "boolean", "description": "Whether the action's effect_class and side_effects are declared (no undeclared side effects)." },
+        "action_reversible_or_rollbackable": { "type": "boolean", "description": "Whether the action is reversible/compensatable OR a rollback is available. An irreversible action with no rollback escalates to require_human_review (§36 two_person for safety-critical)." },
+        "action_safe_in_current_state": { "type": "boolean", "description": "Whether the declared safe_state_precondition is asserted satisfied by the declarer's safety controller. KYE records this assertion; it does not compute the physical safety envelope itself." },
+        "action_risk_classified": { "type": "boolean", "description": "Whether the proposed action carries an action_risk_classification (the explicit pre-admissibility step). False ⇒ unclassified ⇒ require_clarification. A 'prohibited'/'unacceptable' tier ⇒ reject; a 'high' tier raises the required oversight mode (Dynamic Authority Gate) before admit." }
+      }
+    },
+    "next_step": { "enum": ["route_to_authority_check", "block", "request_clarification", "request_human_review", "quarantine"] },
+    "obligations": {
+      "type": "array",
+      "items": { "enum": ["emit_admissibility_event", "bind_to_authority_decision", "include_in_evidence_pack", "notify_principal", "quarantine_actor", "rate_limit_source"] },
+      "uniqueItems": true
+    },
+    "evidence_ref": { "type": "string" },
+    "audit_chain_ref": { "type": "string" },
+    "decided_at": { "type": "string", "format": "date-time" }
+  }
+}

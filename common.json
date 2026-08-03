@@ -1,0 +1,172 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/common.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "KyeId": {
+      "type": "string",
+      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_:-]+)*$"
+    },
+    "DateTime": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "Hash": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:+/=-]+$"
+    },
+    "Signature": {
+      "type": "string"
+    },
+    "StringArray": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Status": {
+      "enum": [
+        "active",
+        "inactive",
+        "limited",
+        "suspended",
+        "quarantined",
+        "revoked",
+        "archived",
+        "tombstoned"
+      ]
+    },
+    "LifecycleState": {
+      "enum": [
+        "discovered",
+        "registered",
+        "pending_verification",
+        "verified",
+        "active",
+        "limited",
+        "under_review",
+        "approval_required",
+        "suspended",
+        "stopped",
+        "quarantined",
+        "revoked",
+        "transferred",
+        "archived",
+        "tombstoned"
+      ]
+    },
+    "Decision": {
+      "enum": [
+        "allow",
+        "allow_dry_run_only",
+        "allow_with_constraints",
+        "allow_with_redaction",
+        "deny",
+        "quarantine",
+        "require_approval",
+        "require_human_review",
+        "require_recovery",
+        "require_step_up",
+        "revoke",
+        "stop"
+      ],
+      "description": "THE canonical decision-outcome enum. One concept, one declaration (§0). Reconciled 2026-08-02: the runtime DecisionOutcome in internal and this enum had drifted in BOTH directions — the engine could decide require_step_up / require_human_review / require_recovery, which this enum rejected, while stop / revoke are declared here and reached only through the drift-to-authority mapping. The union is the truth: an enum that cannot express what the engine decides is not canonical. decisions-evidence-pack-canonical asserts the runtime const and this enum stay identical."
+    },
+    "Assurance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ial": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "aal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "dal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "wal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "cal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "pal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "tal": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        }
+      }
+    },
+    "Envelope": {
+      "type": "object",
+      "required": [
+        "meta"
+      ],
+      "properties": {
+        "meta": {
+          "type": "object",
+          "required": [
+            "request_id",
+            "timestamp",
+            "protocol",
+            "version"
+          ],
+          "properties": {
+            "request_id": {
+              "type": "string"
+            },
+            "trace_id": {
+              "type": "string"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/DateTime"
+            },
+            "protocol": {
+              "const": "kye"
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "data": {},
+        "error": {
+          "$ref": "#/$defs/Error"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

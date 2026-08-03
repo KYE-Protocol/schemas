@@ -1,0 +1,77 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/graph-node.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Graph Node",
+  "description": "A canonical node in the KYE Authority Graph™. Nodes wrap KYE objects (entities, capabilities, credentials, authority grants, delegations, policies, decisions, audit events, evidence packs, taxonomy terms, metadata schemas) so the runtime can traverse, project, and explain authority relationships. Storage substrate (Postgres, Neo4j, Neptune, Memgraph, TigerGraph, ArangoDB, RDF) is implementation choice and outside scope.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "node_id",
+    "node_type"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.graph_node.v1"]
+    },
+    "node_id": {
+      "type": "string",
+      "pattern": "^kye:node:.+",
+      "description": "URN of this node."
+    },
+    "node_type": {
+      "type": "string",
+      "enum": [
+        "entity",
+        "human",
+        "organisation",
+        "ai_agent",
+        "api_client",
+        "wallet",
+        "device",
+        "credential",
+        "capability",
+        "skill",
+        "tool",
+        "workflow",
+        "prompt",
+        "model",
+        "resource",
+        "policy",
+        "authority_grant",
+        "delegation",
+        "scope",
+        "state",
+        "payload_artifact",
+        "decision",
+        "audit_event",
+        "evidence_pack",
+        "compliance_control",
+        "taxonomy_term",
+        "metadata_schema"
+      ]
+    },
+    "entity_ref": {
+      "type": "string",
+      "description": "URN of the wrapped KYE object."
+    },
+    "labels": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form labels (taxonomy term keys preferred)."
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Snapshot of relevant state dimensions for fast filtering."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional projected metadata block (subset of metadata-binding.json)."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

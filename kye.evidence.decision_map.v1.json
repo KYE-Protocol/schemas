@@ -1,0 +1,128 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/kye.evidence.decision_map.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Evidence Decision Map",
+  "description": "Replayable graph projection of a single decision: typed input nodes flow into rule nodes, which produce obligation nodes, which terminate at a single output node. Each node carries its payload hash and signature so an auditor can re-fetch the payload and verify integrity, and a Replay Engine can recompute the output deterministically. Algorithm internals are not part of this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "decision_id",
+    "nodes",
+    "edges",
+    "output_node_id",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kye.evidence.decision_map.v1",
+      "description": "Canonical schema discriminator. Every runtime emitter stamps it and every canonical example carries it; pinned with const so the envelope cannot claim a schema it is not."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^kye:decision-map:[A-Za-z0-9._:-]+$",
+      "description": "Stable URN of the decision map."
+    },
+    "version": {
+      "const": 1,
+      "description": "Schema major version. Pinned to 1 for kye.evidence.decision_map.v1."
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^kye:decision:[A-Za-z0-9._:-]+$",
+      "description": "URN of the decision this map explains."
+    },
+    "nodes": {
+      "type": "array",
+      "minItems": 2,
+      "description": "All nodes in the decision graph. Each node represents a typed step in the decision pipeline.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "payload_hash",
+          "signature"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Locally-unique node identifier within this map."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "input",
+              "rule",
+              "obligation",
+              "output"
+            ],
+            "description": "Node kind. Inputs → rules → obligations → output."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable label shown in audit UIs."
+          },
+          "payload_ref": {
+            "type": "string",
+            "description": "Optional content-addressable reference to the node's full payload (e.g. an IPFS CID or KYEID)."
+          },
+          "payload_hash": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:+/=-]+$",
+            "description": "Hash of the node's canonical payload (algorithm-prefixed, e.g. sha256:...). Required for replay verification."
+          },
+          "signature": {
+            "type": "string",
+            "description": "Detached signature over (id, type, payload_hash) by the engine or signer that produced this node."
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "description": "Directed edges expressing data/flow dependencies between nodes.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to",
+          "kind"
+        ],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source node id."
+          },
+          "to": {
+            "type": "string",
+            "description": "Destination node id."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "feeds",
+              "triggers",
+              "produces",
+              "satisfies"
+            ],
+            "description": "Edge semantics."
+          }
+        }
+      }
+    },
+    "output_node_id": {
+      "type": "string",
+      "description": "Id of the single 'output' node that carries the final decision."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the decision map was emitted."
+    }
+  }
+}

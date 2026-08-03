@@ -1,0 +1,29 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/audit-integrity-check.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Audit Trail Integrity Check",
+  "description": "Output of running an integrity check across a window of audit events. Detects: missing audit events · broken hash chain · invalid timestamps · missing reason codes · orphan decisions · orphan evidence refs · unresolvable policy refs · missing state snapshots · payload-hash mismatch · evidence-pack hash mismatch. Hash-chain mechanism is part of the patent track and is not described here.",
+  "type": "object",
+  "required": ["schema_version", "check_id", "period", "events_checked", "result"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":     { "type": "string", "enum": ["kye.audit_integrity_check.v1"] },
+    "check_id":           { "type": "string", "pattern": "^kye:audit-check:.+" },
+    "period": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "from": { "type": "string", "format": "date-time" },
+        "to":   { "type": "string", "format": "date-time" }
+      }
+    },
+    "events_checked":         { "type": "integer", "minimum": 0 },
+    "hash_chain_status":      { "type": "string", "enum": ["valid", "invalid", "indeterminate"] },
+    "orphan_events":          { "type": "integer", "minimum": 0 },
+    "missing_reason_codes":   { "type": "integer", "minimum": 0 },
+    "missing_evidence_refs":  { "type": "integer", "minimum": 0 },
+    "result":                 { "type": "string", "enum": ["passed", "passed_with_warnings", "failed", "incomplete"] },
+    "details":                { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+  }
+}

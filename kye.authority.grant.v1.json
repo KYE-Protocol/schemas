@@ -1,0 +1,128 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/kye.authority.grant.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Authority Grant (v1, delegation form)",
+  "description": "A signed delegation of authority from a principal to a grantee, scoped to actions and jurisdiction, bounded by not_before/not_after, with an explicit revocation chain that lets a verifier walk back to the original source of authority. Distinct from the Purpose grant: this records the right to act; the Purpose grant records the right to act for a given purpose.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "version", "principal", "grantee", "scope",
+    "jurisdiction", "not_before", "not_after", "issued_at",
+    "signature", "revocation_chain"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^kye:authority:[A-Za-z0-9._:-]+$",
+      "description": "Stable URN of the authority grant."
+    },
+    "version": {
+      "const": 1,
+      "description": "Schema major version. Pinned to 1 for kye.authority.grant.v1."
+    },
+    "principal": {
+      "type": "string",
+      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+      "description": "KYEID of the source of authority (the delegator)."
+    },
+    "grantee": {
+      "type": "string",
+      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+      "description": "KYEID of the entity receiving authority."
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actions"],
+      "description": "What the grantee may do under this authority.",
+      "properties": {
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "Action verbs the grantee is authorised to perform."
+        },
+        "resources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Optional concrete resource URNs/selectors further narrowing scope."
+        },
+        "constraints": {
+          "type": "object",
+          "description": "Free-form constraint object (e.g. monetary caps). Engines may reject unknown keys."
+        }
+      }
+    },
+    "jurisdiction": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "ISO-3166 jurisdictions under which this grant is enforceable."
+    },
+    "not_before": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Inclusive lower bound of the grant's active window."
+    },
+    "not_after": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Exclusive upper bound of the grant's active window."
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the grant was signed and issued."
+    },
+    "issued_by": {
+      "type": "string",
+      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+      "description": "KYEID of the officer/role acting for the principal at issuance."
+    },
+    "signature": {
+      "type": "string",
+      "description": "Detached signature over the canonical encoding of this grant (COSE/JWS)."
+    },
+    "revocation_chain": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered chain of upstream authority grants this grant derives from, ending at a self-rooted authority. A verifier walks the chain to confirm none have been revoked.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["grant_id", "issuer", "status"],
+        "properties": {
+          "grant_id": {
+            "type": "string",
+            "pattern": "^kye:authority:[A-Za-z0-9._:-]+$",
+            "description": "URN of the upstream authority grant."
+          },
+          "issuer": {
+            "type": "string",
+            "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+            "description": "KYEID of the entity that issued that upstream grant."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "expired", "revoked"],
+            "description": "Status of the upstream grant at chain-build time."
+          },
+          "revoked_at": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Time the upstream grant was revoked, or null."
+          }
+        }
+      }
+    },
+    "revoked_at": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Time this grant itself was revoked, or null if still in force."
+    },
+    "revoked_reason": {
+      "type": ["string", "null"],
+      "description": "Free-text reason for revocation, or null."
+    }
+  }
+}

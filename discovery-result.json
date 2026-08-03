@@ -1,0 +1,32 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/discovery-result.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Discovery Result",
+  "description": "Masked, audited result set for a KYE Discovery Query. Carries the decision (allow / deny / partial), result rows with optional redactions list, and a hash-chained audit_event_id.",
+  "type": "object",
+  "required": ["schema_version", "query_id", "result_id", "decision", "results", "result_count", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.discovery_result.v1" },
+    "query_id": { "type": "string" },
+    "result_id": { "type": "string", "pattern": "^kye:discovery-result:" },
+    "decision": { "enum": ["allow", "allow_with_constraints", "partial", "deny"] },
+    "reason_code": { "type": "string" },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["result_type"],
+        "properties": {
+          "result_type": { "enum": ["entity", "authority_path", "capability", "evidence_pack", "directory_entry", "risk", "connector", "profile", "certification"] },
+          "redactions": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "result_count": { "type": "integer", "minimum": 0 },
+    "masked": { "type": "boolean" },
+    "audit_event_id": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

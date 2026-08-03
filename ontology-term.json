@@ -1,0 +1,52 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/ontology-term.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Ontology Term",
+  "description": "One canonical term in the KYE ontology. Carries domain, definition, preferred name, aliases, related-term refs, not-equivalent refs and profile refs. Used by KYE Ontology Registry™ + KYE Semantic Graph™.",
+  "type": "object",
+  "required": ["schema_version", "term_id", "label", "domain", "definition", "preferred_name", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.ontology_term.v1" },
+    "term_id": { "type": "string", "pattern": "^kye:term:[a-z_]+:[a-z0-9_]+$" },
+    "label": { "type": "string" },
+    "domain": { "enum": ["entity", "authority", "capability", "scope", "state", "decision", "evidence", "continuity", "discoverability", "connector", "sector", "certification"] },
+    "definition": { "type": "string", "minLength": 8 },
+    "preferred_name": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "related_terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["relationship", "term_id"],
+        "additionalProperties": false,
+        "properties": {
+          "relationship": { "type": "string" },
+          "term_id": { "type": "string" }
+        }
+      }
+    },
+    "not_equivalent_to": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "profile_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "sector_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "active", "deprecated", "tombstoned"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/attestation.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["attestation_id", "entity_id", "attestation_type", "status"],
+  "properties": {
+    "attestation_id": { "$ref": "common.json#/$defs/KyeId" },
+    "entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "attestation_type": {
+      "enum": [
+        "workload_attestation", "runtime_attestation", "deployment_attestation",
+        "node_attestation", "hardware_attestation", "entity_attestation_token",
+        "payment_attestation"
+      ]
+    },
+    "spiffe_id": { "type": "string" },
+    "svid_type": { "enum": ["x509-svid", "jwt-svid", "none"] },
+    "eat_format": { "enum": ["jwt", "cwt", "none"] },
+    "selector_set": { "$ref": "common.json#/$defs/StringArray" },
+    "platform_evidence": { "type": "object" },
+    "container_digest": { "type": "string" },
+    "build_provenance_hash": { "$ref": "common.json#/$defs/Hash" },
+    "claims": { "type": "object" },
+    "issuer_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "status": { "enum": ["valid", "invalid", "stale", "revoked"] },
+    "issued_at": { "$ref": "common.json#/$defs/DateTime" },
+    "expires_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

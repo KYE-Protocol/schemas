@@ -1,0 +1,109 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/certification-record.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Certification Record",
+  "description": "Signed registry record for a KYE Conformance & Certification Program™ award. One record per (product, version, badge level, profile-set, test-suite-version) tuple. Verifiable via the public KYE Certification Registry. Specific signing-suite construction is part of the patent track and is not described here.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "certification_id",
+    "organisation_entity_id",
+    "product_name",
+    "product_version",
+    "certification_level",
+    "profiles",
+    "protocol_version",
+    "test_suite_version",
+    "status",
+    "issued_at",
+    "expires_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.certification_record.v1"]
+    },
+    "certification_id": {
+      "type": "string",
+      "pattern": "^kye:cert:.+",
+      "description": "URN of this certification."
+    },
+    "organisation_entity_id": {
+      "type": "string",
+      "pattern": "^kye:(org|ent):.+",
+      "description": "Vendor / organisation entity (KYE-governed identity of the certified party)."
+    },
+    "product_name": { "type": "string", "minLength": 1 },
+    "product_version": { "type": "string", "minLength": 1 },
+    "certification_level": {
+      "type": "string",
+      "enum": [
+        "kye_declared",
+        "kye_core_conformant",
+        "kye_authority_conformant",
+        "kye_capability_conformant",
+        "kye_evidence_conformant",
+        "kye_recovery_conformant",
+        "kye_eu_ai_act_profile_ready",
+        "kye_payments_conformant",
+        "kye_healthcare_conformant",
+        "kye_sector_profile_conformant",
+        "kye_certified"
+      ]
+    },
+    "profiles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Profile-version refs covered by this certification (e.g. kye.core.v1.0, kye.authority.v1.0, kye.capability.v1.0)."
+    },
+    "sector": {
+      "type": "string",
+      "description": "Optional sector code (e.g. financial_services, healthcare) when the certification is sector-bound."
+    },
+    "protocol_version": {
+      "type": "string",
+      "pattern": "^kye\\.(?:core|protocol)\\.v\\d+\\.\\d+(?:\\.\\d+)?$"
+    },
+    "test_suite_version": {
+      "type": "string",
+      "pattern": "^kye-conformance-\\d+\\.\\d+\\.\\d+$"
+    },
+    "conformance_run_ref": {
+      "type": "string",
+      "description": "URN of the conformance-run.json that produced this certification."
+    },
+    "evidence_pack_ref": {
+      "type": "string",
+      "description": "Signed evidence pack URN supporting the certification (sample agent decisions, audit chain, etc.)."
+    },
+    "implementation_declaration": {
+      "type": "object",
+      "description": "Vendor's signed declaration of which optional features are implemented.",
+      "additionalProperties": true
+    },
+    "badge_id": { "type": "string", "pattern": "^kye:badge:.+" },
+    "badge_url": { "type": "string", "format": "uri" },
+    "verification_url": { "type": "string", "format": "uri" },
+    "registry_listing_url": { "type": "string", "format": "uri" },
+    "status": {
+      "type": "string",
+      "enum": ["applied", "under_review", "active", "deprecated", "revoked", "expired"]
+    },
+    "issued_at":   { "type": "string", "format": "date-time" },
+    "expires_at":  { "type": "string", "format": "date-time" },
+    "renewed_from": { "type": "string", "description": "Prior certification_id when this is a renewal." },
+    "revocation_reason": { "type": "string" },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signature", "signed_by_credential_id"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm":               { "type": "string" },
+        "signature":               { "type": "string" },
+        "signed_by_credential_id": { "type": "string" }
+      }
+    }
+  }
+}

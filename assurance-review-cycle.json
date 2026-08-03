@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/assurance-review-cycle.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Assurance Review Cycle",
+  "description": "Scheduled + event-triggered review windows for an assurance-card subject. Lists review triggers, reviewer roles, SLA, evidence captured per review, and the chain of completed reviews. Overdue reviews emit a signed Signal Bus event.",
+  "type": "object",
+  "required": ["schema_version", "cycle_id", "assurance_card_ref", "scheduled_frequency", "review_triggers", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.assurance_review_cycle.v1" },
+    "cycle_id": { "type": "string", "pattern": "^kye:assurance-review-cycle:" },
+    "assurance_card_ref": { "type": "string", "pattern": "^kye:assurance-card:" },
+    "scheduled_frequency": { "enum": ["weekly", "monthly", "quarterly", "annual", "ad_hoc"] },
+    "next_review_due": { "type": "string", "format": "date-time" },
+    "review_triggers": {
+      "type": "array",
+      "items": { "enum": ["scheduled", "scope_change", "new_capability", "incident", "risk_state_change", "model_update", "authority_change", "supplier_change", "licence_change", "retention", "decommission"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "reviewer_roles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "evidence_captured_per_review": {
+      "type": "array",
+      "items": { "enum": ["reviewer_identity", "decision", "reason_code", "timestamp", "state_snapshot", "decision_map", "evidence_pack", "scope_diff", "supplier_diff", "licence_diff"] },
+      "uniqueItems": true
+    },
+    "completed_reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["review_id", "reviewed_at", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "review_id": { "type": "string" },
+          "reviewed_at": { "type": "string", "format": "date-time" },
+          "trigger": { "type": "string" },
+          "reviewer_role": { "type": "string" },
+          "outcome": { "enum": ["approved", "denied", "request_changes", "escalated", "quarantined"] },
+          "reason_code": { "type": "string" },
+          "evidence_ref": { "type": "string" }
+        }
+      }
+    },
+    "status": { "enum": ["draft", "active", "overdue", "deprecated"] },
+    "audit_chain_ref": { "type": "string" }
+  }
+}

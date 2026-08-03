@@ -1,0 +1,87 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/proposed-action.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Proposed Action",
+  "description": "A candidate action submitted to KYE Admission Gate™ for admissibility check before any authority decisioning is performed. Carries origin, intent refs, requested capability, target resource, preconditions and risk flags.",
+  "type": "object",
+  "required": ["schema_version", "proposed_action_id", "origin", "requested_capability", "action_summary", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.proposed_action.v1" },
+    "proposed_action_id": { "type": "string", "pattern": "^kye:proposed-action:" },
+    "origin": {
+      "type": "object",
+      "required": ["source_type", "source_entity_id"],
+      "additionalProperties": false,
+      "properties": {
+        "source_type": { "enum": ["ai_agent", "workflow", "service", "model", "tool", "connector", "human_in_the_loop"] },
+        "source_entity_id": { "type": "string" },
+        "principal_entity_id": { "type": "string" },
+        "accountable_entity_id": { "type": "string" }
+      }
+    },
+    "intent_ref": { "type": "string" },
+    "interpreted_intent_ref": { "type": "string" },
+    "requested_capability": { "type": "string" },
+    "action_summary": { "type": "string" },
+    "target_resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resource_type": { "type": "string" },
+        "resource_id": { "type": "string" },
+        "payload_hash": { "type": "string" }
+      }
+    },
+    "preconditions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "principal_known": { "type": "boolean" },
+        "actor_known": { "type": "boolean" },
+        "intent_present": { "type": "boolean" },
+        "authority_context_present": { "type": "boolean" },
+        "data_source_allowed": { "type": "boolean" },
+        "jurisdiction_supported": { "type": "boolean" }
+      }
+    },
+    "risk_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prohibited_category_detected": { "type": "boolean" },
+        "coercion_signal_detected": { "type": "boolean" },
+        "incentive_conflict_detected": { "type": "boolean" },
+        "continuity_drift_detected": { "type": "boolean" },
+        "unsafe_tool_path_detected": { "type": "boolean" }
+      }
+    },
+    "action_declaration": {
+      "type": "object",
+      "description": "Structured declaration of WHAT this action does — its execution-meaning and safety properties. A required INPUT to the Admission Gate for any action that affects system or physical state (robotics, IoT, vehicles, medical devices, industrial control): authorised does not imply safe. The action must be declared clearly enough for admissibility to evaluate. KYE checks the declaration is present and adequate; it does NOT compute the physical safety envelope itself (that is the declarer's / a functional-safety stack's responsibility, e.g. IEC 61508 / ISO 13849 / ISO 26262). See dictionary term action_declaration.",
+      "additionalProperties": false,
+      "properties": {
+        "action_type": { "type": "string", "description": "Canonical action verb being executed (e.g. open_valve, adjust_dosage, reroute_vehicle, transfer_funds, delete_record)." },
+        "effect_class": { "enum": ["informational", "digital_state_change", "financial", "physical_actuation", "safety_critical"] },
+        "target_system_class": { "type": "string", "description": "Class of system/state the action affects (e.g. database, payment_rail, robotic_arm, infusion_pump, vehicle_controller)." },
+        "side_effects_declared": { "type": "array", "items": { "type": "string" }, "description": "Declared side effects of executing the action. An empty array asserts 'no side effects'; absence of the field asserts 'undeclared'." },
+        "reversibility": { "enum": ["reversible", "compensatable", "irreversible"] },
+        "rollback_available": { "type": "boolean", "description": "Whether a rollback / compensating action exists and is invocable." },
+        "stop_condition_present": { "type": "boolean", "description": "Whether an emergency-stop / abort path is defined for the action." },
+        "safe_state_precondition": { "type": "string", "description": "The system/physical state that must hold for the action to be safe to execute (evaluated by the declarer's safety controller, not by KYE)." }
+      }
+    },
+    "action_risk_classification": {
+      "type": "object",
+      "description": "The explicit Action Risk Classification step that runs AFTER Action Declaration and BEFORE Action Admissibility (pipeline: Intent -> Action Declaration -> Action Risk Classification -> Action Admissibility -> Authority Resolution -> ...). It classifies the proposed action's risk so admissibility can apply DYNAMIC AUTHORITY GATES: a low-risk action takes the light path; a high/unacceptable-risk action demands deeper evidence and a stronger oversight mode. KYE does not invent a parallel risk model — it REUSES the canonical risk_tier vocabulary (kye.risk_assessment.v1) and the signed score (kye.risk.score.v1). See dictionary term action_risk_classification.",
+      "additionalProperties": false,
+      "properties": {
+        "risk_tier": { "enum": ["minimal", "limited", "high", "unacceptable", "prohibited"], "description": "Canonical risk tier — REUSED from kye.risk_assessment.v1 (EU AI Act-aligned), never redefined. 'prohibited'/'unacceptable' short-circuit to reject; 'high' escalates the required oversight mode." },
+        "risk_score_ref": { "type": "string", "description": "Pointer to the signed kye.risk.score.v1 record this classification is based on (score + risk_class + signals), so the classification is evidenced, not asserted." },
+        "classification_basis": { "type": "array", "items": { "type": "string" }, "description": "The signals/risk_flags that drove the tier (e.g. effect_class=safety_critical, prohibited_category_detected, irreversible-no-rollback)." },
+        "required_oversight_mode": { "enum": ["none", "single_approver", "two_person", "two_person_with_legal", "delegated", "auto"], "description": "The §36 GovernedUI oversight mode the tier maps to — the Dynamic Authority Gate. Higher risk -> stronger mode. REUSED from the §36 approval-mode enum, never redefined." }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

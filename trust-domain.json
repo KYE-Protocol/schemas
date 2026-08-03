@@ -1,0 +1,17 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/trust-domain.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trust_domain_id", "display_name", "status"],
+  "properties": {
+    "trust_domain_id": { "$ref": "common.json#/$defs/KyeId" },
+    "display_name": { "type": "string" },
+    "jurisdiction": { "type": "string" },
+    "issuer_set": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
+    "transparency_service": { "$ref": "common.json#/$defs/KyeId" },
+    "jwks_uri": { "type": "string", "format": "uri" },
+    "federation_metadata_uri": { "type": "string", "format": "uri" },
+    "status": { "enum": ["active", "deprecated", "revoked"] }
+  }
+}

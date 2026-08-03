@@ -1,0 +1,15 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/wallet-profile.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "wallet_kind": { "enum": ["operating_wallet", "treasury_wallet", "spend_program_wallet", "settlement_wallet", "agent_wallet"] },
+    "currencies": { "type": "array", "items": { "type": "string" } },
+    "rail_types": { "type": "array", "items": { "type": "string" } },
+    "custody_provider_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "owner_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "controller_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "program_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" }
+  }
+}

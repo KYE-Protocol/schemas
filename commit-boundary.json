@@ -1,0 +1,54 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/commit-boundary.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Commit Boundary",
+  "description": "Separates recommendation from committed action. Lists the actions allowed before the boundary and the actions that may only proceed after a successful KYE authority decision. Declares the required decision endpoint, the obligations the runtime MUST fulfil at the boundary, and the failure behaviour.",
+  "type": "object",
+  "required": ["schema_version", "commit_boundary_id", "display_name", "before_boundary_actions", "after_boundary_actions", "boundary_condition", "required_decision", "obligations", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.commit_boundary.v1" },
+    "commit_boundary_id": { "type": "string", "pattern": "^kye:commit-boundary:" },
+    "display_name": { "type": "string" },
+    "description": { "type": "string" },
+    "before_boundary_actions": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+    "after_boundary_actions": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+    "boundary_condition": {
+      "type": "object",
+      "required": ["action_transition"],
+      "additionalProperties": false,
+      "properties": {
+        "action_transition": { "type": "string" },
+        "requires_authority_gate": { "type": "string" }
+      }
+    },
+    "required_decision": {
+      "type": "object",
+      "required": ["decision_endpoint", "required_result"],
+      "additionalProperties": false,
+      "properties": {
+        "decision_endpoint": { "type": "string" },
+        "required_result": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1, "uniqueItems": true
+        }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": { "enum": ["generate_decision_map", "emit_signed_signal", "generate_evidence_pack", "record_commit_event", "emit_signal_bus_event"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "failure_behaviour": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "on_missing_authority": { "enum": ["deny", "quarantine", "require_approval"] },
+        "on_state_mismatch": { "enum": ["deny", "quarantine", "require_approval"] },
+        "on_evidence_failure": { "enum": ["deny", "quarantine"] }
+      }
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

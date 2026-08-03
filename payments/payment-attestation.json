@@ -1,0 +1,29 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/payment-attestation.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payment_attestation_id", "payment_intent_id", "issuer_entity_id", "claims", "status", "issued_at"],
+  "properties": {
+    "payment_attestation_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "payment_intent_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "issuer_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "claims": {
+      "type": "object",
+      "required": ["actor_entity_id", "subject_entity_id", "wallet_entity_id", "policy_decision_id", "amount_minor", "currency", "decision"],
+      "properties": {
+        "actor_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+        "subject_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+        "wallet_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+        "policy_decision_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+        "amount_minor": { "type": "integer" },
+        "currency": { "type": "string" },
+        "decision": { "type": "string" },
+        "approved": { "type": "boolean" }
+      }
+    },
+    "status": { "enum": ["valid", "invalid", "stale", "revoked"] },
+    "issued_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" },
+    "expires_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

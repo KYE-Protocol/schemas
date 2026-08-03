@@ -1,0 +1,17 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/policy-decision.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policy_decision_id", "decision", "created_at"],
+  "properties": {
+    "policy_decision_id": { "$ref": "common.json#/$defs/KyeId" },
+    "policy_id": { "$ref": "common.json#/$defs/KyeId" },
+    "decision": { "$ref": "common.json#/$defs/Decision" },
+    "reasons": { "$ref": "common.json#/$defs/StringArray" },
+    "effective_scope": { "$ref": "scope.json" },
+    "obligations": { "$ref": "common.json#/$defs/StringArray" },
+    "stop_conditions": { "$ref": "common.json#/$defs/StringArray" },
+    "created_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

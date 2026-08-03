@@ -1,0 +1,16 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/beneficiary.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["beneficiary_id", "entity_id", "approval_status"],
+  "properties": {
+    "beneficiary_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "beneficiary_class": { "enum": ["vendor", "employee", "customer_refund", "partner", "internal", "external"] },
+    "approval_status": { "enum": ["pending", "approved", "deactivated", "blocked"] },
+    "jurisdiction": { "type": "string" },
+    "rail_types": { "type": "array", "items": { "type": "string" } },
+    "bank_account_reference_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" }
+  }
+}

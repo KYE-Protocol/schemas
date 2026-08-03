@@ -1,0 +1,40 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/ontology-relationship.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Ontology Relationship",
+  "description": "One predicate triple — (subject_term_id, predicate, object_term_id) — with constraints and required evidence. The protocol's stable predicate dictionary is normative; new predicates require an RFC.",
+  "type": "object",
+  "required": ["schema_version", "relationship_id", "subject_term_id", "predicate", "object_term_id", "relationship_type", "definition", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.ontology_relationship.v1" },
+    "relationship_id": { "type": "string", "pattern": "^kye:ontology:relationship:" },
+    "subject_term_id": { "type": "string", "pattern": "^kye:term:" },
+    "predicate": {
+      "enum": [
+        "grants", "limits", "inherits_from", "requires", "requires_authority", "requires_scope", "requires_state", "requires_evidence", "requires_approval_from",
+        "expires_at", "revokes", "supersedes", "depends_on",
+        "constrains", "narrows", "blocks", "allows", "requires_step_up", "requires_human_review",
+        "triggers", "triggers_signal", "invalidates_authority",
+        "proves", "supports", "binds_to", "references", "verifies", "replays", "maps_to_control",
+        "acts_on_behalf_of", "has_authority", "uses_capability", "evidenced_by",
+        "equivalent_to", "related_not_identical", "not_equivalent_to", "aliased_by",
+        "subsumes", "subsumed_by"
+      ]
+    },
+    "object_term_id": { "type": "string", "pattern": "^kye:term:" },
+    "relationship_type": { "enum": ["semantic_rule", "structural", "alias", "constraint", "evidence_binding"] },
+    "definition": { "type": "string", "minLength": 8 },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

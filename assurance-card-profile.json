@@ -1,0 +1,31 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/assurance-card-profile.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Assurance Card Profile",
+  "description": "Profile manifest for KYE Assurance Card Profile™ — the lifecycle assurance layer that turns KYE™ runtime evidence into a living assurance record per delegated entity.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "display_name", "category", "version", "required_objects", "lifecycle_stages", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.assurance_card_profile.v1" },
+    "profile_id": { "type": "string", "pattern": "^kye:profile:assurance_card" },
+    "display_name": { "type": "string" },
+    "category": { "enum": ["lifecycle_assurance"] },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "required_kye_profiles": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "recommended_kye_profiles": { "type": "array", "items": { "type": "string" } },
+    "required_objects": {
+      "type": "array",
+      "items": { "enum": ["KYEAssuranceCard", "KYEHumanInvolvementPlan", "KYEProvenanceEvidence", "KYEAssuranceReviewCycle", "KYEDecommissioningPlan"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "lifecycle_stages": {
+      "type": "array",
+      "items": { "enum": ["design", "pilot", "deploy", "monitor", "incident_review", "scope_change_review", "retention_review", "decommission"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

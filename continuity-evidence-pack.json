@@ -1,0 +1,57 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/continuity-evidence-pack.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Continuity Evidence Pack",
+  "description": "Replayable bundle for one continuity check. Includes refs to original intent, interpreted intent, delegation chain, authority grant, scope, state snapshot, capability manifest, pressure context, incentive context, policy decision, execution context, audit events, payload hash, decision map and drift events. Signed.",
+  "type": "object",
+  "required": ["schema_version", "evidence_pack_id", "continuity_id", "decision_id", "included_evidence", "continuity_summary", "hash", "signature", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.continuity_evidence_pack.v1" },
+    "evidence_pack_id": { "type": "string", "pattern": "^kye:evidence-pack:continuity_" },
+    "continuity_id": { "type": "string" },
+    "decision_id": { "type": "string" },
+    "included_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "original_intent": { "type": "boolean" },
+        "interpreted_intent": { "type": "boolean" },
+        "delegation_chain": { "type": "boolean" },
+        "authority_grant": { "type": "boolean" },
+        "scope": { "type": "boolean" },
+        "state_snapshot": { "type": "boolean" },
+        "capability_manifest": { "type": "boolean" },
+        "pressure_context": { "type": "boolean" },
+        "incentive_context": { "type": "boolean" },
+        "policy_decision": { "type": "boolean" },
+        "execution_context": { "type": "boolean" },
+        "audit_events": { "type": "boolean" },
+        "payload_hash": { "type": "boolean" },
+        "decision_map": { "type": "boolean" },
+        "drift_events": { "type": "boolean" }
+      }
+    },
+    "continuity_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "continuity_status": { "enum": ["preserved", "degraded", "broken", "unknown", "requires_review"] },
+        "material_drift_detected": { "type": "boolean" },
+        "human_review_required": { "type": "boolean" }
+      }
+    },
+    "hash": { "type": "string", "pattern": "^sha(256|384|512):" },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "key_id", "signature"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": { "enum": ["ed25519", "EdDSA"] },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/rule-proof.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Rule Proof",
+  "description": "Test result over a rule set checking enumerated consistency properties (no permission/prohibition conflict, obligations have satisfaction paths, all commit boundaries have gates, all high-risk actions have evidence requirements, revocation path exists, no circular delegation). Emitted by KYE Rule Prover™.",
+  "type": "object",
+  "required": ["schema_version", "proof_id", "rule_set_id", "proof_status", "checked_properties", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.rule_proof.v1" },
+    "proof_id": { "type": "string", "pattern": "^kye:rule-proof:" },
+    "rule_set_id": { "type": "string" },
+    "proof_status": { "enum": ["passed", "passed_with_warnings", "failed"] },
+    "checked_properties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "no_permission_prohibition_conflict": { "type": "boolean" },
+        "obligations_have_satisfaction_paths": { "type": "boolean" },
+        "all_commit_boundaries_have_gates": { "type": "boolean" },
+        "all_high_risk_actions_have_evidence": { "type": "boolean" },
+        "revocation_path_exists": { "type": "boolean" },
+        "no_circular_delegation": { "type": "boolean" },
+        "no_unbounded_obligations": { "type": "boolean" },
+        "all_overrides_have_governance_rule": { "type": "boolean" }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason_code", "message"],
+        "additionalProperties": false,
+        "properties": {
+          "reason_code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    },
+    "conflict_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/state-composition.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE State Composition",
+  "description": "The composed 6-tuple state of a KYE entity at a point in time. Returned by GET /v1/entities/{id}/state. Each dimension references the enums defined in state-model.json and is independently transitionable.",
+  "type": "object",
+  "required": ["entity_state", "checked_at"],
+  "additionalProperties": false,
+  "properties": {
+    "entity_id": { "type": "string", "pattern": "^kye:ent:.+" },
+    "entity_state": { "type": "string" },
+    "authority_state": { "type": "string" },
+    "delegation_state": { "type": "string" },
+    "credential_state": { "type": "string" },
+    "recovery_state": { "type": "string" },
+    "risk_state": { "type": "string" },
+    "checked_at": { "type": "string", "format": "date-time" },
+    "may_act_now": { "type": "boolean", "description": "Composed test per state-composition-matrix.md §2." },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "If may_act_now is false, the dimension(s) that block. Reason codes from public/vocabulary/decision-codes.md."
+    },
+    "active_break_glass_grants": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^kye:bgg:.+" }
+    },
+    "last_audit_event_id": { "type": "string", "pattern": "^kye:aud:.+" }
+  }
+}

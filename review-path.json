@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/review-path.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Review Path",
+  "description": "Multi-step human-review chain for a class of decisions. Each step declares a required role, allowed decision outcomes, optional condition, and an SLA in minutes. Evidence requirements list what MUST be captured per step.",
+  "type": "object",
+  "required": ["schema_version", "review_path_id", "display_name", "applies_to", "review_steps", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.review_path.v1" },
+    "review_path_id": { "type": "string", "pattern": "^kye:review-path:" },
+    "display_name": { "type": "string" },
+    "description": { "type": "string" },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_tiers": { "type": "array", "items": { "enum": ["low", "medium", "high", "critical"] }, "uniqueItems": true },
+        "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "gate_types": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "review_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["step_id", "required_role", "decision_options"],
+        "additionalProperties": false,
+        "properties": {
+          "step_id": { "type": "string" },
+          "required_role": { "type": "string" },
+          "condition": { "type": "string" },
+          "decision_options": {
+            "type": "array",
+            "items": { "enum": ["approve", "deny", "request_changes", "quarantine", "escalate"] },
+            "minItems": 1, "uniqueItems": true
+          },
+          "sla_minutes": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    "evidence_requirements": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

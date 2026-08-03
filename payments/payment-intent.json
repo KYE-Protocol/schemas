@@ -1,0 +1,28 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/payment-intent.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "payment_intent_id", "actor_entity_id", "subject_entity_id",
+    "wallet_entity_id", "amount_minor", "currency", "rail_type", "status"
+  ],
+  "properties": {
+    "payment_intent_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "actor_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "subject_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "wallet_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "beneficiary_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "merchant_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "amount_minor": { "type": "integer", "minimum": 1 },
+    "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+    "rail_type": { "enum": ["bank_transfer", "card", "stablecoin", "internal_ledger", "payout_provider"] },
+    "purpose_code": { "type": "string" },
+    "invoice_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "status": {
+      "enum": ["draft", "pending_authorization", "authorized", "requires_approval", "approved", "denied", "executed", "stopped", "failed", "refunded", "cancelled"]
+    },
+    "external_reference": { "type": "string" },
+    "created_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

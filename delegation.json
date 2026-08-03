@@ -1,0 +1,30 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/delegation.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "delegation_id", "actor_entity_id", "subject_entity_id",
+    "delegator_entity_id", "allowed_actions", "scope", "status"
+  ],
+  "properties": {
+    "delegation_id": { "$ref": "common.json#/$defs/KyeId" },
+    "actor_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "subject_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "delegator_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "authorized_by_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "basis": {
+      "enum": [
+        "explicit_delegation", "employment_role", "service_contract",
+        "board_resolution", "system_binding", "emergency_override"
+      ]
+    },
+    "allowed_actions": { "$ref": "common.json#/$defs/StringArray" },
+    "forbidden_actions": { "$ref": "common.json#/$defs/StringArray" },
+    "scope": { "$ref": "scope.json" },
+    "requires_approval_for": { "$ref": "common.json#/$defs/StringArray" },
+    "status": { "enum": ["pending", "active", "suspended", "revoked", "expired"] },
+    "valid_from": { "$ref": "common.json#/$defs/DateTime" },
+    "valid_until": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

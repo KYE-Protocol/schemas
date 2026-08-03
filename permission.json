@@ -1,0 +1,31 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/permission.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Permission",
+  "description": "Standing rule that an actor MAY perform a capability under defined scope + state requirements. Distinct from a runtime decision: the permission is the standing authority, the decision is the runtime result.",
+  "type": "object",
+  "required": ["schema_version", "permission_id", "subject_entity_id", "principal_entity_id", "capability_id", "permission_type", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.permission.v1" },
+    "permission_id": { "type": "string", "pattern": "^kye:permission:" },
+    "subject_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "capability_id": { "type": "string" },
+    "permission_type": { "enum": ["delegated_capability_permission", "role_based_permission", "scope_based_permission", "regulatory_permission", "contractual_permission"] },
+    "scope": { "type": "object", "additionalProperties": true },
+    "state_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "authority_state": { "type": "string" },
+        "credential_state": { "type": "string" },
+        "risk_state": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "evidence_required": { "type": "boolean" },
+    "valid_from": { "type": "string", "format": "date-time" },
+    "valid_until": { "type": "string", "format": "date-time" },
+    "status": { "enum": ["draft", "active", "expired", "revoked", "suspended"] }
+  }
+}

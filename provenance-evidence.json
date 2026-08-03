@@ -1,0 +1,65 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/provenance-evidence.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Provenance Evidence",
+  "description": "Provenance + supply-chain evidence for an assurance card subject. Lists model / dataset / tool / hardware / supplier / licence references with verification status. Supports SBOM-style decomposition and version lineage. Verification failures emit a signed Signal Bus event.",
+  "type": "object",
+  "required": ["schema_version", "provenance_id", "subject_entity_id", "verification_status", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.provenance_evidence.v1" },
+    "provenance_id": { "type": "string", "pattern": "^kye:provenance:" },
+    "subject_entity_id": { "type": "string" },
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["model_id"],
+        "additionalProperties": false,
+        "properties": {
+          "model_id": { "type": "string" },
+          "version": { "type": "string" },
+          "supplier": { "type": "string" },
+          "licence": { "type": "string" },
+          "checksum": { "type": "string" }
+        }
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dataset_id"],
+        "additionalProperties": false,
+        "properties": {
+          "dataset_id": { "type": "string" },
+          "version": { "type": "string" },
+          "licence": { "type": "string" },
+          "checksum": { "type": "string" },
+          "data_classes": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        }
+      }
+    },
+    "tools": { "type": "array", "items": { "type": "object" } },
+    "hardware": { "type": "array", "items": { "type": "object" } },
+    "suppliers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["supplier_id"],
+        "additionalProperties": false,
+        "properties": {
+          "supplier_id": { "type": "string" },
+          "verified": { "type": "boolean" },
+          "verification_method": { "enum": ["self_attested", "third_party_attestation", "signed_evidence", "registry_check"] }
+        }
+      }
+    },
+    "licences": { "type": "array", "items": { "type": "string" } },
+    "version_lineage": { "type": "array", "items": { "type": "string" } },
+    "verification_status": { "enum": ["verified", "partially_verified", "unverified", "failed"] },
+    "audit_chain_ref": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

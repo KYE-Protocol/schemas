@@ -1,0 +1,299 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/kye.evidence.pack.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Evidence Pack",
+  "description": "Self-contained, signed bundle that captures everything needed to replay and verify a single decision: a reference to the decision map, the immutable input blob, the signed state of the world used during evaluation, the supporting signals, signatures over the bundle, and a reference to the replay context seal. Auditors and regulators consume this as the unit of evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "decision_id",
+    "decision_map_ref",
+    "inputs_blob_ref",
+    "signed_state",
+    "signals",
+    "signatures",
+    "replay_seal_ref",
+    "created_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kye.evidence.pack.v1",
+      "description": "Canonical schema discriminator. Every runtime emitter stamps it and every canonical example carries it; pinned with const so the envelope cannot claim a schema it is not."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^kye:evidence-pack:[A-Za-z0-9._:-]+$",
+      "description": "Stable URN of the evidence pack."
+    },
+    "version": {
+      "const": 1,
+      "description": "Schema major version. Pinned to 1 for kye.evidence.pack.v1."
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^kye:decision:[A-Za-z0-9._:-]+$",
+      "description": "URN of the decision this pack provides evidence for."
+    },
+    "decision_map_ref": {
+      "type": "string",
+      "description": "Content-addressable reference to the kye.evidence.decision_map.v1 instance for this decision (e.g. its id or CID)."
+    },
+    "inputs_blob_ref": {
+      "type": "string",
+      "description": "Content-addressable reference to the immutable, canonical-encoded inputs blob the engine consumed."
+    },
+    "signed_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state_hash",
+        "signer",
+        "signed_at",
+        "signature"
+      ],
+      "description": "Signed snapshot of the relevant state-of-the-world used during evaluation (grants in force, policies live, principal status, etc.).",
+      "properties": {
+        "state_hash": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:+/=-]+$",
+          "description": "Hash over the canonical encoding of the state snapshot."
+        },
+        "state_ref": {
+          "type": "string",
+          "description": "Optional content-addressable reference to the full state snapshot blob."
+        },
+        "signer": {
+          "type": "string",
+          "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+          "description": "KYEID of the entity that signed the snapshot."
+        },
+        "signed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time the snapshot was signed."
+        },
+        "signature": {
+          "type": "string",
+          "description": "Detached signature over state_hash."
+        }
+      }
+    },
+    "signals": {
+      "type": "array",
+      "description": "External signals consumed during evaluation (risk scores, telemetry, attestations). Each carries provenance.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source",
+          "payload_hash",
+          "observed_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Locally-unique signal identifier inside the pack."
+          },
+          "source": {
+            "type": "string",
+            "description": "KYEID or URN of the signal producer."
+          },
+          "payload_hash": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._:+/=-]+$",
+            "description": "Hash of the signal's canonical payload."
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time the signal was observed by the engine."
+          }
+        }
+      }
+    },
+    "signatures": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Signatures binding the pack contents together (typically engine + principal countersignature).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "signer",
+          "signature",
+          "signed_at"
+        ],
+        "properties": {
+          "signer": {
+            "type": "string",
+            "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
+            "description": "KYEID of the signer."
+          },
+          "signature": {
+            "type": "string",
+            "description": "Detached signature value (COSE/JWS string)."
+          },
+          "signed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time the signature was produced."
+          }
+        }
+      }
+    },
+    "replay_seal_ref": {
+      "type": "string",
+      "description": "Content-addressable reference to the kye.replay.context_seal.v1 captured at decision time."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the evidence pack was assembled."
+    },
+    "decided_in_region": {
+      "type": "string",
+      "enum": [
+        "us",
+        "eu",
+        "uk",
+        "apac",
+        "me",
+        "af",
+        "latam"
+      ],
+      "description": "§16 §12 Residency-proof (2026-06-10). The canonical residency region (kye:dictionary:data-residency region term) in which this decision was EVALUATED — the region-pinning PEP resolved the request and ran the policy here. Distinct from jurisdictions[] (legal jurisdiction): this is the infra deployment region. A regulator re-derives, from the pack alone, that the tenant's decision was made in-jurisdiction. Stamped by the region-pinning PEP (internal)."
+    },
+    "stored_in_region": {
+      "type": "string",
+      "enum": [
+        "us",
+        "eu",
+        "uk",
+        "apac",
+        "me",
+        "af",
+        "latam"
+      ],
+      "description": "§16 §12 Residency-proof (2026-06-10). The canonical residency region in which this evidence pack + decision record were PERSISTED (the region-pinned D1 + jurisdiction-restricted R2 bucket declared in internal). MUST equal decided_in_region unless the pack carries a cross_border record with a lawful_basis. A regulator re-derives that the evidence was stored in-jurisdiction."
+    },
+    "jurisdictions": {
+      "type": "array",
+      "description": "Jurisdictions this evidence pack is scoped to — values from internal Used to filter regulator-facing replay: an ICO subpoena receives only UK-scoped packs; an OCR subpoena receives only US-scoped packs. The pack includes BOTH the data-subject jurisdiction and every processing-region the call touched, so cross-border calls surface their full route.",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "subject_jurisdiction_canonical": {
+      "type": "string",
+      "description": "Jurisdiction of the data subject (where applicable) — drives lawful-basis selection + retention floor. Resolves against internal Optional in v1.x; required in v2.",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "cross_border": {
+      "type": "object",
+      "description": "Cross-border transfer record. Populated automatically when subject_jurisdiction_canonical differs from any element of jurisdictions[] (i.e. the call crossed a boundary). Carries the lawful basis for the transfer so GDPR Art. 44-49 transfer-impact assessment is automatic.",
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "lawful_basis": {
+          "type": "string",
+          "enum": [
+            "adequacy_decision",
+            "standard_contractual_clauses",
+            "binding_corporate_rules",
+            "explicit_consent",
+            "vital_interests",
+            "public_interest",
+            "legitimate_interest_with_safeguards",
+            "intra_organisational_transfer"
+          ],
+          "description": "GDPR Art. 44-49 transfer mechanism. Mirrors EDPB Recommendations 01/2020."
+        },
+        "basis_ref": {
+          "type": "string",
+          "description": "URN or URL of the documentary evidence backing the lawful basis (e.g. SCC version, BCR approval reference)."
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "lawful_basis"
+      ]
+    },
+    "memory_basis": {
+      "type": "array",
+      "description": "§31 Memory Authority. Every agent-memory record the decision relied upon — as action evidence or as decision context — with the recall-time admissibility verdict. Empty/absent = the action relied on no memory. A regulator can re-derive whether the memory the agent acted on was authorised, current, scoped, consented and provenance-backed.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "memory_id",
+          "admissibility_state",
+          "used_as"
+        ],
+        "properties": {
+          "memory_id": {
+            "type": "string",
+            "pattern": "^kye:agent-memory:[a-z0-9_-]+$",
+            "description": "URN of the kye.agent_memory.v1 record relied upon."
+          },
+          "content_hash": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "description": "Pins the exact memory version relied upon (matches kye.agent_memory.v1.content_hash)."
+          },
+          "used_as": {
+            "type": "string",
+            "enum": [
+              "action_evidence",
+              "decision_context"
+            ],
+            "description": "Whether the memory was cited as evidence justifying the action, or only as background context informing it."
+          },
+          "admissibility_state": {
+            "type": "string",
+            "enum": [
+              "MEMORY_ADMISSIBLE",
+              "MEMORY_NOT_ADMISSIBLE",
+              "MEMORY_VALID",
+              "MEMORY_STALE",
+              "MEMORY_EXPIRED",
+              "MEMORY_REVOKED",
+              "MEMORY_SCOPE_EXCEEDED",
+              "MEMORY_PROVENANCE_MISSING",
+              "MEMORY_CONFLICT",
+              "MEMORY_POISONING_RISK"
+            ],
+            "description": "Recall-time verdict (canonical enum — single declaration here). MEMORY_ADMISSIBLE/MEMORY_NOT_ADMISSIBLE are the terminal verdicts; the remainder are the reason states that drive them. A non-admissible memory used as action_evidence maps to the Action-Admissibility inadmissibility class `inadmissible_memory`."
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "uniqueItems": true,
+            "description": "Zero or more contributing reason states when admissibility_state is a terminal verdict (e.g. [MEMORY_STALE, MEMORY_SCOPE_EXCEEDED])."
+          }
+        }
+      }
+    }
+  }
+}

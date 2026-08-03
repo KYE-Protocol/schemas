@@ -1,0 +1,52 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/scope.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scope_id", "constraints"],
+  "properties": {
+    "scope_id": { "$ref": "common.json#/$defs/KyeId" },
+    "actions": { "$ref": "common.json#/$defs/StringArray" },
+    "resources": { "$ref": "common.json#/$defs/StringArray" },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tenant": { "type": "string" },
+        "workspace": { "type": "string" },
+        "environment": { "enum": ["dev", "test", "stage", "prod", "airgapped"] },
+        "jurisdiction": { "type": "string" },
+        "region": { "type": "string" },
+        "time_window": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "valid_from": { "$ref": "common.json#/$defs/DateTime" },
+            "valid_until": { "$ref": "common.json#/$defs/DateTime" }
+          }
+        },
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "max_calls_per_minute": { "type": "integer", "minimum": 0 },
+            "max_calls_per_hour": { "type": "integer", "minimum": 0 },
+            "max_calls_per_day": { "type": "integer", "minimum": 0 },
+            "max_records_per_action": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "data_constraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowed_data_classes": { "$ref": "common.json#/$defs/StringArray" },
+            "redaction_required": { "type": "boolean" },
+            "external_send_allowed": { "type": "boolean" },
+            "export_allowed": { "type": "boolean" }
+          }
+        },
+        "obligations": { "$ref": "common.json#/$defs/StringArray" }
+      }
+    }
+  }
+}

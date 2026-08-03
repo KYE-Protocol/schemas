@@ -1,0 +1,98 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/meaning-continuity-decision.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Meaning Continuity Decision",
+  "description": "Signed verdict from the KYE Meaning Continuity Engine. Carries decision value, reason code, per-dimension Boolean outcomes, meaning score, next-step routing, obligations and reference to the meaning evidence pack. See kye-meaning-continuity-v1.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "decision_id",
+    "meaning_continuity_id",
+    "decision",
+    "reason_code",
+    "decided_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.meaning_continuity_decision.v1" },
+    "decision_id": { "type": "string", "pattern": "^kye:decision:meaning-continuity_" },
+    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
+    "decision": {
+      "enum": [
+        "meaning_preserved",
+        "meaning_degraded",
+        "meaning_broken",
+        "meaning_unknown",
+        "require_clarification",
+        "require_reconfirmation",
+        "require_human_review",
+        "quarantine"
+      ]
+    },
+    "reason_code": { "type": "string" },
+    "checked_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "intent_preserved": { "type": "boolean" },
+        "constraints_preserved": { "type": "boolean" },
+        "context_preserved": { "type": "boolean" },
+        "memory_consistent": { "type": "boolean" },
+        "incentives_aligned": { "type": "boolean" },
+        "timing_stable": { "type": "boolean" },
+        "handoff_integrity": { "enum": ["preserved", "degraded", "broken", "unknown"] },
+        "state_transition_safe": { "type": "boolean" }
+      }
+    },
+    "meaning_score": {
+      "type": "object",
+      "required": ["score"],
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "type": "string", "const": "0_to_1" },
+        "interpretation": {
+          "enum": [
+            "meaning_preserved",
+            "meaning_degraded",
+            "meaning_broken",
+            "meaning_unknown"
+          ]
+        }
+      }
+    },
+    "required_next_step": {
+      "enum": [
+        "route_to_admissibility",
+        "route_to_authority_check",
+        "principal_clarification",
+        "principal_reconfirmation",
+        "human_review",
+        "pause_admission",
+        "quarantine_proposed_action",
+        "block"
+      ]
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "pause_admission",
+          "request_clarification",
+          "request_reconfirmation",
+          "prevent_commit_until_reconfirmed",
+          "emit_meaning_drift_event",
+          "include_in_evidence_pack",
+          "notify_principal",
+          "escalate_to_human_review",
+          "quarantine_actor",
+          "bind_to_admissibility_decision"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "evidence_pack_ref": { "type": "string" },
+    "audit_chain_ref": { "type": "string" },
+    "decided_at": { "type": "string", "format": "date-time" }
+  }
+}

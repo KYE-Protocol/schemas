@@ -1,0 +1,31 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/policy-coverage-report.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Policy Coverage Report",
+  "description": "Audits whether KYE policies cover important risk surfaces — payment thresholds, high-risk-AI human oversight, broken / quarantined capabilities, expired delegations, compromised credentials, EU AI Act post-market monitoring evidence emission, etc.",
+  "type": "object",
+  "required": ["schema_version", "report_id", "coverage_result", "coverage"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":   { "type": "string", "enum": ["kye.policy_coverage_report.v1"] },
+    "report_id":        { "type": "string", "pattern": "^kye:policy-coverage:.+" },
+    "coverage_result":  { "type": "string", "enum": ["passed", "passed_with_gaps", "failed", "incomplete"] },
+    "coverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["area", "required_policy", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "area":            { "type": "string" },
+          "required_policy": { "type": "string" },
+          "status":          { "type": "string", "enum": ["covered", "gap", "deprecated", "out_of_scope"] },
+          "policy_id":       { "type": "string" },
+          "reason_code":     { "type": "string" }
+        }
+      }
+    },
+    "checked_at":       { "type": "string", "format": "date-time" }
+  }
+}

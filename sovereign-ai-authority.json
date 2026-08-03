@@ -1,0 +1,61 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/sovereign-ai-authority.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Sovereign AI Authority Decision",
+  "description": "Per-public-sector-action authority decision under the KYE Sovereign AI profile (kye-sovereign-ai-v1). Binds the actor, the principal (citizen / business / agency), the statutory basis, the consent basis (when applicable), the data classes in scope, and the decision.",
+  "type": "object",
+  "required": [
+    "request_id",
+    "decision",
+    "decision_id",
+    "actor_entity_id",
+    "principal_entity_id",
+    "agency_ref",
+    "decided_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema":             { "type": "string" },
+    "request_id":          { "type": "string" },
+    "decision":            { "enum": ["allow", "allow_with_constraints", "require_approval", "require_step_up", "require_human_review", "require_recovery", "quarantine", "deny"] },
+    "decision_id":         { "type": "string", "pattern": "^kye:decision:[A-Za-z0-9_:.-]+$" },
+    "reason_code":         { "type": "string" },
+    "actor_entity_id":     { "type": "string" },
+    "actor_role":          { "enum": ["civil_servant", "contractor", "vendor", "ai_agent", "regulator", "ombudsman", "auditor"] },
+    "principal_entity_id": { "type": "string" },
+    "agency_ref":          { "type": "string", "description": "Agency / ministry / regulator entity URN." },
+    "statutory_basis":     { "type": "string", "description": "Law / regulation / order under which the action is taken (e.g. 'GDPR Art. 6(1)(e)', 'PSD3 RTS Art. 14')." },
+    "consent_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "consent_id":    { "type": "string" },
+        "consent_state": { "enum": ["active", "withdrawn", "expired", "pending"] }
+      }
+    },
+    "data_classes_in_scope": {
+      "type": "array",
+      "items": { "enum": ["public", "internal", "confidential", "restricted", "sovereign_protected"] }
+    },
+    "model_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "model_entity_id":  { "type": "string" },
+        "model_risk_state": { "enum": ["normal", "elevated", "high", "critical", "blocked"] }
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type":  { "type": "string" },
+          "value": {}
+        }
+      }
+    },
+    "decided_at":          { "type": "string", "format": "date-time" }
+  }
+}

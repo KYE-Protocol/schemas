@@ -1,0 +1,25 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/payment-authority.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "payment_authority_id", "actor_entity_id", "subject_entity_id",
+    "wallet_entity_id", "basis", "allowed_actions", "scope_id", "status",
+    "valid_from"
+  ],
+  "properties": {
+    "payment_authority_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "actor_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "subject_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "wallet_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "basis": { "enum": ["explicit_delegation", "employment_role", "service_contract", "board_resolution", "system_binding", "emergency_override"] },
+    "allowed_actions": { "type": "array", "items": { "type": "string" } },
+    "forbidden_actions": { "type": "array", "items": { "type": "string" } },
+    "scope_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "status": { "enum": ["pending", "active", "suspended", "revoked", "expired"] },
+    "revocable": { "type": "boolean" },
+    "valid_from": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" },
+    "valid_until": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

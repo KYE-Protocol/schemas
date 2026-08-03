@@ -1,0 +1,129 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payload-artifact.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Payload Artifact",
+  "description": "A signed, hashed, replay-resistant **artefact** (not an entity) that records or requests an action by an acting entity, on behalf of a principal entity, using a capability entity, under a specific authority context. Payloads carry state but never authority — they are evidence artefacts the runtime verifies and binds to a policy decision and audit trail. Companion to evidence-pack.json (which aggregates many artefacts) and capability-manifest.json (which declares the capability invoked).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "payload_id",
+    "artifact_type",
+    "payload_type",
+    "state",
+    "actor_entity_id",
+    "principal_entity_id",
+    "integrity",
+    "freshness"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.payload_artifact.v1"]
+    },
+    "payload_id": {
+      "type": "string",
+      "pattern": "^kye:payload:.+",
+      "description": "URN of this payload artefact."
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": ["payload"],
+      "description": "Discriminator. Always 'payload' for this schema."
+    },
+    "payload_type": {
+      "type": "string",
+      "enum": [
+        "capability_invocation_request",
+        "capability_invocation_response",
+        "tool_call_request",
+        "tool_call_response",
+        "model_completion_request",
+        "model_completion_response",
+        "payment_initiate_request",
+        "payment_authorize_request",
+        "credential_present",
+        "attestation_assertion",
+        "human_oversight_decision",
+        "recovery_request_payload",
+        "compromise_report_payload",
+        "evidence_export_request",
+        "generic"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "created",
+        "signed",
+        "submitted",
+        "received",
+        "verified",
+        "rejected",
+        "expired",
+        "replayed",
+        "tampered",
+        "bound_to_decision",
+        "executed",
+        "failed",
+        "archived"
+      ]
+    },
+    "actor_entity_id":     { "type": "string", "pattern": "^kye:ent:.+|^kye:agent:.+" },
+    "principal_entity_id": { "type": "string", "pattern": "^kye:ent:.+|^kye:org:.+|^kye:user:.+" },
+    "acting_on_behalf_of": { "type": "string" },
+    "capability_id":       { "type": "string", "pattern": "^kye:cap(?:ability)?:.+" },
+    "capability_version":  { "type": "string" },
+    "requested_action":    { "type": "string" },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resource_type": { "type": "string" },
+        "resource_id":   { "type": "string" }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["payload_hash", "canonicalization", "signature_algorithm", "signature", "signed_by_credential_id"],
+      "additionalProperties": false,
+      "properties": {
+        "payload_hash":             { "type": "string", "description": "Opaque hash of the canonicalised payload body. Construction is part of the patent track and is not described here." },
+        "canonicalization":         { "type": "string", "enum": ["jcs-rfc8785", "jose-detached", "cose-sign1", "kye-canonical-1"] },
+        "signature_algorithm":      { "type": "string" },
+        "signature":                { "type": "string" },
+        "signed_by_credential_id":  { "type": "string", "pattern": "^kye:cred(?:ential)?:.+" },
+        "payload_hash_valid":       { "type": "boolean" }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "required": ["nonce", "issued_at", "expires_at", "replay_protection"],
+      "additionalProperties": false,
+      "properties": {
+        "nonce":              { "type": "string", "minLength": 1 },
+        "issued_at":          { "type": "string", "format": "date-time" },
+        "expires_at":         { "type": "string", "format": "date-time" },
+        "replay_protection":  { "type": "boolean" },
+        "nonce_reused":       { "type": "boolean" }
+      }
+    },
+    "decision_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision_id":  { "type": "string", "pattern": "^kye:(?:decision|pdc):.+" },
+        "decision":     { "type": "string", "enum": ["allow", "allow_with_constraints", "require_approval", "deny", "quarantine"] },
+        "reason_code":  { "type": "string" }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "audit_event_id":    { "type": "string", "pattern": "^kye:(?:audit|aud):.+" },
+        "evidence_pack_ref": { "type": "string", "pattern": "^kye:evidence-pack:.+|^kye:evp:.+" }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/adoption-evidence-pack.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Adoption Evidence Pack",
+  "description": "Signed bundle composing intake + readiness + entity authority record + authority gates + commit boundaries + review paths + training + sample runtime decisions + revocation test. Stage 8 of the journey; offline-verifiable by a third party against a published JWKS.",
+  "type": "object",
+  "required": ["schema_version", "evidence_pack_id", "use_case_id", "included_evidence", "readiness_summary", "hash", "signature", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.adoption_evidence_pack.v1" },
+    "evidence_pack_id": { "type": "string", "pattern": "^kye:evidence-pack:" },
+    "use_case_id": { "type": "string", "pattern": "^kye:use-case:" },
+    "included_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "use_case_intake": { "type": "boolean" },
+        "readiness_assessment": { "type": "boolean" },
+        "entity_authority_record": { "type": "boolean" },
+        "authority_gates": { "type": "boolean" },
+        "commit_boundaries": { "type": "boolean" },
+        "review_paths": { "type": "boolean" },
+        "training_records": { "type": "boolean" },
+        "runtime_decision_examples": { "type": "boolean" },
+        "evidence_pack_samples": { "type": "boolean" },
+        "revocation_test": { "type": "boolean" }
+      }
+    },
+    "readiness_summary": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["not_ready", "pilot_ready_with_controls", "controlled_production", "production_ready"] },
+        "autonomous_execution_allowed": { "type": "boolean" },
+        "human_review_required": { "type": "boolean" }
+      }
+    },
+    "hash": { "type": "string", "pattern": "^sha(256|384|512):[A-Za-z0-9+/=]+|^sha(256|384|512):\\.\\.\\.$" },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "key_id"],
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": { "enum": ["ed25519", "ecdsa-p256", "rs256"] },
+        "key_id": { "type": "string" },
+        "signature": { "type": "string" }
+      }
+    },
+    "audit_chain_ref": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}

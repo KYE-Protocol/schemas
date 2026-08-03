@@ -1,0 +1,79 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/taxonomy-term.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Taxonomy Term",
+  "description": "A canonical term inside a versioned KYE taxonomy. Taxonomies are how KYE classifies entities, capabilities, resources, actions, risk states, sectors, jurisdictions, and evidence so that policy decisions and compliance mappings can reason against shared vocabulary instead of free-text labels. Companion to compliance-mapping.json (which binds taxonomy terms to framework controls).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "taxonomy_id",
+    "term_id",
+    "key",
+    "label",
+    "version",
+    "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.taxonomy_term.v1"]
+    },
+    "taxonomy_id": {
+      "type": "string",
+      "pattern": "^kye:taxonomy:.+",
+      "description": "URN of the parent taxonomy (e.g. kye:taxonomy:capability_type)."
+    },
+    "term_id": {
+      "type": "string",
+      "pattern": "^kye:term:.+",
+      "description": "URN of this term."
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Stable machine key inside the taxonomy."
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "parent_term": {
+      "type": "string",
+      "pattern": "^kye:term:.+",
+      "description": "Optional URN of a parent term for hierarchical taxonomies."
+    },
+    "risk_default": {
+      "type": "string",
+      "enum": ["nominal", "elevated", "watch", "denylisted", "high"]
+    },
+    "side_effect_default": {
+      "type": "string",
+      "description": "Default side-effect classification for this term (read, write, move_money, external_send, …)."
+    },
+    "requires_authority": { "type": "boolean" },
+    "requires_audit":     { "type": "boolean" },
+    "requires_human_approval_default": { "type": "boolean" },
+    "profiles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "KYE profiles in which this term is in scope."
+    },
+    "compliance_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Compliance framework controls this term informs (e.g. EU_AI_ACT:high_risk_ai_system)."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "deprecated", "retired"]
+    }
+  }
+}

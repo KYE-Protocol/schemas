@@ -1,0 +1,124 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/problem-detail.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Problem Detail (RFC 7807) — Canonical HTTP Error Response Envelope",
+  "description": "CANONICAL: the single error-response envelope every KYE™ API surface (gateway-worker, pep-express, pages-functions, rules-gateway, estate-engine, admin Functions) returns on every non-2xx HTTP response, with Content-Type: application/problem+json. Extends RFC 7807 with KYE-specific members for trace correlation, decision provenance, reason codes, field-level validation feedback, retry guidance, support links, and category-grouping. Per §0 (Zero Competing Systems) + §41 (Error Horizons) + §43 (Machine-Readable by Default), the per-error-code → http_status / category / sdk_throw_class / retry_class binding lives in internal; the reason_code enum (a.k.a. error code) lives in internal (extended with http_status + category columns). Wave-ErrorsEnvelope (2026-05-30) consolidated four divergent runtime shapes — `{error, detail}` (gateway-worker), `{error: {code, reason}}` (pep-express), `{error, message}` (estate-engine), `{ok: false, error}` (pages-functions / admin Functions) — into this envelope and added field_errors / category / occurred_at / request_id / support_url / trace_id for SDK ergonomics.",
+  "type": "object",
+  "required": ["type", "title", "status", "reason_code"],
+  "additionalProperties": true,
+  "properties": {
+    "type": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI that identifies the problem type. KYE codes use https://kye.dev/errors/{reason_code}."
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable summary of the problem type."
+    },
+    "status": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 599,
+      "description": "HTTP status code matching the response."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Human-readable explanation specific to this occurrence."
+    },
+    "instance": {
+      "type": "string",
+      "description": "URI / path of the resource instance this error occurred on."
+    },
+    "reason_code": {
+      "type": "string",
+      "description": "Machine-readable, vocabulary-pinned reason code. See public/vocabulary/decision-codes.md."
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "KYE correlation URN tying this error to its trace.",
+      "pattern": "^kye:cor:.+"
+    },
+    "policy_decision_id": {
+      "type": "string",
+      "description": "KYE policy-decision URN, when this error is the result of a denied authorize call.",
+      "pattern": "^kye:pdc:.+"
+    },
+    "audit_event_id": {
+      "type": "string",
+      "description": "KYE audit-event URN written for this error.",
+      "pattern": "^kye:aud:.+"
+    },
+    "supported_versions": {
+      "type": "array",
+      "description": "Set on 406 with reason_code=version_not_acceptable. Lists negotiable versions.",
+      "items": { "type": "string" }
+    },
+    "supported_crypto_suites": {
+      "type": "array",
+      "description": "Set on 406 with reason_code=crypto_suite_not_acceptable.",
+      "items": { "type": "string" }
+    },
+    "retry_after_seconds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Set on 429 / 503. Mirrors the Retry-After header."
+    },
+    "see_also": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" }
+    },
+    "obligations_violated": {
+      "type": "array",
+      "description": "When the error is an obligation enforcement failure, the obligation IDs that failed.",
+      "items": { "type": "string" }
+    },
+    "category": {
+      "type": "string",
+      "enum": ["auth", "validation", "authority", "rate_limit", "dependency", "internal", "capacity", "deprecated"],
+      "description": "Wave-ErrorsEnvelope: coarse-grained grouping used by SDKs to choose a throw class, by dashboards to colour-code, and by SLO scoring. MUST agree with the row in internal for this reason_code."
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Wave-ErrorsEnvelope: server-assigned correlation ID for this single HTTP request. Mirrors the `x-kye-request-id` response header. Distinct from `correlation_id` (which scopes a multi-request trace)."
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Wave-ErrorsEnvelope: ISO-8601 UTC instant when the server produced the error. Helps SDK retry/backoff math and correlates with §35 Streaming Logs."
+    },
+    "trace_id": {
+      "type": "string",
+      "description": "Wave-ErrorsEnvelope: W3C trace-context trace_id (32 lowercase hex) for distributed-trace correlation across Cloudflare → Workers → D1 / R2 / Vectorize spans."
+    },
+    "support_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Wave-ErrorsEnvelope: deep-link to the human-readable runbook / status page for this error class. Typically https://kyeprotocol.com/errors/{reason_code} (mirrors the `type` URI but routes to docs rather than the machine-readable problem-type doc)."
+    },
+    "field_errors": {
+      "type": "array",
+      "description": "Wave-ErrorsEnvelope: present on category='validation' responses (HTTP 400/422). One entry per offending input field; gives the SDK a path-keyed error map for form rendering.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "code", "message"],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "JSON Pointer (RFC 6901) or dotted-path to the offending field. Example: '/applicant/email' or 'applicant.email'."
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable validation reason. SHOULD be a term in the errors dictionary if cross-handler; MAY be handler-local."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable message for the offending field. Safe to render in a form."
+          }
+        }
+      }
+    }
+  }
+}

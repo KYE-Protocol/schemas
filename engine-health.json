@@ -1,0 +1,32 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/engine-health.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Engine Health",
+  "description": "Lightweight readiness check across every KYE engine. Returned by GET /v1/system/health and /v1/system/readiness. Powers operator dashboards + the KYE Self-Audit & Attestation Profile™ continuous-monitoring layer.",
+  "type": "object",
+  "required": ["schema_version", "implementation_id", "checked_at", "status", "engines"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":      { "type": "string", "enum": ["kye.engine_health.v1"] },
+    "implementation_id":   { "type": "string" },
+    "checked_at":          { "type": "string", "format": "date-time" },
+    "status":              { "type": "string", "enum": ["healthy", "degraded", "unhealthy"] },
+    "engines": {
+      "type": "object",
+      "description": "Per-engine status. Keys are engine ids; values are healthy / degraded / unhealthy / not_present.",
+      "additionalProperties": { "type": "string", "enum": ["healthy", "degraded", "unhealthy", "not_present"] }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "engine":      { "type": "string" },
+          "reason_code": { "type": "string" },
+          "message":     { "type": "string" }
+        }
+      }
+    }
+  }
+}

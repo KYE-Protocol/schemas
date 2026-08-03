@@ -1,0 +1,68 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/decommissioning-plan.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Decommissioning Plan",
+  "description": "Decommissioning plan for an assurance-card subject. Carries retention windows, off-boarding steps, cascade-revocation behaviour, evidence-archival policy and the post-execution verification record.",
+  "type": "object",
+  "required": ["schema_version", "plan_id", "assurance_card_ref", "retention", "off_boarding_steps", "cascade_revocation", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.decommissioning_plan.v1" },
+    "plan_id": { "type": "string", "pattern": "^kye:decommissioning-plan:" },
+    "assurance_card_ref": { "type": "string", "pattern": "^kye:assurance-card:" },
+    "retention": {
+      "type": "object",
+      "required": ["evidence_retention_window", "audit_retention_window"],
+      "additionalProperties": false,
+      "properties": {
+        "evidence_retention_window": { "type": "string" },
+        "audit_retention_window": { "type": "string" },
+        "data_retention_window": { "type": "string" }
+      }
+    },
+    "off_boarding_steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["step_id", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "step_id": { "type": "string" },
+          "action": { "enum": ["revoke_authority", "quarantine_credentials", "rotate_keys", "archive_evidence", "notify_owner", "notify_supplier", "update_catalog", "remove_from_runtime"] },
+          "owner_role": { "type": "string" },
+          "evidence_required": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "cascade_revocation": {
+      "type": "object",
+      "required": ["enabled"],
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "scope": { "enum": ["entity_only", "entity_and_descendants", "tenant_wide"] }
+      }
+    },
+    "evidence_archival": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "archive_location": { "type": "string" },
+        "archive_method": { "enum": ["signed_bundle", "cold_storage", "external_archive"] },
+        "archive_signature_key_id": { "type": "string" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "started_at": { "type": "string", "format": "date-time" },
+        "completed_at": { "type": "string", "format": "date-time" },
+        "verified_by_entity_id": { "type": "string" },
+        "verification_evidence_ref": { "type": "string" }
+      }
+    },
+    "status": { "enum": ["draft", "active", "executing", "completed", "deprecated"] }
+  }
+}

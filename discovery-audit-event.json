@@ -1,0 +1,27 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/discovery-audit-event.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Discovery Audit Event",
+  "description": "Hash-chained record of every discovery query. Carries the policy_id under which the query ran, masking flag, decision, reason code and previous_hash for chain replay.",
+  "type": "object",
+  "required": ["schema_version", "audit_event_id", "event_type", "query_id", "requested_by_entity_id", "tenant_id", "purpose", "decision", "timestamp"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.discovery_audit_event.v1" },
+    "audit_event_id": { "type": "string", "pattern": "^kye:audit:" },
+    "event_type": { "const": "kye.discovery.query_performed" },
+    "query_id": { "type": "string" },
+    "requested_by_entity_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "purpose": { "type": "string" },
+    "query_type": { "type": "string" },
+    "result_count": { "type": "integer", "minimum": 0 },
+    "sensitive_fields_masked": { "type": "boolean" },
+    "policy_id": { "type": "string" },
+    "decision": { "enum": ["allow", "allow_with_constraints", "partial", "deny"] },
+    "reason_code": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "hash": { "type": "string", "pattern": "^sha(256|384|512):" },
+    "previous_hash": { "type": "string", "pattern": "^sha(256|384|512):" }
+  }
+}

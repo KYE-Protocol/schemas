@@ -1,0 +1,18 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/access-right.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["access_right_id", "granted_to_entity_id", "right_key", "scope", "status"],
+  "properties": {
+    "access_right_id": { "$ref": "common.json#/$defs/KyeId" },
+    "granted_to_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "granted_by_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "subject_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "right_key": { "type": "string" },
+    "resource_pattern": { "type": "string" },
+    "scope": { "$ref": "scope.json" },
+    "status": { "enum": ["active", "suspended", "revoked", "expired"] },
+    "expires_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

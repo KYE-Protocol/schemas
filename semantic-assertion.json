@@ -1,0 +1,49 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/semantic-assertion.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Semantic Assertion",
+  "description": "Binds a runtime decision to the ontology terms it relied on. Hash-chained into the audit ledger; included in the Continuity Evidence Pack™. Allows a third-party verifier to re-derive what the decision *meant* — not just what it returned.",
+  "type": "object",
+  "required": ["schema_version", "assertion_id", "subject_ref", "assertion_type", "epistemic_status", "terms", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.semantic_assertion.v1" },
+    "assertion_id": { "type": "string", "pattern": "^kye:semantic:assertion:" },
+    "subject_ref": { "type": "string", "description": "URN of the runtime artefact this assertion describes — typically a decision_id or evidence_pack_id." },
+    "assertion_type": { "enum": ["decision_semantics", "mapping_validation", "discovery_semantics", "continuity_semantics", "evidence_semantics"] },
+    "epistemic_status": {
+      "enum": ["declared", "inferred", "verified", "resolved"],
+      "description": "HOW this assertion is known — the term key from kye:dictionary:epistemic-status (internal). assertion_type says what KIND of claim this is; epistemic_status says what STANDING it has. The dictionary carries verdict_admissible per term: `inferred` and `resolved` are NOT admissible as inputs to a sealed decision, because a verdict depending on them cannot be re-derived from published keys alone (§13 Replay-Proof™ / §0.47 air-gapped determinism). Note terms[].confidence is a per-term score, not a standing — a confident inference is still an inference."
+    },
+    "epistemic_basis": {
+      "type": "string",
+      "description": "How the epistemic_status was reached, per the dictionary's provenance_required for that term: the identified party (declared), the mechanism and version (inferred), the check id or named reviewer (verified), or the resolution policy ref (resolved)."
+    },
+    "terms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term_id", "applies"],
+        "additionalProperties": false,
+        "properties": {
+          "term_id": { "type": "string", "pattern": "^kye:term:" },
+          "applies": { "type": "boolean" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      },
+      "minItems": 1
+    },
+    "mappings_consulted": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^kye:ontology:mapping:" },
+      "uniqueItems": true
+    },
+    "semantic_summary": { "type": "string" },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "audit_chain_ref": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

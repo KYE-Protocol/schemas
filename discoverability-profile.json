@@ -1,0 +1,32 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/discoverability-profile.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Discoverability Profile",
+  "description": "Defines policy-filtered discovery of KYE entities, authorities, delegations, capabilities, states, decisions, evidence packs, profiles, connectors, apps and plugins. See kye-discoverability-v1.md.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "display_name", "version", "required_kye_profiles", "access_model"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.discoverability_profile.v1" },
+    "profile_id": { "type": "string", "pattern": "^kye:profile:[a-z0-9-]+$" },
+    "display_name": { "type": "string" },
+    "category": { "type": "string", "const": "delegated_agency_discovery" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "required_kye_profiles": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "required_objects": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "discovery_modes": {
+      "type": "array",
+      "items": { "enum": ["private_tenant", "workspace", "cross_workspace", "federated", "public_registry", "certification_registry"] }
+    },
+    "access_model": { "const": "policy_filtered" },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

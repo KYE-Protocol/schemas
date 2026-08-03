@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/admission-gate.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Admission Gate",
+  "description": "Pre-admission gate placed UPSTREAM of the authority pipeline. Declares applicable scopes, decision policy, required checks, evidence requirements and signal events emitted on admit / reject / require-clarification / require-human-review / quarantine.",
+  "type": "object",
+  "required": ["schema_version", "gate_id", "display_name", "applies_to", "decision_policy", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.admission_gate.v1" },
+    "gate_id": { "type": "string", "pattern": "^kye:admission-gate:" },
+    "display_name": { "type": "string" },
+    "description": { "type": "string" },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actor_types": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "profiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "sectors": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "decision_policy": {
+      "type": "object",
+      "required": ["default_decision", "allowed_decisions"],
+      "additionalProperties": false,
+      "properties": {
+        "default_decision": { "enum": ["admit", "reject", "require_clarification", "require_human_review", "quarantine", "route_to_authority_check"] },
+        "allowed_decisions": {
+          "type": "array",
+          "items": { "enum": ["admit", "reject", "require_clarification", "require_human_review", "quarantine", "route_to_authority_check"] },
+          "minItems": 1, "uniqueItems": true
+        }
+      }
+    },
+    "required_checks": {
+      "type": "array",
+      "items": { "enum": ["intent_present", "intent_clear", "principal_resolved", "actor_resolved", "accountable_owner_known", "capability_known", "resource_known", "data_source_allowed", "prohibited_action_class", "continuity_preserved", "formal_rule_block", "evidence_ready", "jurisdiction_supported", "risk_state_acceptable", "no_coercion_signal", "no_incentive_conflict", "no_unsafe_tool_path"] },
+      "uniqueItems": true
+    },
+    "required_evidence": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "signal_events": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

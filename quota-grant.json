@@ -1,0 +1,25 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/quota-grant.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Quota Grant",
+  "description": "A token-bucket / hard-cap allocation tied to an authority grant. The Gateway reserves units before authorising an action, commits on success, releases on cancel.",
+  "type": "object",
+  "required": ["quota_id", "principal_entity_id", "metric_name", "limit", "unit", "window", "state"],
+  "properties": {
+    "quota_id":            { "type": "string", "pattern": "^kye:quota:[A-Za-z0-9_:.-]+$" },
+    "schema_version":      { "const": "kye.quota_grant.v1" },
+    "principal_entity_id": { "type": "string" },
+    "authority_grant_id":  { "type": "string", "description": "Optional: bind the quota to a specific authority grant. Cascade revocation invalidates the quota." },
+    "metric_name":         { "type": "string" },
+    "limit":               { "type": "number", "exclusiveMinimum": 0 },
+    "unit":                { "type": "string", "enum": ["count", "byte", "second", "millisecond", "request", "decision", "pack"] },
+    "window":              { "type": "string", "enum": ["per_request", "per_minute", "per_hour", "per_day", "per_month", "per_year", "lifetime"] },
+    "current_consumed":    { "type": "number", "minimum": 0 },
+    "reserved":            { "type": "number", "minimum": 0, "description": "Reserved-but-not-committed units (in flight)." },
+    "state":               { "enum": ["active", "exhausted", "frozen", "expired", "revoked"] },
+    "valid_from":          { "type": "string", "format": "date-time" },
+    "valid_until":         { "type": "string", "format": "date-time" },
+    "external_meter_id":   { "type": "string" },
+    "external_meter_provider": { "type": "string", "enum": ["stripe", "lago", "metronome", "orb", "internal"] }
+  }
+}

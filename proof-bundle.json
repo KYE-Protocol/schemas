@@ -1,0 +1,18 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/proof-bundle.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["proof_bundle_id", "subject_type", "subject_id", "bundle_hash", "created_at"],
+  "properties": {
+    "proof_bundle_id": { "$ref": "common.json#/$defs/KyeId" },
+    "subject_type": { "type": "string" },
+    "subject_id": { "$ref": "common.json#/$defs/KyeId" },
+    "included_artifacts": { "$ref": "common.json#/$defs/StringArray" },
+    "bundle_hash": { "$ref": "common.json#/$defs/Hash" },
+    "transparency_receipt_id": { "$ref": "common.json#/$defs/KyeId" },
+    "signature": { "$ref": "common.json#/$defs/Signature" },
+    "artifact_uri": { "type": "string", "format": "uri" },
+    "created_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

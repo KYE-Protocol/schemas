@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/runtime-authorize-request.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["actor", "action"],
+  "properties": {
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id"],
+      "properties": {
+        "entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "entity_type": { "type": "string" }
+      }
+    },
+    "principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity_id": { "$ref": "common.json#/$defs/KyeId" }
+      }
+    },
+    "acting_on_behalf_of": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subject_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "delegation_id": { "$ref": "common.json#/$defs/KyeId" }
+      }
+    },
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resource_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "resource_owner_entity_id": { "$ref": "common.json#/$defs/KyeId" }
+      }
+    },
+    "action": { "type": "string" },
+    "requested_scope": { "$ref": "scope.json" },
+    "credentials": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
+    "attestations": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
+    "context": { "type": "object" }
+  }
+}

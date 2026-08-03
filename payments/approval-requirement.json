@@ -1,0 +1,16 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/approval-requirement.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["approval_requirement_id", "applies_to_action", "approval_type", "status"],
+  "properties": {
+    "approval_requirement_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "applies_to_action": { "type": "string" },
+    "threshold_minor": { "type": "integer", "minimum": 0 },
+    "currency": { "type": "string" },
+    "approval_type": { "enum": ["single", "dual", "four_eyes", "threshold_based", "beneficiary_specific", "rail_specific", "break_glass"] },
+    "approver_roles": { "type": "array", "items": { "type": "string" } },
+    "status": { "enum": ["active", "deprecated"] }
+  }
+}

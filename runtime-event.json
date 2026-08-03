@@ -1,0 +1,24 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/runtime-event.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["runtime_event_id", "actor_entity_id", "action", "outcome", "occurred_at"],
+  "properties": {
+    "runtime_event_id": { "$ref": "common.json#/$defs/KyeId" },
+    "actor_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "principal_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "acting_on_behalf_of_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "resource_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "action": { "type": "string" },
+    "credential_id": { "$ref": "common.json#/$defs/KyeId" },
+    "delegation_id": { "$ref": "common.json#/$defs/KyeId" },
+    "policy_decision_id": { "$ref": "common.json#/$defs/KyeId" },
+    "outcome": { "enum": ["authorized", "denied", "executed", "stopped", "failed"] },
+    "input_hash": { "$ref": "common.json#/$defs/Hash" },
+    "output_hash": { "$ref": "common.json#/$defs/Hash" },
+    "context": { "type": "object" },
+    "occurred_at": { "$ref": "common.json#/$defs/DateTime" },
+    "recorded_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

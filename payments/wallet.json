@@ -1,0 +1,20 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/wallet.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["wallet_id", "entity_id", "wallet_kind", "owner_entity_id", "currencies", "rail_types", "status"],
+  "properties": {
+    "wallet_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "wallet_kind": { "enum": ["operating_wallet", "treasury_wallet", "spend_program_wallet", "settlement_wallet", "agent_wallet"] },
+    "owner_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "controller_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "currencies": { "type": "array", "items": { "type": "string", "minLength": 3, "maxLength": 3 } },
+    "rail_types": { "type": "array", "items": { "type": "string" } },
+    "custody_provider_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "program_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "status": { "enum": ["active", "stopped", "suspended", "revoked"] },
+    "created_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

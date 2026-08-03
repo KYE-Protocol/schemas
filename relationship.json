@@ -1,0 +1,18 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/relationship.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["relationship_id", "source_entity_id", "relationship_type", "target_entity_id", "status"],
+  "properties": {
+    "relationship_id": { "$ref": "common.json#/$defs/KyeId" },
+    "source_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "relationship_type": { "type": "string" },
+    "target_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "evidence_refs": { "$ref": "common.json#/$defs/StringArray" },
+    "confidence": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "valid_from": { "$ref": "common.json#/$defs/DateTime" },
+    "valid_until": { "$ref": "common.json#/$defs/DateTime" },
+    "status": { "enum": ["active", "pending", "revoked", "expired"] }
+  }
+}

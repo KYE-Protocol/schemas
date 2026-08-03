@@ -1,0 +1,36 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/formal-rules-profile.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Formal Rules Profile",
+  "description": "Profile manifest for KYE Formal Rules Profile™ — the rights, obligations and governance layer that models permissions, obligations, prohibitions, powers, exceptions and governance meta-rules as machine-readable authority objects.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "display_name", "category", "version", "required_objects", "rule_families", "decision_outputs", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.formal_rules_profile.v1" },
+    "profile_id": { "type": "string", "pattern": "^kye:profile:formal_rules" },
+    "display_name": { "type": "string" },
+    "category": { "enum": ["rights_obligations_governance"] },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "required_kye_profiles": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "recommended_kye_profiles": { "type": "array", "items": { "type": "string" } },
+    "required_objects": {
+      "type": "array",
+      "items": { "enum": ["KYEFormalRule", "KYEPermission", "KYEObligation", "KYEProhibition", "KYEPower", "KYEException", "KYEGovernanceRule", "KYERuleConflict", "KYERuleProof", "KYEObligationState"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "rule_families": {
+      "type": "array",
+      "items": { "enum": ["permission", "obligation", "prohibition", "power", "immunity", "exception", "meta_governance"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "decision_outputs": {
+      "type": "array",
+      "items": { "enum": ["allow", "allowed", "deny", "denied", "prohibited", "require_approval", "require_step_up", "quarantine", "obligation_created", "obligation_satisfied", "obligation_breached", "override_required", "human_review_required", "evidence_required"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

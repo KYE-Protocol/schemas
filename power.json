@@ -1,0 +1,44 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/power.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Power",
+  "description": "Authority to create, modify, revoke, waive or override a normative state. Powers are second-order: they govern what may be done to permissions, obligations, prohibitions and other authority objects.",
+  "type": "object",
+  "required": ["schema_version", "power_id", "holder_entity_id", "power_type", "target_object_types", "allowed_operations", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.power.v1" },
+    "power_id": { "type": "string", "pattern": "^kye:power:" },
+    "holder_entity_id": { "type": "string" },
+    "power_type": { "enum": ["grant_power", "revocation_power", "modification_power", "waiver_power", "override_power", "delegation_power"] },
+    "target_object_types": {
+      "type": "array",
+      "items": { "enum": ["KYEAuthorityGrant", "KYEPermission", "KYEDelegation", "KYEObligation", "KYEProhibition", "KYEPower", "KYEFormalRule", "KYEGovernanceRule"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "allowed_operations": {
+      "type": "array",
+      "items": { "enum": ["grant", "modify", "revoke", "suspend", "expire", "waive", "override", "delegate"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "scope": { "type": "object", "additionalProperties": true },
+    "state_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "holder_state": { "type": "string" },
+        "credential_state": { "type": "string" }
+      }
+    },
+    "exercise_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cascade_revocation_required": { "type": "boolean" },
+        "emit_signal_event": { "type": "string" },
+        "generate_evidence_pack": { "type": "boolean" }
+      }
+    },
+    "status": { "enum": ["draft", "active", "revoked", "deprecated"] }
+  }
+}

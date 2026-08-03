@@ -1,0 +1,36 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/governed-catalog-entry.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Governed Catalogue Entry",
+  "description": "Discovery entry for a governed entity — agent, model, tool, service, connector, app or certified implementation. Reused by KYE Discoverability Profile™ + KYE Governed Entity Catalog™. Carries owner, purpose, lifecycle state, risk tier, supported profiles, capabilities, authority record reference, certification status, evidence status, visibility scope and an access-request path.",
+  "type": "object",
+  "required": ["schema_version", "catalog_entry_id", "entity_id", "entry_type", "display_name", "owner_entity_id", "purpose", "lifecycle_state", "visibility"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.governed_catalog_entry.v1" },
+    "catalog_entry_id": { "type": "string", "pattern": "^kye:catalog:" },
+    "entity_id": { "type": "string" },
+    "entry_type": { "enum": ["ai_agent", "workflow", "service", "model", "tool", "connector", "app", "plugin", "profile", "certified_implementation"] },
+    "display_name": { "type": "string" },
+    "owner_entity_id": { "type": "string" },
+    "purpose": { "type": "string" },
+    "lifecycle_state": { "enum": ["proposed", "pilot", "controlled_production", "production", "deprecated", "suspended", "revoked"] },
+    "risk_tier": { "enum": ["low", "medium", "high", "critical"] },
+    "supported_profiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "authority_record_ref": { "type": "string" },
+    "certification_status": { "enum": ["self_attested", "self_tested", "conformant", "certified", "unverified"] },
+    "evidence_status": { "enum": ["evidence_pack_available", "in_progress", "missing"] },
+    "visibility": {
+      "type": "object",
+      "required": ["visibility_level"],
+      "additionalProperties": false,
+      "properties": {
+        "visibility_level": { "enum": ["tenant_private", "workspace", "cross_workspace", "federated", "public_registry"] },
+        "discoverable_by": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "access_request_path": { "type": "string" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

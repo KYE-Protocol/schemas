@@ -1,0 +1,63 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/entity.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "entity_id", "trust_domain_id", "entity_type",
+    "status", "lifecycle_state", "immutable", "created_at"
+  ],
+  "properties": {
+    "entity_id": { "$ref": "common.json#/$defs/KyeId" },
+    "trust_domain_id": { "$ref": "common.json#/$defs/KyeId" },
+    "entity_type": { "type": "string" },
+    "display_name": { "type": "string" },
+    "status": { "$ref": "common.json#/$defs/Status" },
+    "lifecycle_state": { "$ref": "common.json#/$defs/LifecycleState" },
+    "immutable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_entity_id", "registration_event_id", "root_hash", "initial_entity_type"],
+      "properties": {
+        "root_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "registration_event_id": { "$ref": "common.json#/$defs/KyeId" },
+        "root_hash": { "$ref": "common.json#/$defs/Hash" },
+        "initial_entity_type": { "type": "string" }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_level": { "enum": ["low", "medium", "high", "critical"] },
+        "sector_tags": { "$ref": "common.json#/$defs/StringArray" },
+        "data_classes": { "$ref": "common.json#/$defs/StringArray" }
+      }
+    },
+    "assurance": { "$ref": "common.json#/$defs/Assurance" },
+    "labels": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "ai_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agent_runtime_id": { "type": "string" },
+        "autonomy_mode": {
+          "enum": ["advisory", "human_in_the_loop", "approval_required", "constrained", "sandbox_only", "dry_run_only", "blocked"]
+        },
+        "model_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "prompt_template_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "guardrail_entity_ids": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
+        "tool_entity_ids": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
+        "memory_store_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "retrieval_context_hash": { "$ref": "common.json#/$defs/Hash" },
+        "prompt_context_hash": { "$ref": "common.json#/$defs/Hash" }
+      }
+    },
+    "wallet_profile": { "$ref": "https://kyeprotocol.com/schemas/payments/wallet-profile.json" },
+    "created_at": { "$ref": "common.json#/$defs/DateTime" },
+    "updated_at": { "$ref": "common.json#/$defs/DateTime" }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/self-audit-run.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Self-Audit Run",
+  "description": "Output of a KYE Self-Audit & Attestation Profile™ run. Covers the 17 canonical audit areas (schema, dictionary, profile, registry, entity_state, authority_grant, delegation_path, capability_state, credential_binding, policy_binding, decision_correctness, reason_code_correctness, audit_trail_integrity, evidence_completeness, webhook_delivery_integrity, graph_consistency, recovery_revocation_correctness).",
+  "type": "object",
+  "required": ["schema_version", "self_audit_id", "implementation_id", "started_at", "result"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":     { "type": "string", "enum": ["kye.self_audit_run.v1"] },
+    "self_audit_id":      { "type": "string", "pattern": "^kye:self-audit:.+" },
+    "implementation_id":  { "type": "string" },
+    "organisation_entity_id": { "type": "string" },
+    "kye_core_version":   { "type": "string" },
+    "profiles_tested":    { "type": "array", "items": { "type": "string" } },
+    "started_at":         { "type": "string", "format": "date-time" },
+    "completed_at":       { "type": "string", "format": "date-time" },
+    "result":             { "type": "string", "enum": ["passed", "passed_with_warnings", "failed", "incomplete", "not_applicable"] },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tests_total":      { "type": "integer", "minimum": 0 },
+        "tests_passed":     { "type": "integer", "minimum": 0 },
+        "tests_failed":     { "type": "integer", "minimum": 0 },
+        "warnings":         { "type": "integer", "minimum": 0 },
+        "critical_findings":{ "type": "integer", "minimum": 0 }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["finding_id", "severity", "area"],
+        "additionalProperties": false,
+        "properties": {
+          "finding_id": { "type": "string" },
+          "severity":   { "type": "string", "enum": ["info", "low", "medium", "high", "critical"] },
+          "area":       { "type": "string", "enum": ["schema","dictionary","profile","registry","authority","state","delegation","capability","credential","policy","decision","audit","evidence","graph","webhook","recovery","security","compliance_mapping"] },
+          "reason_code":{ "type": "string" },
+          "message":    { "type": "string" }
+        }
+      }
+    },
+    "evidence_refs":      { "type": "array", "items": { "type": "string" } },
+    "provenance": {
+      "type": "object",
+      "description": "How the summary test counts were derived. Present when the run's counts come from an actual executed signal rather than a hand-asserted constant. The build-self-audit-snapshot builder refuses to write without this block, so a snapshot lacking provenance is, by construction, not a real run.",
+      "required": ["derivation", "command", "source", "derived_at", "tests_total", "tests_passed"],
+      "additionalProperties": false,
+      "properties": {
+        "derivation":   { "type": "string", "enum": ["executed", "supplied-from-execution"], "description": "executed = the builder ran the command itself; supplied-from-execution = the counts were parsed from a real run by a caller and passed in with the originating command recorded." },
+        "command":      { "type": "string", "minLength": 1, "description": "The exact command whose output produced tests_total/tests_passed." },
+        "source":       { "type": "string", "minLength": 1, "description": "Identifier of the signal the counts came from, e.g. 'ci-parity-runner' or 'conformance-runner-vitest'." },
+        "derived_at":   { "type": "string", "format": "date-time" },
+        "tests_total":  { "type": "integer", "minimum": 0 },
+        "tests_passed": { "type": "integer", "minimum": 0 },
+        "key_class":    { "type": "string", "enum": ["ci-fixture", "production-hsm"], "description": "Provenance of the signing key used when this run was sealed into a signed bundle: ci-fixture = the in-repo self-audit fixture key matching the published JWKS; production-hsm = the live key whose private half lives in HSM/KMS." }
+      }
+    }
+  }
+}

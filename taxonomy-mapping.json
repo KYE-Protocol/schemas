@@ -1,0 +1,65 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/taxonomy-mapping.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Taxonomy Mapping",
+  "description": "A versioned mapping from a registered KYE taxonomy term to a compliance-framework control reference. The KYE Compliance Mapping Rail™ binds runtime classifications (taxonomy terms) to framework obligations (EU AI Act, ISO 42001, SOC 2, DORA, NIS2, HIPAA, NIST 800-207, PCI DSS, PSD3) so policy decisions and signed evidence packs can be reasoned about against the controls auditors care about. Companion to taxonomy-term.json and compliance-mapping.json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "mapping_id",
+    "source",
+    "target",
+    "version",
+    "status"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.taxonomy_mapping.v1"]
+    },
+    "mapping_id": {
+      "type": "string",
+      "pattern": "^kye:mapping:.+"
+    },
+    "source": {
+      "type": "object",
+      "required": ["taxonomy_id", "term"],
+      "additionalProperties": false,
+      "properties": {
+        "taxonomy_id": { "type": "string", "pattern": "^kye:taxonomy:.+" },
+        "term":        { "type": "string", "minLength": 1 }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["framework", "control_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "framework":    { "type": "string", "description": "Compliance framework identifier (EU_AI_ACT, ISO_42001, SOC2, ISO_27001, PCI_DSS, PSD3, DORA, NIS2, HIPAA, NIST_800_207, NIST_AI_RMF, GDPR, FEDRAMP, NIST_CSF)." },
+        "control_ref": { "type": "string", "description": "Control identifier inside the framework (e.g. high_risk_ai_system, A.5.1, CC1.1, ART.9.1)." }
+      }
+    },
+    "kye_implications": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requires_human_oversight":              { "type": "boolean" },
+        "requires_runtime_logs":                 { "type": "boolean" },
+        "requires_technical_documentation":      { "type": "boolean" },
+        "requires_post_market_monitoring":       { "type": "boolean" },
+        "requires_signed_evidence_pack":         { "type": "boolean" },
+        "requires_dispute_resolution_artefact":  { "type": "boolean" }
+      }
+    },
+    "issued_at":  { "type": "string", "format": "date-time" },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "deprecated", "retired"]
+    }
+  }
+}

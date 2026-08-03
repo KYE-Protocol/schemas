@@ -1,0 +1,40 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/authority-path-discovery.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Authority Path Discovery",
+  "description": "Principal → delegation → actor → capability → authority-grant traversal result. Used by KYE Authority Path Finder™ and the policy-filtered discovery engine.",
+  "type": "object",
+  "required": ["schema_version", "path_id", "actor_entity_id", "principal_entity_id", "path", "path_state"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.authority_path_discovery.v1" },
+    "path_id": { "type": "string", "pattern": "^kye:authority-path:" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "requested_action": { "type": "string" },
+    "capability_id": { "type": "string" },
+    "path": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["node_type", "ref"],
+        "additionalProperties": false,
+        "properties": {
+          "node_type": { "enum": ["principal", "delegation", "actor", "capability", "authority_grant", "scope", "credential"] },
+          "ref": { "type": "string" }
+        }
+      }
+    },
+    "path_state": { "enum": ["valid", "broken", "stale", "disputed", "expired", "revoked"] },
+    "risk_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_state": { "enum": ["low", "normal", "elevated", "high", "critical"] },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/ontology-mapping.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Ontology Mapping",
+  "description": "External-system → KYE term mapping. The mapping_type field declares whether the source term is equivalent, related-not-identical, not-equivalent, aliased, subsumes or is subsumed-by the KYE term. Mappings of type related_not_identical MUST list requires_additional_kye_objects so the policy engine can deny when the source term is presented alone.",
+  "type": "object",
+  "required": ["schema_version", "mapping_id", "source_system", "source_term", "target_term_id", "mapping_type", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.ontology_mapping.v1" },
+    "mapping_id": { "type": "string", "pattern": "^kye:ontology:mapping:" },
+    "source_system": { "type": "string" },
+    "source_term": { "type": "string" },
+    "source_value": { "type": "string" },
+    "target_term_id": { "type": "string", "pattern": "^kye:term:" },
+    "mapping_type": { "enum": ["equivalent", "related_not_identical", "not_equivalent", "aliased_by", "subsumes", "subsumed_by"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "notes": { "type": "string" },
+    "requires_additional_kye_objects": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "status": { "enum": ["draft", "active", "deprecated", "rejected"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "validated_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mapping_type": { "const": "related_not_identical" } } },
+      "then": { "required": ["requires_additional_kye_objects"] }
+    }
+  ]
+}

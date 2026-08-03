@@ -1,0 +1,28 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/prohibition.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Prohibition",
+  "description": "Standing rule — actor MUST NOT perform the prohibited capability under stated conditions. Stronger than a runtime deny: a deny is 'not allowed now', a prohibition is 'this class of action is forbidden under this authority model'.",
+  "type": "object",
+  "required": ["schema_version", "prohibition_id", "subject_entity_id", "prohibited_capability", "effect", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.prohibition.v1" },
+    "prohibition_id": { "type": "string", "pattern": "^kye:prohibition:" },
+    "subject_entity_id": { "type": "string" },
+    "prohibited_capability": { "type": "string" },
+    "condition": { "type": "object", "additionalProperties": true },
+    "effect": {
+      "type": "object",
+      "required": ["decision", "reason_code"],
+      "additionalProperties": false,
+      "properties": {
+        "decision": { "enum": ["deny", "prohibited", "quarantine"] },
+        "reason_code": { "type": "string" },
+        "quarantine_request": { "type": "boolean" },
+        "generate_evidence_pack": { "type": "boolean" }
+      }
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

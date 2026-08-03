@@ -1,0 +1,37 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/agency-drift-event.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Agency Drift Event",
+  "description": "One record per detected drift across the ten KYE Continuity Profile™ drift categories: intent / authority / scope / state / capability / execution / incentive / oversight / evidence / delegation drift. Signed and hash-chained into the audit ledger.",
+  "type": "object",
+  "required": ["schema_version", "drift_event_id", "continuity_id", "drift_type", "severity", "detected_at", "actor_entity_id", "principal_entity_id"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.agency_drift_event.v1" },
+    "drift_event_id": { "type": "string", "pattern": "^kye:drift:" },
+    "continuity_id": { "type": "string" },
+    "drift_type": { "enum": ["intent_drift", "authority_drift", "scope_drift", "state_drift", "capability_drift", "execution_drift", "incentive_drift", "oversight_drift", "evidence_drift", "delegation_drift"] },
+    "severity": { "enum": ["low", "medium", "high", "critical"] },
+    "detected_at": { "type": "string", "format": "date-time" },
+    "actor_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string" },
+    "description": { "type": "string" },
+    "affected_dimensions": {
+      "type": "array",
+      "items": {
+        "enum": ["intent_alignment", "authority_alignment", "scope_alignment", "state_alignment", "capability_alignment", "execution_alignment", "incentive_alignment", "oversight_state", "evidence_completeness", "delegation_chain"]
+      }
+    },
+    "original_value": { "type": "object" },
+    "observed_value": { "type": "object" },
+    "recommended_decision": { "enum": ["allow", "allow_with_constraints", "require_approval", "require_step_up", "require_human_review", "require_reconfirmation", "quarantine", "deny"] },
+    "recommended_obligations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

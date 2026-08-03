@@ -1,0 +1,72 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/metadata-schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Metadata Schema",
+  "description": "A registered KYE metadata schema — the meta-schema that describes which metadata fields a class of KYE objects must carry, which taxonomies their values draw from, and which compliance frameworks are bound to them. Sector and regulatory profiles each register one or more KYEMetadataSchema objects (e.g. financial_services.v1, healthcare.v1, eu_ai_act.v1). KYEMetadataBinding instances reference one of these via metadata_schema_id. Companion to metadata-binding.json and taxonomy-term.json.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "metadata_schema_id",
+    "name",
+    "version",
+    "status",
+    "fields"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.metadata_schema.v1"]
+    },
+    "metadata_schema_id": {
+      "type": "string",
+      "pattern": "^kye:metadata-schema:.+",
+      "description": "URN of this metadata schema."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": { "type": "string" },
+    "applies_to_node_types": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Which KYE object types this schema applies to (entity, capability, resource, authority_grant, payload_artifact, …)."
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "kind", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "name":          { "type": "string", "minLength": 1 },
+          "kind":          { "type": "string", "enum": ["string", "boolean", "number", "datetime", "urn", "taxonomy_term", "list", "object"] },
+          "taxonomy_id":   { "type": "string", "pattern": "^kye:taxonomy:.+", "description": "If kind=taxonomy_term, the taxonomy whose registered terms are valid values." },
+          "required":      { "type": "boolean" },
+          "default":       {},
+          "description":   { "type": "string" }
+        }
+      }
+    },
+    "compliance_framework_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Compliance frameworks this metadata schema produces evidence for (EU_AI_ACT, ISO_42001, SOC2, DORA, NIS2, HIPAA, …)."
+    },
+    "profile_refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "KYE profile IDs that register this schema."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "deprecated", "retired"]
+    }
+  }
+}

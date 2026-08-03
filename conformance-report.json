@@ -1,0 +1,113 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/conformance-report.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Conformance Report",
+  "description": "Machine-readable evidence emitted by the conformance runner after testing a candidate KYE Gateway against the v1.0 fixture pack. The auditor's primary artefact for vendor self-attestation and procurement evidence.",
+  "type": "object",
+  "required": [
+    "report_id",
+    "issued_at",
+    "subject",
+    "conformance_pack_version",
+    "kye_version",
+    "fixtures",
+    "summary",
+    "verdict"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "Unique URN of this report.",
+      "pattern": "^kye:rpt:.+"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subject": {
+      "type": "object",
+      "description": "The Gateway under test.",
+      "required": ["gateway_url", "vendor", "release"],
+      "additionalProperties": false,
+      "properties": {
+        "gateway_url": { "type": "string", "format": "uri" },
+        "vendor": { "type": "string" },
+        "release": { "type": "string" },
+        "deployment_topology": { "type": "string", "enum": ["single-tenant", "multi-tenant", "self-hosted", "saas", "hybrid"] },
+        "kye_version_advertised": { "type": "string" },
+        "kye_profiles_advertised": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "conformance_pack_version": {
+      "type": "string",
+      "description": "Version of the fixture pack that was run.",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "kye_version": {
+      "type": "string",
+      "description": "KYE Protocol version asserted by this report.",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "tier_claimed": {
+      "type": "string",
+      "enum": ["tier-1-bank", "tier-2-mid-market", "tier-3-reference"],
+      "description": "If the Gateway claims a quantitative SLA tier per the SLA conformance tier spec."
+    },
+    "fixtures": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["fixture_id", "name", "outcome"],
+        "additionalProperties": false,
+        "properties": {
+          "fixture_id": { "type": "string" },
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "outcome": { "type": "string", "enum": ["pass", "fail", "skip"] },
+          "duration_ms": { "type": "integer", "minimum": 0 },
+          "started_at": { "type": "string", "format": "date-time" },
+          "evidence": {
+            "type": "object",
+            "description": "Optional evidence captured per step (response status codes, response hashes, audit event ids).",
+            "additionalProperties": true
+          },
+          "failures": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total", "passed", "failed", "skipped"],
+      "additionalProperties": false,
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "started_at": { "type": "string", "format": "date-time" },
+        "ended_at": { "type": "string", "format": "date-time" },
+        "wall_clock_ms": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "type": "string", "enum": ["conformant", "non-conformant", "partial"] },
+        "narrative": { "type": "string" },
+        "tier_claim_validated": { "type": "boolean" }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "description": "Optional detached signature over the canonical encoding of this report (excluding this field). Signing-suite construction is opaque to this schema and lives in the patent track.",
+      "additionalProperties": true
+    }
+  }
+}

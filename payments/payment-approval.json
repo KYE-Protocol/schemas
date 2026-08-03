@@ -1,0 +1,16 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/payment-approval.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["payment_approval_id", "payment_intent_id", "approver_entity_id", "approval_type", "decision", "created_at"],
+  "properties": {
+    "payment_approval_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "payment_intent_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "approver_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "approval_type": { "enum": ["single", "dual", "four_eyes", "threshold_based", "beneficiary_specific", "rail_specific", "break_glass"] },
+    "decision": { "enum": ["approved", "rejected", "withdrawn"] },
+    "reason": { "type": "string" },
+    "created_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

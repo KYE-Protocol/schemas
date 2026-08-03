@@ -1,0 +1,18 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/evidence-completeness-check.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Evidence Completeness Check",
+  "description": "Verifies the canonical 15-item evidence checklist for a single decision: actor entity snapshot, principal entity snapshot, delegation ref, authority grant ref, scope ref, capability manifest ref, capability version/hash, credential binding ref, policy evaluation ref, decision result, reason code, audit event, payload hash/signature where applicable, state snapshot, timestamp.",
+  "type": "object",
+  "required": ["schema_version", "decision_id", "result"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version":  { "type": "string", "enum": ["kye.evidence_completeness_check.v1"] },
+    "decision_id":     { "type": "string", "pattern": "^kye:(decision|pdc):.+" },
+    "result":          { "type": "string", "enum": ["complete", "incomplete", "indeterminate"] },
+    "missing_items":   { "type": "array", "items": { "type": "string" } },
+    "severity":        { "type": "string", "enum": ["info", "low", "medium", "high", "critical"] },
+    "recommendation":  { "type": "string" },
+    "checked_at":      { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/payments/merchant.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["merchant_id", "entity_id", "status"],
+  "properties": {
+    "merchant_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
+    "merchant_category": { "type": "string", "description": "MCC or KYE-internal category code" },
+    "jurisdiction": { "type": "string" },
+    "status": { "enum": ["active", "blocked", "deprecated"] },
+    "created_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+  }
+}

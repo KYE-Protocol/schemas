@@ -1,0 +1,87 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/compliance-mapping.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Compliance Mapping Rail™",
+  "description": "Single-document binding of one regulatory framework's controls / obligations to the KYE Protocol™ runtime events, audit events, and evidence packs that produce evidence for them. Used by the evidence-pack exporter, the conformance reporter, and the Notified-Body / auditor / GRC audit interface.",
+  "type": "object",
+  "required": ["schema_version", "framework", "control_ref", "kye_controls"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.compliance_mapping.v1"]
+    },
+    "framework": {
+      "type": "string",
+      "description": "Canonical short name of the regulatory framework.",
+      "enum": [
+        "EU_AI_ACT",
+        "ISO_IEC_42001",
+        "NIST_AI_RMF",
+        "ISO_27001",
+        "SOC_2",
+        "GDPR",
+        "DORA",
+        "NIS2",
+        "PCI_DSS_4",
+        "HIPAA",
+        "PSD2",
+        "PSD3",
+        "CCPA",
+        "MiCA",
+        "FedRAMP",
+        "FFIEC",
+        "RBI",
+        "MAS",
+        "OFAC",
+        "FATF",
+        "LEI"
+      ]
+    },
+    "framework_version": { "type": "string" },
+    "control_ref": {
+      "type": "string",
+      "description": "Identifier of the obligation / control / article inside the named framework (e.g. AIA_HIGH_RISK_LOGGING, ISO27001_A_8_15, NIST_RMF_GOVERN_2_1, SOC2_CC1_5)."
+    },
+    "control_title":   { "type": "string" },
+    "control_summary": { "type": "string" },
+    "kye_controls": {
+      "type": "array",
+      "minItems": 1,
+      "description": "URNs of the KYE Protocol™ runtime / audit / signal events that produce evidence for this control.",
+      "items": {
+        "type": "string",
+        "pattern": "^kye\\.[a-z0-9_]+(\\.[a-z0-9_]+)+$"
+      }
+    },
+    "evidence_events": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_pack": {
+      "type": "string",
+      "description": "URN of the canonical evidence pack template the auditor receives.",
+      "pattern": "^kye:evidence-pack:.+"
+    },
+    "kye_profiles_required": {
+      "type": "array",
+      "description": "Profile IDs that must be active for this mapping to be valid.",
+      "items": { "type": "string" }
+    },
+    "policy_bundle_refs": {
+      "type": "array",
+      "description": "Rego / Cerbos policy bundle URNs that enforce the control at runtime.",
+      "items": { "type": "string" }
+    },
+    "applicable_sector_profiles": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "applies_to_entity_types": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "retention_minimum_days": { "type": "integer", "minimum": 0 },
+    "notes": { "type": "string" }
+  }
+}

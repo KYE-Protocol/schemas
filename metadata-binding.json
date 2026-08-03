@@ -1,0 +1,86 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/metadata-binding.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Metadata Binding",
+  "description": "A structured metadata block bound to a KYE object (entity, capability, resource, authority, audit event). Field values MUST be drawn from registered KYE taxonomies. The runtime makes metadata available to the policy layer so decisions are aware of sector, jurisdiction, risk class, data class, ownership, lineage, and compliance context. KYE is metadata-first: metadata is not decorative, it influences decisions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "binding_id",
+    "subject_urn"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.metadata_binding.v1"]
+    },
+    "binding_id": {
+      "type": "string",
+      "pattern": "^kye:metadata-binding:.+"
+    },
+    "subject_urn": {
+      "type": "string",
+      "description": "URN of the KYE object this metadata is bound to (entity, capability, resource, authority, audit event, payload artefact)."
+    },
+    "metadata_schema_id": {
+      "type": "string",
+      "pattern": "^kye:metadata-schema:.+",
+      "description": "Optional reference to the KYEMetadataSchema constraining this binding."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "labels": {
+          "type": "object",
+          "description": "Free-form key/value labels. Values MUST be registered taxonomy terms where a taxonomy exists (sector, environment, business_unit, …).",
+          "additionalProperties": { "type": "string" }
+        },
+        "classifications": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "data_classes":      { "type": "array", "items": { "type": "string" } },
+            "risk_state":        { "type": "string" },
+            "ai_risk_class":     { "type": "string" },
+            "criticality":       { "type": "string" },
+            "jurisdiction":      { "type": "string" },
+            "side_effect_level": { "type": "string" },
+            "regulated_status":  { "type": "string" }
+          }
+        },
+        "ownership": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "business_owner_entity_id":  { "type": "string" },
+            "technical_owner_entity_id": { "type": "string" },
+            "controller_entity_id":      { "type": "string" },
+            "maintainer_entity_id":      { "type": "string" }
+          }
+        },
+        "lineage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "source_system":       { "type": "string" },
+            "created_by_process":  { "type": "string" },
+            "supersedes":          { "type": ["string", "null"] }
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "framework_refs":    { "type": "array", "items": { "type": "string" } },
+            "evidence_required": { "type": "boolean" },
+            "control_refs":      { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "valid_from": { "type": "string", "format": "date-time" },
+    "valid_until": { "type": "string", "format": "date-time" }
+  }
+}

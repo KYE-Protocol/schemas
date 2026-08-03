@@ -1,0 +1,128 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/assurance-card.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Assurance Card",
+  "description": "Living lifecycle assurance record for a delegated entity (AI agent, model, workflow, service, tool, connector). Carries owner / accountable entity / lifecycle state / risk tier / intended use / authority model / human involvement / provenance / performance + limitations / evidence / review cycle / decommissioning plan / status. Binds to KYE™ runtime evidence so every claim is offline-verifiable against a published JWKS.",
+  "type": "object",
+  "required": ["schema_version", "assurance_card_id", "subject_entity_id", "subject_type", "display_name", "owner_entity_id", "lifecycle_state", "risk_tier", "status", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.assurance_card.v1" },
+    "assurance_card_id": { "type": "string", "pattern": "^kye:assurance-card:" },
+    "subject_entity_id": { "type": "string" },
+    "subject_type": { "enum": ["ai_agent", "workflow", "service", "model", "tool", "connector", "system"] },
+    "display_name": { "type": "string" },
+    "owner_entity_id": { "type": "string" },
+    "accountable_entity_id": { "type": "string" },
+    "lifecycle_state": { "enum": ["proposed", "design", "pilot", "controlled_production", "production", "deprecated", "suspended", "revoked"] },
+    "risk_tier": { "enum": ["low", "medium", "high", "critical"] },
+    "intended_use": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "summary": { "type": "string" },
+        "permitted_uses": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "prohibited_uses": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "authority_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "entity_authority_record_ref": { "type": "string" },
+        "authority_grants": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "required_gates": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "commit_boundaries": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "human_involvement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "review_path_ref": { "type": "string" },
+        "human_involvement_plan_ref": { "type": "string" },
+        "human_approval_required": { "type": "boolean" },
+        "approval_thresholds": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["capability"],
+            "additionalProperties": false,
+            "properties": {
+              "capability": { "type": "string" },
+              "requires_review_above": {
+                "type": "object",
+                "required": ["value"],
+                "additionalProperties": false,
+                "properties": {
+                  "value": { "type": "number" },
+                  "currency": { "type": "string" },
+                  "unit": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provenance_evidence_ref": { "type": "string" },
+        "model_refs": { "type": "array", "items": { "type": "string" } },
+        "dataset_refs": { "type": "array", "items": { "type": "string" } },
+        "tool_refs": { "type": "array", "items": { "type": "string" } },
+        "supplier_refs": { "type": "array", "items": { "type": "string" } },
+        "licensing_refs": { "type": "array", "items": { "type": "string" } },
+        "hardware_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "performance_and_limitations": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "known_limitations": { "type": "array", "items": { "type": "string" } },
+        "performance_metrics": { "type": "array", "items": { "type": "string" } },
+        "evaluation_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evidence_pack_refs": { "type": "array", "items": { "type": "string" } },
+        "decision_map_refs": { "type": "array", "items": { "type": "string" } },
+        "audit_refs": { "type": "array", "items": { "type": "string" } },
+        "adoption_evidence_pack_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "review_cycle_ref": { "type": "string" },
+        "last_reviewed_at": { "type": "string", "format": "date-time" },
+        "next_review_due": { "type": "string", "format": "date-time" },
+        "review_frequency": { "enum": ["weekly", "monthly", "quarterly", "annual", "ad_hoc"] },
+        "review_triggers": {
+          "type": "array",
+          "items": { "enum": ["scope_change", "new_capability", "incident", "risk_state_change", "model_update", "authority_change", "supplier_change", "licence_change", "retention", "scheduled"] },
+          "uniqueItems": true
+        }
+      }
+    },
+    "decommissioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": { "type": "boolean" },
+        "plan_ref": { "type": "string" }
+      }
+    },
+    "status": { "enum": ["draft", "active", "published", "deprecated", "retired"] },
+    "audit_chain_ref": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

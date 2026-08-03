@@ -1,0 +1,73 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/healthcare-authority.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Healthcare Authority Decision",
+  "description": "Per-clinical-action authority decision under the canonical KYE healthcare sector pack (internal). Binds the actor (clinician, AI agent, system), the principal (patient or covered entity), the clinical context, the consent or break-glass justification, and the decision.",
+  "type": "object",
+  "required": [
+    "request_id",
+    "decision",
+    "decision_id",
+    "actor_entity_id",
+    "principal_entity_id",
+    "clinical_context",
+    "decided_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema":             { "type": "string" },
+    "request_id":          { "type": "string" },
+    "decision":            { "enum": ["allow", "allow_with_constraints", "require_approval", "require_step_up", "require_human_review", "require_recovery", "quarantine", "deny"] },
+    "decision_id":         { "type": "string", "pattern": "^kye:decision:[A-Za-z0-9_:.-]+$" },
+    "reason_code":         { "type": "string" },
+    "actor_entity_id":     { "type": "string" },
+    "actor_role":          { "enum": ["clinician", "nurse", "pharmacist", "lab_tech", "billing", "researcher", "ai_agent", "patient_self_service", "external_consultant", "emergency_responder"] },
+    "principal_entity_id": { "type": "string", "description": "Patient or covered-entity reference; opaque KYE URN." },
+    "clinical_context": {
+      "type": "object",
+      "required": ["facility_ref", "encounter_type"],
+      "additionalProperties": false,
+      "properties": {
+        "facility_ref":     { "type": "string" },
+        "encounter_type":   { "enum": ["inpatient", "outpatient", "emergency", "telehealth", "research", "billing", "pharmacy", "lab", "imaging"] },
+        "care_team_ref":    { "type": "string" },
+        "specialty":        { "type": "string" }
+      }
+    },
+    "consent_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "consent_id":         { "type": "string" },
+        "consent_type":       { "enum": ["explicit_patient_consent", "implied_treatment", "tpo_treatment_payment_operations", "research_irb_approval", "public_health"] },
+        "consent_state":      { "enum": ["active", "withdrawn", "expired", "pending"] }
+      }
+    },
+    "break_glass": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "break_glass_grant_id": { "type": "string" },
+        "category":             { "enum": ["life_threatening", "incapacitated_patient", "communicable_disease", "court_order", "audit_review"] },
+        "ttl_seconds":          { "type": "integer", "minimum": 1 },
+        "justification":        { "type": "string" }
+      }
+    },
+    "data_classes_in_scope": {
+      "type": "array",
+      "items": { "enum": ["demographics", "diagnoses", "medications", "allergies", "labs", "imaging", "notes", "billing", "psychiatric", "substance_use", "hiv_status", "genetic", "minor_protected"] }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type":  { "type": "string" },
+          "value": {}
+        }
+      }
+    },
+    "decided_at":          { "type": "string", "format": "date-time" }
+  }
+}

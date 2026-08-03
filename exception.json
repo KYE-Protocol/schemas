@@ -1,0 +1,26 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/exception.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Exception",
+  "description": "A rule that displaces or modifies another rule under enumerated exceptional conditions (incident response, business continuity, regulatory instruction). Carries time bounds, additional obligations and required approver roles.",
+  "type": "object",
+  "required": ["schema_version", "exception_id", "display_name", "applies_to_rule_id", "exception_type", "conditions", "effect", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.exception.v1" },
+    "exception_id": { "type": "string", "pattern": "^kye:exception:" },
+    "display_name": { "type": "string" },
+    "applies_to_rule_id": { "type": "string" },
+    "exception_type": { "enum": ["emergency_override", "business_continuity", "regulatory_instruction", "incident_response", "scheduled_maintenance", "custom"] },
+    "conditions": { "type": "object", "additionalProperties": true },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "temporary_decision_override": { "enum": ["allow", "allow_with_review", "require_step_up", "quarantine"] },
+        "additional_obligations": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "status": { "enum": ["draft", "active", "expired", "deprecated"] }
+  }
+}

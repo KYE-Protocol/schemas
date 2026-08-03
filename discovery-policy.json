@@ -1,0 +1,46 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/discovery-policy.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Discovery Policy",
+  "description": "Role + purpose binding for KYE Discoverability Profile™. Declares allowed query types, allowed/masked/denied fields, audit + reason-code requirements, and query-audit retention.",
+  "type": "object",
+  "required": ["schema_version", "policy_id", "display_name", "applies_to", "allowed_discovery_types", "field_rules", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.discovery_policy.v1" },
+    "policy_id": { "type": "string", "pattern": "^kye:policy:discovery:" },
+    "display_name": { "type": "string" },
+    "description": { "type": "string" },
+    "applies_to": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "roles": { "type": "array", "items": { "type": "string" } },
+        "purposes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "allowed_discovery_types": {
+      "type": "array",
+      "items": { "enum": ["entity_search", "authority_path_search", "capability_search", "evidence_search", "risk_search", "connector_search", "profile_search", "certification_search"] }
+    },
+    "field_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "allowed_fields": { "type": "array", "items": { "type": "string" } },
+        "masked_fields": { "type": "array", "items": { "type": "string" } },
+        "denied_fields": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "audit_required": { "type": "boolean" },
+    "reason_code_required": { "type": "boolean" },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "query_audit_retention_days": { "type": "integer", "minimum": 30, "maximum": 3650 }
+      }
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] }
+  }
+}

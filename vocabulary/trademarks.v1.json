@@ -1,0 +1,91 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/vocabulary/trademarks.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Protocol Trademarks Registry",
+  "description": "Machine-readable registry of KYE Protocol™ protected marks. Consumed by scripts/audit-trademarks.mjs to enforce first-prominent-use ™ on every public surface, and by downstream tooling (license generators, conformance attestation forms) that need to programmatically reference the marks. 2026-05-28: KYE Counterparty Governance Rail™ and KYE Runtime Console™ marks added to the public registries (additive entries only — this schema unchanged at the structural level; the description field bump is the lockstep marker for the §53 §3.3 schema-existence triplet). 2026-05-30 (Wave-AgenticGovernanceMarks): the 4 positioning marks Agentic Governance™, Agent Governance™, Agentic Era™, Agentic Governance Protocol™ added to both registries; structurally additive only; lockstep marker bumped. 2026-06-20 (KYE Academy authority tracks): the capstone certification mark KYE Certified Agentic Governance Practitioner™ added to both registries; structurally additive only; lockstep marker bumped. 2026-06-24 (Governed Organization marks): KYE Governed Organization™ + KYE Certified Governed Organization™ (the §66 entity-level certificate family, kind=organization) added to both registries; structurally additive only; lockstep marker bumped.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "policy",
+    "marks"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "kye.trademarks.v1"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "rule",
+        "markup_canonical"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "type": "string"
+        },
+        "markup_canonical": {
+          "type": "string"
+        },
+        "markup_acceptable": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "marks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "term",
+          "class"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "term": {
+            "type": "string",
+            "minLength": 1
+          },
+          "class": {
+            "type": "string",
+            "enum": [
+              "wordmark",
+              "concept",
+              "infrastructure",
+              "commercial",
+              "certification",
+              "profile",
+              "app",
+              "plugin",
+              "connector",
+              "product"
+            ]
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "_lockstep_note": "2026-05-29 schema-existence-triplet lockstep touch (trademark dedup commit)"
+}

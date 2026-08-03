@@ -1,0 +1,47 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/readiness-assessment.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Readiness Assessment",
+  "description": "Multi-dimension assessment of an AI-worker use case against the KYE Operating Model Profile™. Carries a readiness score, required profiles / gates / evidence, and recommended next steps. Stage 2 of the journey.",
+  "type": "object",
+  "required": ["schema_version", "assessment_id", "use_case_id", "status", "risk_tier", "assessed_dimensions", "readiness_score", "assessed_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.readiness_assessment.v1" },
+    "assessment_id": { "type": "string", "pattern": "^kye:readiness:" },
+    "use_case_id": { "type": "string", "pattern": "^kye:use-case:" },
+    "status": { "enum": ["not_ready", "requires_controls", "pilot_ready", "pilot_ready_with_controls", "production_ready"] },
+    "risk_tier": { "enum": ["low", "medium", "high", "critical"] },
+    "assessed_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_defined": { "type": "boolean" },
+        "purpose_defined": { "type": "boolean" },
+        "capabilities_defined": { "type": "boolean" },
+        "data_classes_identified": { "type": "boolean" },
+        "authority_model_defined": { "type": "boolean" },
+        "human_review_path_defined": { "type": "boolean" },
+        "evidence_requirements_defined": { "type": "boolean" },
+        "revocation_path_defined": { "type": "boolean" },
+        "continuity_requirements_defined": { "type": "boolean" },
+        "discoverability_requirements_defined": { "type": "boolean" }
+      }
+    },
+    "required_profiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "required_gates": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "required_evidence": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "readiness_score": {
+      "type": "object",
+      "required": ["score", "scale", "interpretation"],
+      "additionalProperties": false,
+      "properties": {
+        "score": { "type": "number", "minimum": 0, "maximum": 1 },
+        "scale": { "enum": ["0_to_1"] },
+        "interpretation": { "enum": ["not_ready_for_autonomous_execution", "ready_for_pilot_with_controls", "ready_for_controlled_execution", "production_ready"] }
+      }
+    },
+    "recommended_next_steps": { "type": "array", "items": { "type": "string" } },
+    "assessed_at": { "type": "string", "format": "date-time" }
+  }
+}

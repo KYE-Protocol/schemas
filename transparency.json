@@ -1,0 +1,41 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/transparency.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement_id", "subject_type", "subject_id", "issuer_entity_id", "statement_hash", "submitted_at"],
+      "properties": {
+        "statement_id": { "$ref": "common.json#/$defs/KyeId" },
+        "subject_type": { "type": "string" },
+        "subject_id": { "$ref": "common.json#/$defs/KyeId" },
+        "issuer_entity_id": { "$ref": "common.json#/$defs/KyeId" },
+        "statement_hash": { "$ref": "common.json#/$defs/Hash" },
+        "payload": { "type": "object" },
+        "submitted_at": { "$ref": "common.json#/$defs/DateTime" }
+      }
+    },
+    "Receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["receipt_id", "statement_id", "transparency_service_id", "issued_at"],
+      "properties": {
+        "receipt_id": { "$ref": "common.json#/$defs/KyeId" },
+        "statement_id": { "$ref": "common.json#/$defs/KyeId" },
+        "transparency_service_id": { "$ref": "common.json#/$defs/KyeId" },
+        "inclusion_proof": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "tree_size": { "type": "integer", "minimum": 0 },
+            "leaf_hash": { "$ref": "common.json#/$defs/Hash" },
+            "proof_nodes": { "type": "array", "items": { "$ref": "common.json#/$defs/Hash" } }
+          }
+        },
+        "issued_at": { "$ref": "common.json#/$defs/DateTime" },
+        "signature": { "$ref": "common.json#/$defs/Signature" }
+      }
+    }
+  }
+}

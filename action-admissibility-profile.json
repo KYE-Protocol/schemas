@@ -1,0 +1,31 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/action-admissibility-profile.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Action Admissibility Profile",
+  "description": "Profile manifest for KYE Action Admissibility Profile™ — the upstream pre-action layer that checks whether a proposed action is admissible into the authority pipeline before any authority, formal-rule or commit-boundary check runs.",
+  "type": "object",
+  "required": ["schema_version", "profile_id", "display_name", "category", "version", "required_objects", "decision_types", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.action_admissibility_profile.v1" },
+    "profile_id": { "type": "string", "pattern": "^kye:profile:action_admissibility" },
+    "display_name": { "type": "string" },
+    "category": { "enum": ["pre_action_governance"] },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string" },
+    "required_kye_profiles": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "recommended_kye_profiles": { "type": "array", "items": { "type": "string" } },
+    "required_objects": {
+      "type": "array",
+      "items": { "enum": ["KYEProposedAction", "KYEAdmissionGate", "KYEAdmissibilityDecision", "KYEAdmissibilityEvidence", "KYEAdmissibilityReason"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "decision_types": {
+      "type": "array",
+      "items": { "enum": ["admit", "reject", "require_clarification", "require_human_review", "quarantine", "route_to_authority_check"] },
+      "minItems": 1, "uniqueItems": true
+    },
+    "status": { "enum": ["draft", "active", "deprecated"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

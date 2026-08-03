@@ -1,0 +1,42 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/obligation.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Obligation",
+  "description": "Lifecycle object — actor MUST perform a required action by a deadline. Carries trigger event, deadline, satisfaction conditions, breach effect and evidence references. State transitions tracked via KYEObligationState.",
+  "type": "object",
+  "required": ["schema_version", "obligation_id", "obligation_type", "owed_by_entity_id", "owed_to_entity_id", "trigger_event", "required_action", "state", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "kye.obligation.v1" },
+    "obligation_id": { "type": "string", "pattern": "^kye:obligation:" },
+    "obligation_type": { "enum": ["pre_execution_approval", "post_action_review", "evidence_emission", "notification", "data_retention", "data_deletion", "regulatory_report", "remediation", "custom"] },
+    "owed_by_entity_id": { "type": "string" },
+    "owed_to_entity_id": { "type": "string" },
+    "trigger_event": { "type": "string" },
+    "required_action": { "type": "string" },
+    "deadline": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["before_action", "before_timestamp", "within_duration", "before_event"] },
+        "before_capability": { "type": "string" },
+        "before_timestamp": { "type": "string", "format": "date-time" },
+        "within_duration": { "type": "string" },
+        "before_event": { "type": "string" }
+      }
+    },
+    "state": { "enum": ["pending", "satisfied", "breached", "waived", "expired", "disputed", "remediated", "superseded"] },
+    "satisfaction_conditions": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "breach_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decision": { "enum": ["allow", "deny", "prohibited", "require_approval", "quarantine"] },
+        "reason_code": { "type": "string" },
+        "generate_evidence_pack": { "type": "boolean" }
+      }
+    },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$id": "https://kyeprotocol.com/schemas/graph-edge.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KYE Graph Edge",
+  "description": "A canonical edge in the KYE Authority Graph™. Edges represent ownership, control, delegation, authority grant, capability use, dependency, credential binding, policy governance, decision production, audit record, evidence aggregation, framework mapping, supersession, revocation, quarantine, and recovery — among others. Specific traversal algorithms are part of the patent track and are not described here.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "edge_id",
+    "edge_type",
+    "source_node_id",
+    "target_node_id"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["kye.graph_edge.v1"]
+    },
+    "edge_id": {
+      "type": "string",
+      "pattern": "^kye:edge:.+"
+    },
+    "edge_type": {
+      "type": "string",
+      "enum": [
+        "owns",
+        "controls",
+        "maintains",
+        "issues",
+        "approves",
+        "delegates_to",
+        "acts_on_behalf_of",
+        "grants_authority_to",
+        "has_authority",
+        "authorises_capability",
+        "uses_capability",
+        "depends_on",
+        "calls",
+        "accesses",
+        "bound_to_credential",
+        "has_state",
+        "governed_by_policy",
+        "requires_approval_from",
+        "evaluated_by",
+        "allowed_by",
+        "denied_by",
+        "produced_decision",
+        "produced_audit_event",
+        "included_in_evidence_pack",
+        "maps_to_framework_control",
+        "supersedes",
+        "revokes",
+        "quarantines",
+        "recovers"
+      ]
+    },
+    "source_node_id": { "type": "string", "pattern": "^kye:node:.+" },
+    "target_node_id": { "type": "string", "pattern": "^kye:node:.+" },
+    "state":          { "type": "string" },
+    "valid_from":     { "type": "string", "format": "date-time" },
+    "valid_until":    { "type": "string", "format": "date-time" },
+    "authority_ref":  { "type": "string" },
+    "scope_ref":      { "type": "string" },
+    "policy_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
