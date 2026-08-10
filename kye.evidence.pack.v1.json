@@ -294,6 +294,84 @@
           }
         }
       }
+    },
+    "resolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resolved_at",
+        "member_order",
+        "members"
+      ],
+      "description": "The RESOLVED content every *_ref field points at, carried inside the pack — the peer of kye.authority_proof_bundle.v1.resolution (constitution/53-COHESION-CASCADE.md §3.3). Without it this pack is a manifest of pointers: decision_map_ref, inputs_blob_ref and replay_seal_ref resolve only inside KYE storage, so a holder can hold the pack but cannot verify OFFLINE what it points at, and WORM-storing it (§30) freezes the pointer while its target stays mutable — the one thing a seal exists to prevent. Each member carries a per-member content address (sha256 over the member's canonical bytes), which is the evidence pack's offline tamper-evidence: recomputing it detects any post-resolution change and NAMES which ref changed, with no KYE service in the loop (§0.47). This is additive and optional — a pack without it is still valid, but is portable pointers, not portable evidence. Distinct from the pack's own seal: the pack `id` is content-addressed over the whole body (resolution included) and `signatures[]` bind it; `resolution` makes the refs' targets travel and be independently checkable.",
+      "properties": {
+        "resolved_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the refs were resolved into members. Normally equals the pack's created_at."
+        },
+        "member_order": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "The ref-field names, in a declared order. Declared rather than implied because any consumer that concatenates or enumerates members is order-sensitive, and 'obvious' orderings are exactly what drifts between implementations."
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ref_field",
+              "ref",
+              "sha256",
+              "content"
+            ],
+            "properties": {
+              "ref_field": {
+                "type": "string",
+                "description": "Which *_ref property of this pack this member resolves (e.g. decision_map_ref)."
+              },
+              "ref": {
+                "type": "string",
+                "description": "The reference carried in that field — kept so the resolution is auditable against the pointer it replaces. The sha256 is KYE's content address of the resolved content and does not claim to reproduce a ref's own native address (e.g. an IPFS CID)."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$",
+                "description": "Content address of this member's canonical bytes. Per-member so a tampered member is identified individually, not merely detected somewhere in the pack."
+              },
+              "content": {
+                "description": "The resolved object itself — the decision map, the inputs blob, the replay context seal. This is the evidence; the ref is metadata about it."
+              }
+            }
+          }
+        },
+        "unresolved": {
+          "type": "array",
+          "description": "Ref fields deliberately NOT resolved, each with a reason. Present so an incomplete pack is HONEST rather than silently thin (§70): a verifier reports partial resolution instead of passing a pack whose missing half nobody declared. An empty array is the resting state. A ref the schema makes REQUIRED may never be declared here.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ref_field",
+              "reason"
+            ],
+            "properties": {
+              "ref_field": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 24
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
