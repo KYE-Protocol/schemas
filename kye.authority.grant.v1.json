@@ -6,9 +6,17 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "id", "version", "principal", "grantee", "scope",
-    "jurisdiction", "not_before", "not_after", "issued_at",
-    "signature", "revocation_chain"
+    "id",
+    "version",
+    "principal",
+    "grantee",
+    "scope",
+    "jurisdiction",
+    "not_before",
+    "not_after",
+    "issued_at",
+    "signature",
+    "revocation_chain"
   ],
   "properties": {
     "id": {
@@ -21,30 +29,34 @@
       "description": "Schema major version. Pinned to 1 for kye.authority.grant.v1."
     },
     "principal": {
-      "type": "string",
-      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
-      "description": "KYEID of the source of authority (the delegator)."
+      "$ref": "#/$defs/principalId",
+      "description": "KYEID of the source of authority (the delegator). Accepts the canonical principal-bearing entity classes declared in internal (org · system · agent · board-member); `ent`/`prin` are retained for the pre-existing instance corpus (§0.10 graft-not-rewrite). Widened 2026-08-10: the prior `^kye:ent:` -only pattern made KYE's OWN canonical principals structurally incapable of holding authority, leaving customer fixtures as the sole admissible grantees."
     },
     "grantee": {
-      "type": "string",
-      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
-      "description": "KYEID of the entity receiving authority."
+      "$ref": "#/$defs/principalId",
+      "description": "KYEID of the entity receiving authority. Same canonical class set as `principal`."
     },
     "scope": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["actions"],
+      "required": [
+        "actions"
+      ],
       "description": "What the grantee may do under this authority.",
       "properties": {
         "actions": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Action verbs the grantee is authorised to perform."
         },
         "resources": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Optional concrete resource URNs/selectors further narrowing scope."
         },
         "constraints": {
@@ -56,7 +68,9 @@
     "jurisdiction": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "ISO-3166 jurisdictions under which this grant is enforceable."
     },
     "not_before": {
@@ -75,9 +89,8 @@
       "description": "Time the grant was signed and issued."
     },
     "issued_by": {
-      "type": "string",
-      "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
-      "description": "KYEID of the officer/role acting for the principal at issuance."
+      "$ref": "#/$defs/principalId",
+      "description": "KYEID of the officer/role acting for the principal at issuance. Same canonical class set as `principal`."
     },
     "signature": {
       "type": "string",
@@ -90,7 +103,11 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["grant_id", "issuer", "status"],
+        "required": [
+          "grant_id",
+          "issuer",
+          "status"
+        ],
         "properties": {
           "grant_id": {
             "type": "string",
@@ -98,17 +115,23 @@
             "description": "URN of the upstream authority grant."
           },
           "issuer": {
-            "type": "string",
-            "pattern": "^kye:ent:[A-Za-z0-9._:-]+$",
-            "description": "KYEID of the entity that issued that upstream grant."
+            "$ref": "#/$defs/principalId",
+            "description": "KYEID of the entity that issued that upstream grant. Same canonical class set as the top-level `principal`."
           },
           "status": {
             "type": "string",
-            "enum": ["active", "expired", "revoked"],
+            "enum": [
+              "active",
+              "expired",
+              "revoked"
+            ],
             "description": "Status of the upstream grant at chain-build time."
           },
           "revoked_at": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "date-time",
             "description": "Time the upstream grant was revoked, or null."
           }
@@ -116,13 +139,26 @@
       }
     },
     "revoked_at": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date-time",
       "description": "Time this grant itself was revoked, or null if still in force."
     },
     "revoked_reason": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Free-text reason for revocation, or null."
+    }
+  },
+  "$defs": {
+    "principalId": {
+      "type": "string",
+      "pattern": "^kye:(agent|ent|person|prin|principal|org|system|board-member):[A-Za-z0-9._:-]+$",
+      "description": "An entity that may hold or confer authority. ONE definition, $ref'd by every field in this schema that names such an entity — the pattern was hand-copied at four separate fields, which is how a widening lands in three of them and not the fourth (§0.49). Widened 2026-08-13 to admit `person` and `principal`: three canonical decision rights declare holders in those classes, both are valid in internal and the narrower list was rejecting ids the canonical grammar admits. Deriving this list FROM the grammar — and resolving whether prin/principal and ent/person are duplicate concepts — is registered in constitution/DECAY-WINDOWS.md."
     }
   }
 }

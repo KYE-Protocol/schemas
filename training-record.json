@@ -4,17 +4,56 @@
   "title": "KYE Training Record",
   "description": "Per-owner or per-operator training and certification record covering KYE Academy™ tracks. Carries modules completed, certification status, validity window, and a reference to the signed evidence pack.",
   "type": "object",
-  "required": ["schema_version", "training_record_id", "subject_entity_id", "training_track", "certification_status", "created_at"],
+  "required": [
+    "schema_version",
+    "training_record_id",
+    "subject_entity_id",
+    "training_track",
+    "certification_status",
+    "created_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.training_record.v1" },
-    "training_record_id": { "type": "string", "pattern": "^kye:training:" },
-    "subject_entity_id": { "type": "string" },
-    "training_track": { "type": "string" },
-    "modules_completed": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "certification_status": { "enum": ["in_progress", "completed", "expired", "revoked"] },
-    "valid_until": { "type": "string", "format": "date-time" },
-    "evidence_ref": { "type": "string" },
-    "created_at": { "type": "string", "format": "date-time" }
+    "schema_version": {
+      "type": "string",
+      "const": "kye.training_record.v1"
+    },
+    "training_record_id": {
+      "type": "string",
+      "pattern": "^kye:training:"
+    },
+    "subject_entity_id": {
+      "type": "string",
+      "pattern": "^kye:[a-z][a-z0-9-]*:[A-Za-z0-9._:{}-]+$"
+    },
+    "training_track": {
+      "type": "string"
+    },
+    "modules_completed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "certification_status": {
+      "enum": [
+        "in_progress",
+        "completed",
+        "expired",
+        "revoked"
+      ]
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence_ref": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
   }
 }

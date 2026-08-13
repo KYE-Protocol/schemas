@@ -4,7 +4,7 @@
   "$defs": {
     "KyeId": {
       "type": "string",
-      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_:-]+)*$"
+      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_-]+)*$"
     },
     "DateTime": {
       "type": "string",

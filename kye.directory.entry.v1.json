@@ -9,7 +9,7 @@
   "properties": {
     "kyeid": {
       "type": "string",
-      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_:-]+)*$",
+      "pattern": "^kye:[a-z]{2,8}:[A-Za-z0-9._-]+(?::[A-Za-z0-9_-]+)*$",
       "description": "Canonical KYEID of the entity."
     },
     "class": {

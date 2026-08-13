@@ -4,21 +4,67 @@
   "title": "KYE Human Involvement Plan",
   "description": "Defines where authorised, suitably qualified humans MUST exercise judgement to influence, direct, limit or override an AI-enabled system. Required for every assurance card whose subject performs commit-level capabilities. Bypass attempts are denied at runtime and emit a signed Signal Bus event.",
   "type": "object",
-  "required": ["schema_version", "plan_id", "display_name", "applies_to", "involvement_points", "status"],
+  "required": [
+    "schema_version",
+    "plan_id",
+    "display_name",
+    "applies_to",
+    "involvement_points",
+    "status"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.human_involvement_plan.v1" },
-    "plan_id": { "type": "string", "pattern": "^kye:human-involvement-plan:" },
-    "display_name": { "type": "string" },
-    "description": { "type": "string" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.human_involvement_plan.v1"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^kye:human-involvement-plan:"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
     "applies_to": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "assurance_card_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "entity_authority_record_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "risk_tiers": { "type": "array", "items": { "enum": ["low", "medium", "high", "critical"] }, "uniqueItems": true }
+        "assurance_card_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "entity_authority_record_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "risk_tiers": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "uniqueItems": true
+        }
       }
     },
     "involvement_points": {
@@ -26,21 +72,73 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["point_id", "stage", "required_role", "involvement_type"],
+        "required": [
+          "point_id",
+          "stage",
+          "required_role",
+          "involvement_type"
+        ],
         "additionalProperties": false,
         "properties": {
-          "point_id": { "type": "string" },
-          "stage": { "enum": ["design", "pilot", "deploy", "pre_commit", "post_commit", "incident", "scope_change", "retention", "decommission"] },
-          "required_role": { "type": "string" },
-          "qualification": { "type": "string" },
-          "involvement_type": { "enum": ["influence", "direct", "limit", "approve", "override", "review"] },
+          "point_id": {
+            "type": "string"
+          },
+          "stage": {
+            "enum": [
+              "design",
+              "pilot",
+              "deploy",
+              "pre_commit",
+              "post_commit",
+              "incident",
+              "scope_change",
+              "retention",
+              "decommission"
+            ]
+          },
+          "required_role": {
+            "type": "string"
+          },
+          "qualification": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Competence this involvement point requires of the human. MUST resolve to a term in kye:dictionary:competences (internal) \u2014 the SAME vocabulary kye.decision_right.v1 limits.requires_competence resolves to. Previously an unconstrained string carrying prose such as 'Authorised payment approver', which no resolver could evaluate against a holder: a competence requirement that cannot be checked is a competence requirement that is not enforced."
+          },
+          "involvement_type": {
+            "enum": [
+              "influence",
+              "direct",
+              "limit",
+              "approve",
+              "override",
+              "review"
+            ]
+          },
           "decision_options": {
             "type": "array",
-            "items": { "enum": ["approve", "deny", "request_changes", "quarantine", "escalate", "limit"] },
-            "minItems": 1, "uniqueItems": true
+            "items": {
+              "enum": [
+                "approve",
+                "deny",
+                "request_changes",
+                "quarantine",
+                "escalate",
+                "limit"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
           },
-          "sla_minutes": { "type": "integer", "minimum": 1 },
-          "evidence_required": { "type": "array", "items": { "type": "string" } }
+          "sla_minutes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "evidence_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     },
@@ -48,10 +146,24 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "on_attempted_bypass": { "enum": ["deny", "quarantine", "escalate"] },
-        "emit_signal_event": { "type": "boolean" }
+        "on_attempted_bypass": {
+          "enum": [
+            "deny",
+            "quarantine",
+            "escalate"
+          ]
+        },
+        "emit_signal_event": {
+          "type": "boolean"
+        }
       }
     },
-    "status": { "enum": ["draft", "active", "deprecated"] }
+    "status": {
+      "enum": [
+        "draft",
+        "active",
+        "deprecated"
+      ]
+    }
   }
 }
