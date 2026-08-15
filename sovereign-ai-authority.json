@@ -20,16 +20,16 @@
     "decision":            { "enum": ["allow", "allow_with_constraints", "require_approval", "require_step_up", "require_human_review", "require_recovery", "quarantine", "deny"] },
     "decision_id":         { "type": "string", "pattern": "^kye:decision:[A-Za-z0-9_:.-]+$" },
     "reason_code":         { "type": "string" },
-    "actor_entity_id":     { "type": "string" },
+    "actor_entity_id":     { "type": "string", "pattern": "^kye:ent:[A-Za-z0-9._:-]+$" },
     "actor_role":          { "enum": ["civil_servant", "contractor", "vendor", "ai_agent", "regulator", "ombudsman", "auditor"] },
-    "principal_entity_id": { "type": "string" },
+    "principal_entity_id": { "type": "string", "pattern": "^kye:ent:[A-Za-z0-9._:-]+$" },
     "agency_ref":          { "type": "string", "description": "Agency / ministry / regulator entity URN." },
     "statutory_basis":     { "type": "string", "description": "Law / regulation / order under which the action is taken (e.g. 'GDPR Art. 6(1)(e)', 'PSD3 RTS Art. 14')." },
     "consent_basis": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "consent_id":    { "type": "string" },
+        "consent_id":    { "type": "string", "pattern": "^kye:consent:[A-Za-z0-9._:-]+$" },
         "consent_state": { "enum": ["active", "withdrawn", "expired", "pending"] }
       }
     },
@@ -41,7 +41,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "model_entity_id":  { "type": "string" },
+        "model_entity_id":  { "type": "string", "pattern": "^kye:ent:[A-Za-z0-9._:-]+$" },
         "model_risk_state": { "enum": ["normal", "elevated", "high", "critical", "blocked"] }
       }
     },
