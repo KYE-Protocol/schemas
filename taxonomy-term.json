@@ -17,7 +17,9 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["kye.taxonomy_term.v1"]
+      "enum": [
+        "kye.taxonomy_term.v1"
+      ]
     },
     "taxonomy_id": {
       "type": "string",
@@ -48,23 +50,39 @@
     },
     "risk_default": {
       "type": "string",
-      "enum": ["nominal", "elevated", "watch", "denylisted", "high"]
+      "enum": [
+        "nominal",
+        "elevated",
+        "watch",
+        "denylisted",
+        "high"
+      ]
     },
     "side_effect_default": {
       "type": "string",
       "description": "Default side-effect classification for this term (read, write, move_money, external_send, …)."
     },
-    "requires_authority": { "type": "boolean" },
-    "requires_audit":     { "type": "boolean" },
-    "requires_human_approval_default": { "type": "boolean" },
+    "requires_authority": {
+      "type": "boolean"
+    },
+    "requires_audit": {
+      "type": "boolean"
+    },
+    "requires_human_approval_default": {
+      "type": "boolean"
+    },
     "profiles": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "KYE profiles in which this term is in scope."
     },
     "compliance_refs": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Compliance framework controls this term informs (e.g. EU_AI_ACT:high_risk_ai_system)."
     },
     "version": {
@@ -73,7 +91,37 @@
     },
     "status": {
       "type": "string",
-      "enum": ["draft", "active", "deprecated", "retired"]
+      "enum": [
+        "draft",
+        "active",
+        "deprecated",
+        "retired"
+      ]
+    },
+    "component_class": {
+      "type": "string",
+      "enum": [
+        "sector",
+        "industry",
+        "stakeholder",
+        "agent",
+        "workflow",
+        "sku",
+        "template",
+        "engine",
+        "rail",
+        "report",
+        "framework",
+        "profile",
+        "tool",
+        "app",
+        "program",
+        "feature",
+        "jurisdiction",
+        "page",
+        "color_role"
+      ],
+      "description": "§7 Phase 1 row 14 — WHICH of the 19 canonical component classes this term is an instance of, DECLARED on the term rather than inferred from where it lives. The classes are the ones already in kye:taxonomy:component-graph (component-classes.terms.json); this field does not mint a second vocabulary, it binds each instance to the existing one. Placement today is decided by PROSE predicates in navigation-mapping.json ('Pages under /products/<sector>/ map to tier2_parent=sectors') — a rule a human applies, which is exactly what row 14 exists to replace with a machine-readable declaration. Absent means undeclared, counted by component_class__undeclared_terms; it is never defaulted, because a guessed class is worse than a known gap (§70)."
     }
   }
 }

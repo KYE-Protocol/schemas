@@ -295,6 +295,63 @@
         }
       }
     },
+    "coordinate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "plane",
+        "class",
+        "kye_id",
+        "t"
+      ],
+      "description": "WHERE in the governed estate this decision happened, sealed at decision time — the §0.52 coordinate (plane × class × kye-id) plus the `t` axis that says which version of the entity map it was resolved against. Without it a pack answers what was decided and when, but a holder must consult a LIVE registry to answer where, which is the same non-portability `resolution` exists to fix: offline (§0.47) there is no registry to consult, and online the registry has moved on, so a coordinate resolved at read time silently describes today's estate rather than the one the decision was made in. Sealing the COMPUTED value here does not create a second source of truth for position (§0/§0.10) — the coordinate index is explicit that a coordinate is a JOIN never stored on a record, and this is the same freezing-a-derived-fact-at-t that decision_map_ref and signed_state already do. `t.basis` is the discriminator that makes it checkable rather than merely asserted: a verifier that recomputes the same basis can resolve plane/class/kye_id against that exact map, and one that recomputes a different basis reports that the map moved instead of guessing. A basis naming a map the verifier does not hold (a tenant's own estate rather than KYE's) is reported as unverifiable-here, never silently skipped. Additive and optional — a pack without it is still valid evidence, just not self-locating.",
+      "properties": {
+        "plane": {
+          "enum": [
+            "private",
+            "public",
+            "hybrid"
+          ],
+          "description": "§33 IP/OSS plane of the acting entity's artefact, as derived at decision time."
+        },
+        "class": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The entity's artefact_class (§0.36 namespace) at decision time."
+        },
+        "kye_id": {
+          "type": "string",
+          "pattern": "^kye:[a-z0-9-]+:[A-Za-z0-9._:-]+$",
+          "description": "The entity whose position this is — the acting principal (§0.30: an agent is a principal exactly like a human or a system)."
+        },
+        "origin": {
+          "type": "string",
+          "minLength": 1,
+          "description": "How `class` and `kye_id` were determined. Present because two determinations answer different questions and a consumer that cannot tell them apart reads a structural class as a semantic one: a registry-sourced class says WHAT the entity is (worker, surface, endpoint), a path-derived class says only that the artefact exists and is a file or a folder. Stating it is the difference between an honest coordinate and a silently-downgraded one (§0.31)."
+        },
+        "t": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "at",
+            "basis"
+          ],
+          "description": "The fourth axis. Two facts, deliberately not merged: `at` is the instant the position was true, `basis` is the map version it was true against. A timestamp alone cannot be re-resolved (there is no way to reconstruct what the registry said then); a basis alone cannot be ordered.",
+          "properties": {
+            "at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When the coordinate was resolved. Normally the DECISION instant, not the pack-assembly instant — the position that matters is where the entity sat when the decision was made, and the two differ whenever assembly is deferred."
+            },
+            "basis": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$",
+              "description": "kye.coordinate_index.v1 `t.basis` of the entity map this coordinate was resolved against."
+            }
+          }
+        }
+      }
+    },
     "resolution": {
       "type": "object",
       "additionalProperties": false,
