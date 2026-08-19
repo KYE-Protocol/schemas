@@ -7,7 +7,8 @@
   "required": [
     "schema_version",
     "policy",
-    "marks"
+    "marks",
+    "enforcement"
   ],
   "additionalProperties": false,
   "properties": {
@@ -27,7 +28,8 @@
       "type": "object",
       "required": [
         "rule",
-        "markup_canonical"
+        "markup_canonical",
+        "enforcement_mode"
       ],
       "additionalProperties": false,
       "properties": {
@@ -42,8 +44,55 @@
           "items": {
             "type": "string"
           }
+        },
+        "enforcement_mode": {
+          "type": "string",
+          "enum": [
+            "first-prominent-use",
+            "every-occurrence"
+          ],
+          "description": "Structured, machine-readable form of policy.rule. The trademark audit MUST derive its enforcement behaviour from this field rather than hand-coding a rule beside the prose (no-hand-rolling; machine-readable-by-default). 'first-prominent-use' = only the first prose occurrence of a mark per page must carry the symbol; 'every-occurrence' = every prose occurrence must."
+        },
+        "compound_exception": {
+          "type": "string",
+          "description": "When a registered mark appears as a substring of a longer compound name that itself carries the symbol, the substring does not need its own. Present in the instance since adoption; added to the schema 2026-08-17 to close a schema/instance drift that additionalProperties:false would otherwise reject."
         }
       }
+    },
+    "classes": {
+      "description": "Reading order, label and description per mark class — the ONE declaration the public renderer iterates (§0.55 sets resolve, they are never enumerated). It replaced a CAT_ORDER/CAT_LABEL/CAT_DESC literal in public/site/assets/inline/b-6dc29c920eba.js that named 11 of the 21 classes marks[] actually uses and silently skipped the rest, so 32 of 363 marks — every rule-pack mark among them — never rendered on the page whose purpose is listing them.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "class",
+          "label",
+          "description"
+        ],
+        "properties": {
+          "class": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "description": "A value appearing in marks[].class. audit-trademarks resolves that set and refuses a mark whose class no row here declares."
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Section heading on the public page."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "description": "One sentence under the heading."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "classes_note": {
+      "type": "string",
+      "description": "Why classes[] exists, kept beside it so the reason travels with the data."
     },
     "marks": {
       "type": "array",
@@ -68,21 +117,72 @@
           "class": {
             "type": "string",
             "enum": [
-              "wordmark",
-              "concept",
-              "infrastructure",
-              "commercial",
-              "certification",
-              "profile",
+              "agent",
               "app",
-              "plugin",
+              "artefact",
+              "capability",
+              "category",
+              "certification",
+              "commercial",
+              "concept",
               "connector",
-              "product"
+              "ecosystem",
+              "engine",
+              "feature",
+              "implementation",
+              "infrastructure",
+              "manifest",
+              "plugin",
+              "positioning",
+              "product",
+              "profile",
+              "rail",
+              "report",
+              "rule-pack",
+              "sku",
+              "wordmark",
+              "worker"
             ]
           },
           "notes": {
             "type": "string"
+          },
+          "sku_id": {
+            "type": "string",
+            "description": "The §26 SKU identifier this mark is attached to. Constrained so a mark cannot claim a SKU from outside the KYE catalogue namespace.",
+            "pattern": "^KYE-[A-Z0-9-]+$"
           }
+        }
+      }
+    },
+    "enforcement": {
+      "type": "object",
+      "description": "Names the gate that enforces this contract so contract and enforcer are discoverable from each other. Shape mirrors the pre-existing enforcement{} block in the deploy-toolchain registry rather than introducing a new pattern.",
+      "required": [
+        "gate",
+        "npm_ref",
+        "contract"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "gate": {
+          "type": "string"
+        },
+        "npm_ref": {
+          "type": "string"
+        },
+        "rule_code": {
+          "type": "string"
+        },
+        "contract": {
+          "type": "string"
+        },
+        "derives_from": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Contract fields the enforcer MUST read rather than re-implement. A field listed here that the enforcer never references is a contract/enforcer split."
         }
       }
     }
