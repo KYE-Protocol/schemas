@@ -185,6 +185,10 @@
           "description": "Contract fields the enforcer MUST read rather than re-implement. A field listed here that the enforcer never references is a contract/enforcer split."
         }
       }
+    },
+    "constitution_ref": {
+      "type": "string",
+      "description": "The constitution chapter that governs this registry. Declared because a canonical registry must be able to record which chapter it answers to — kye.canonical_everything.v1 REQUIRES constitution_ref on every concept, and a schema forbidding the field made that unsatisfiable for its own registry."
     }
   },
   "_lockstep_note": "2026-05-29 schema-existence-triplet lockstep touch (trademark dedup commit)"
