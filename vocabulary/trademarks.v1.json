@@ -102,7 +102,8 @@
         "required": [
           "id",
           "term",
-          "class"
+          "class",
+          "entity_class"
         ],
         "additionalProperties": false,
         "properties": {
@@ -151,6 +152,10 @@
             "type": "string",
             "description": "The §26 SKU identifier this mark is attached to. Constrained so a mark cannot claim a SKU from outside the KYE catalogue namespace.",
             "pattern": "^KYE-[A-Z0-9-]+$"
+          },
+          "entity_class": {
+            "const": "public-vocabulary-trademarks",
+            "description": "§0.36 limb (c) — the row states its own class; membership inferred from the file it lives in is not a declaration."
           }
         }
       }
