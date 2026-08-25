@@ -31,7 +31,7 @@
     },
     "decision_id": {
       "type": "string",
-      "pattern": "^kye:decision:[A-Za-z0-9._:-]+$",
+      "pattern": "^kye:decision:[A-Za-z0-9_][A-Za-z0-9._:/-]*$",
       "description": "URN of the decision this map explains."
     },
     "nodes": {

@@ -14,9 +14,18 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.meaning_continuity_decision.v1" },
-    "decision_id": { "type": "string", "pattern": "^kye:decision:meaning-continuity_" },
-    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.meaning_continuity_decision.v1"
+    },
+    "decision_id": {
+      "type": "string",
+      "pattern": "^kye:decision:[A-Za-z0-9_][A-Za-z0-9._:/-]*$"
+    },
+    "meaning_continuity_id": {
+      "type": "string",
+      "pattern": "^kye:meaning-continuity:"
+    },
     "decision": {
       "enum": [
         "meaning_preserved",
@@ -29,28 +38,60 @@
         "quarantine"
       ]
     },
-    "reason_code": { "type": "string" },
+    "reason_code": {
+      "type": "string"
+    },
     "checked_dimensions": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "intent_preserved": { "type": "boolean" },
-        "constraints_preserved": { "type": "boolean" },
-        "context_preserved": { "type": "boolean" },
-        "memory_consistent": { "type": "boolean" },
-        "incentives_aligned": { "type": "boolean" },
-        "timing_stable": { "type": "boolean" },
-        "handoff_integrity": { "enum": ["preserved", "degraded", "broken", "unknown"] },
-        "state_transition_safe": { "type": "boolean" }
+        "intent_preserved": {
+          "type": "boolean"
+        },
+        "constraints_preserved": {
+          "type": "boolean"
+        },
+        "context_preserved": {
+          "type": "boolean"
+        },
+        "memory_consistent": {
+          "type": "boolean"
+        },
+        "incentives_aligned": {
+          "type": "boolean"
+        },
+        "timing_stable": {
+          "type": "boolean"
+        },
+        "handoff_integrity": {
+          "enum": [
+            "preserved",
+            "degraded",
+            "broken",
+            "unknown"
+          ]
+        },
+        "state_transition_safe": {
+          "type": "boolean"
+        }
       }
     },
     "meaning_score": {
       "type": "object",
-      "required": ["score"],
+      "required": [
+        "score"
+      ],
       "additionalProperties": false,
       "properties": {
-        "score": { "type": "number", "minimum": 0, "maximum": 1 },
-        "scale": { "type": "string", "const": "0_to_1" },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "scale": {
+          "type": "string",
+          "const": "0_to_1"
+        },
         "interpretation": {
           "enum": [
             "meaning_preserved",
@@ -91,8 +132,15 @@
       },
       "uniqueItems": true
     },
-    "evidence_pack_ref": { "type": "string" },
-    "audit_chain_ref": { "type": "string" },
-    "decided_at": { "type": "string", "format": "date-time" }
+    "evidence_pack_ref": {
+      "type": "string"
+    },
+    "audit_chain_ref": {
+      "type": "string"
+    },
+    "decided_at": {
+      "type": "string",
+      "format": "date-time"
+    }
   }
 }
