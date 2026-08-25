@@ -4,20 +4,78 @@
   "title": "KYE Decision Replay",
   "description": "Result of replaying a historical decision against the recorded state snapshot. Powers legal defensibility, incident investigation, and drift detection. Returned by POST /v1/decisions/{decision_id}:replay.",
   "type": "object",
-  "required": ["schema_version", "replay_id", "decision_id", "original_decision", "replayed_decision", "result", "replay_mode", "replayed_at"],
+  "required": [
+    "schema_version",
+    "replay_id",
+    "decision_id",
+    "original_decision",
+    "replayed_decision",
+    "result",
+    "replay_mode",
+    "replayed_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version":     { "type": "string", "enum": ["kye.decision_replay.v1"] },
-    "replay_id":          { "type": "string", "pattern": "^kye:replay:.+" },
-    "decision_id":        { "type": "string", "pattern": "^kye:(decision|pdc):.+" },
-    "original_decision":  { "type": "string" },
-    "replayed_decision":  { "type": "string" },
-    "result":             { "type": "string", "enum": ["match", "mismatch", "indeterminate"] },
-    "replay_mode":        { "type": "string", "enum": ["historical_state_snapshot", "current_state", "policy_pin"] },
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "kye.decision_replay.v1"
+      ]
+    },
+    "replay_id": {
+      "type": "string",
+      "pattern": "^kye:replay:.+"
+    },
+    "decision_id": {
+      "type": "string",
+      "anyOf": [
+        {
+          "pattern": "^kye:decision:[A-Za-z0-9_][A-Za-z0-9._:/-]*$"
+        },
+        {
+          "pattern": "^kye:pdc:[A-Za-z0-9_][A-Za-z0-9._:/-]*$"
+        }
+      ],
+      "description": "Admits either declared id class. Composed from the two CANONICAL grammar patterns (kye:decision and kye:pdc in internal) rather than a hand-merged third regex — a merged alternation is a new pattern nobody generated, and it drifts the moment either class's grammar changes (§0.49)."
+    },
+    "original_decision": {
+      "type": "string"
+    },
+    "replayed_decision": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string",
+      "enum": [
+        "match",
+        "mismatch",
+        "indeterminate"
+      ]
+    },
+    "replay_mode": {
+      "type": "string",
+      "enum": [
+        "historical_state_snapshot",
+        "current_state",
+        "policy_pin"
+      ]
+    },
     "checked_items": {
       "type": "object",
-      "additionalProperties": { "type": "string", "enum": ["matched", "mismatched", "missing", "valid", "invalid"] }
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "matched",
+          "mismatched",
+          "missing",
+          "valid",
+          "invalid"
+        ]
+      }
     },
-    "replayed_at":        { "type": "string", "format": "date-time" }
+    "replayed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
   }
 }

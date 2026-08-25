@@ -194,6 +194,21 @@
     "constitution_ref": {
       "type": "string",
       "description": "The constitution chapter that governs this registry. Declared because a canonical registry must be able to record which chapter it answers to — kye.canonical_everything.v1 REQUIRES constitution_ref on every concept, and a schema forbidding the field made that unsatisfiable for its own registry."
+    },
+    "schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Absolute URI of the contract that governs THIS document — the contract for the COLLECTION, never the contract for one of its rows. THIS IS A DELIBERATE TIGHTENING, recorded so it is auditable rather than discovered: measured 2026-08-25, 160 registries declare a bare short form (kye.program.v1) and 40 declare the absolute URI. The URI is canonical because it is the form that RESOLVES — scripts/validate-schemas.js loads canonical schemas by declared $id, and the bare form needs a lookup convention to mean anything. The 160 are drift under this contract, not errors of the moment they were written."
+    },
+    "registry_id": {
+      "type": "string",
+      "pattern": "^kye:registry:[a-z][a-z0-9:_-]*$",
+      "description": "Canonical id of the registry. Unique across registries — a generic basename names nothing, so six registries once shared kye:registry:manifest."
+    },
+    "adopted_at": {
+      "type": "string",
+      "format": "date",
+      "description": "The date this registry entered the repository. Derivable from the commit that added the file; it is never today's date and never a placeholder."
     }
   },
   "_lockstep_note": "2026-05-29 schema-existence-triplet lockstep touch (trademark dedup commit)"
