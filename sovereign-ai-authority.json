@@ -19,7 +19,8 @@
       "type": "string"
     },
     "request_id": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^req-[A-Za-z0-9._-]+$"
     },
     "decision": {
       "enum": [

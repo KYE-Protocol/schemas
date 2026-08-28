@@ -41,7 +41,7 @@
       "properties": {
         "algorithm":               { "type": "string" },
         "signature":               { "type": "string" },
-        "signed_by_credential_id": { "type": "string" }
+        "signed_by_credential_id": { "type": "string", "pattern": "^kye:credential:[A-Za-z0-9._:-]+$" }
       }
     },
     "status":             { "type": "string", "enum": ["draft", "signed", "published", "expired", "revoked", "superseded"] },
