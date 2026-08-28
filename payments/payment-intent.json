@@ -4,25 +4,95 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "payment_intent_id", "actor_entity_id", "subject_entity_id",
-    "wallet_entity_id", "amount_minor", "currency", "rail_type", "status"
+    "payment_intent_id",
+    "actor_entity_id",
+    "subject_entity_id",
+    "wallet_entity_id",
+    "amount_minor",
+    "currency",
+    "rail_type",
+    "status"
   ],
   "properties": {
-    "payment_intent_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "actor_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "subject_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "wallet_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "beneficiary_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "merchant_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "amount_minor": { "type": "integer", "minimum": 1 },
-    "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
-    "rail_type": { "enum": ["bank_transfer", "card", "stablecoin", "internal_ledger", "payout_provider"] },
-    "purpose_code": { "type": "string" },
-    "invoice_entity_id": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId" },
-    "status": {
-      "enum": ["draft", "pending_authorization", "authorized", "requires_approval", "approved", "denied", "executed", "stopped", "failed", "refunded", "cancelled"]
+    "payment_intent_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
     },
-    "external_reference": { "type": "string" },
-    "created_at": { "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime" }
+    "actor_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "subject_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "wallet_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "beneficiary_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "merchant_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "amount_minor": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "currency": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "rail_type": {
+      "enum": [
+        "bank_transfer",
+        "card",
+        "stablecoin",
+        "internal_ledger",
+        "payout_provider"
+      ]
+    },
+    "purpose_code": {
+      "type": "string"
+    },
+    "invoice_entity_id": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/KyeId"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "pending_authorization",
+        "authorized",
+        "requires_approval",
+        "approved",
+        "denied",
+        "executed",
+        "stopped",
+        "failed",
+        "refunded",
+        "cancelled"
+      ]
+    },
+    "external_reference": {
+      "type": "string"
+    },
+    "created_at": {
+      "$ref": "https://kyeprotocol.com/schemas/common.json#/$defs/DateTime"
+    },
+    "economic_effect": {
+      "type": "string",
+      "enum": [
+        "commitment",
+        "payment",
+        "disbursement",
+        "fx_conversion",
+        "concession",
+        "netting",
+        "novation",
+        "hold",
+        "guarantee",
+        "reversal"
+      ],
+      "default": "payment",
+      "description": "The ECONOMIC EFFECT this intent causes (kye:dictionary:economic-effect). Optional, defaults to `payment` (a settlement). Set to `commitment`/`concession`/etc. to express an intent that binds the principal economically WITHOUT moving money — the commitment != payment distinction: such an intent needs commitment authority, and any later payment is a separate act needing payment authority."
+    }
   }
 }

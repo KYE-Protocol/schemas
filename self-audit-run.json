@@ -9,8 +9,8 @@
   "properties": {
     "schema_version":     { "type": "string", "enum": ["kye.self_audit_run.v1"] },
     "self_audit_id":      { "type": "string", "pattern": "^kye:self-audit:.+" },
-    "implementation_id":  { "type": "string" },
-    "organisation_entity_id": { "type": "string" },
+    "implementation_id":  { "type": "string", "pattern": "^kye:implementation:[A-Za-z0-9._:-]+$" },
+    "organisation_entity_id": { "type": "string", "pattern": "^kye:org:[A-Za-z0-9._:-]+$" },
     "kye_core_version":   { "type": "string" },
     "profiles_tested":    { "type": "array", "items": { "type": "string" } },
     "started_at":         { "type": "string", "format": "date-time" },
@@ -34,7 +34,7 @@
         "required": ["finding_id", "severity", "area"],
         "additionalProperties": false,
         "properties": {
-          "finding_id": { "type": "string" },
+          "finding_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
           "severity":   { "type": "string", "enum": ["info", "low", "medium", "high", "critical"] },
           "area":       { "type": "string", "enum": ["schema","dictionary","profile","registry","authority","state","delegation","capability","credential","policy","decision","audit","evidence","graph","webhook","recovery","security","compliance_mapping"] },
           "reason_code":{ "type": "string" },
