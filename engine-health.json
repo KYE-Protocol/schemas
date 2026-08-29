@@ -4,17 +4,48 @@
   "title": "KYE Engine Health",
   "description": "Lightweight readiness check across every KYE engine. Returned by GET /v1/system/health and /v1/system/readiness. Powers operator dashboards + the KYE Self-Audit & Attestation Profile™ continuous-monitoring layer.",
   "type": "object",
-  "required": ["schema_version", "implementation_id", "checked_at", "status", "engines"],
+  "required": [
+    "schema_version",
+    "implementation_id",
+    "checked_at",
+    "status",
+    "engines"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version":      { "type": "string", "enum": ["kye.engine_health.v1"] },
-    "implementation_id":   { "type": "string" },
-    "checked_at":          { "type": "string", "format": "date-time" },
-    "status":              { "type": "string", "enum": ["healthy", "degraded", "unhealthy"] },
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "kye.engine_health.v1"
+      ]
+    },
+    "implementation_id": {
+      "type": "string"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "healthy",
+        "degraded",
+        "unhealthy"
+      ]
+    },
     "engines": {
       "type": "object",
       "description": "Per-engine status. Keys are engine ids; values are healthy / degraded / unhealthy / not_present.",
-      "additionalProperties": { "type": "string", "enum": ["healthy", "degraded", "unhealthy", "not_present"] }
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "healthy",
+          "degraded",
+          "unhealthy",
+          "not_present"
+        ]
+      }
     },
     "warnings": {
       "type": "array",
@@ -22,11 +53,25 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "engine":      { "type": "string" },
-          "reason_code": { "type": "string" },
-          "message":     { "type": "string" }
+          "engine": {
+            "type": "string"
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+          }
         }
       }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

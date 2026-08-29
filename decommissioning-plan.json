@@ -4,20 +4,50 @@
   "title": "KYE Decommissioning Plan",
   "description": "Decommissioning plan for an assurance-card subject. Carries retention windows, off-boarding steps, cascade-revocation behaviour, evidence-archival policy and the post-execution verification record.",
   "type": "object",
-  "required": ["schema_version", "plan_id", "assurance_card_ref", "retention", "off_boarding_steps", "cascade_revocation", "status"],
+  "required": [
+    "schema_version",
+    "plan_id",
+    "assurance_card_ref",
+    "retention",
+    "off_boarding_steps",
+    "cascade_revocation",
+    "status"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.decommissioning_plan.v1" },
-    "plan_id": { "type": "string", "pattern": "^kye:decommissioning-plan:" },
-    "assurance_card_ref": { "type": "string", "pattern": "^kye:assurance-card:" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.decommissioning_plan.v1"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^kye:decommissioning-plan:"
+    },
+    "assurance_card_ref": {
+      "type": "string",
+      "pattern": "^kye:assurance-card:"
+    },
     "retention": {
       "type": "object",
-      "required": ["evidence_retention_window", "audit_retention_window"],
+      "required": [
+        "evidence_retention_window",
+        "audit_retention_window"
+      ],
       "additionalProperties": false,
       "properties": {
-        "evidence_retention_window": { "type": "string" },
-        "audit_retention_window": { "type": "string" },
-        "data_retention_window": { "type": "string" }
+        "evidence_retention_window": {
+          "type": "string"
+        },
+        "audit_retention_window": {
+          "type": "string"
+        },
+        "data_retention_window": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "off_boarding_steps": {
@@ -25,44 +55,125 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["step_id", "action"],
+        "required": [
+          "step_id",
+          "action"
+        ],
         "additionalProperties": false,
         "properties": {
-          "step_id": { "type": "string" },
-          "action": { "enum": ["revoke_authority", "quarantine_credentials", "rotate_keys", "archive_evidence", "notify_owner", "notify_supplier", "update_catalog", "remove_from_runtime"] },
-          "owner_role": { "type": "string" },
-          "evidence_required": { "type": "array", "items": { "type": "string" } }
+          "step_id": {
+            "type": "string"
+          },
+          "action": {
+            "enum": [
+              "revoke_authority",
+              "quarantine_credentials",
+              "rotate_keys",
+              "archive_evidence",
+              "notify_owner",
+              "notify_supplier",
+              "update_catalog",
+              "remove_from_runtime"
+            ]
+          },
+          "owner_role": {
+            "type": "string"
+          },
+          "evidence_required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+          }
         }
       }
     },
     "cascade_revocation": {
       "type": "object",
-      "required": ["enabled"],
+      "required": [
+        "enabled"
+      ],
       "additionalProperties": false,
       "properties": {
-        "enabled": { "type": "boolean" },
-        "scope": { "enum": ["entity_only", "entity_and_descendants", "tenant_wide"] }
+        "enabled": {
+          "type": "boolean"
+        },
+        "scope": {
+          "enum": [
+            "entity_only",
+            "entity_and_descendants",
+            "tenant_wide"
+          ]
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "evidence_archival": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "archive_location": { "type": "string" },
-        "archive_method": { "enum": ["signed_bundle", "cold_storage", "external_archive"] },
-        "archive_signature_key_id": { "type": "string" }
+        "archive_location": {
+          "type": "string"
+        },
+        "archive_method": {
+          "enum": [
+            "signed_bundle",
+            "cold_storage",
+            "external_archive"
+          ]
+        },
+        "archive_signature_key_id": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "execution": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "started_at": { "type": "string", "format": "date-time" },
-        "completed_at": { "type": "string", "format": "date-time" },
-        "verified_by_entity_id": { "type": "string" },
-        "verification_evidence_ref": { "type": "string" }
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verified_by_entity_id": {
+          "type": "string"
+        },
+        "verification_evidence_ref": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "status": { "enum": ["draft", "active", "executing", "completed", "deprecated"] }
+    "status": {
+      "enum": [
+        "draft",
+        "active",
+        "executing",
+        "completed",
+        "deprecated"
+      ]
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

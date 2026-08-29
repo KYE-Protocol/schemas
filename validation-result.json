@@ -4,14 +4,35 @@
   "title": "KYE Validation Result",
   "description": "Outcome of a runtime validation step (entity resolution, authority chain check, scope attenuation, capability authorisation, state composition). Distinct from policy-decision.json (which is the final adjudication): a validation-result is a single per-check artefact that policy-decision aggregates over.",
   "type": "object",
-  "required": ["validation_id", "subject_entity_id", "check_kind", "outcome", "performed_at"],
+  "required": [
+    "validation_id",
+    "subject_entity_id",
+    "check_kind",
+    "outcome",
+    "performed_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "validation_id":     { "type": "string", "pattern": "^kye:val:.+" },
-    "subject_entity_id": { "type": "string", "pattern": "^kye:ent:.+" },
-    "actor_entity_id":   { "type": "string", "pattern": "^kye:ent:.+" },
-    "policy_decision_id":{ "type": "string", "pattern": "^kye:pdc:.+" },
-    "correlation_id":    { "type": "string", "pattern": "^kye:cor:.+" },
+    "validation_id": {
+      "type": "string",
+      "pattern": "^kye:val:.+"
+    },
+    "subject_entity_id": {
+      "type": "string",
+      "pattern": "^kye:ent:.+"
+    },
+    "actor_entity_id": {
+      "type": "string",
+      "pattern": "^kye:ent:.+"
+    },
+    "policy_decision_id": {
+      "type": "string",
+      "pattern": "^kye:pdc:.+"
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^kye:cor:.+"
+    },
     "check_kind": {
       "type": "string",
       "enum": [
@@ -33,14 +54,33 @@
     },
     "outcome": {
       "type": "string",
-      "enum": ["pass", "fail", "approval_required", "deferred"]
+      "enum": [
+        "pass",
+        "fail",
+        "approval_required",
+        "deferred"
+      ]
     },
-    "reason_code": { "type": "string" },
+    "reason_code": {
+      "type": "string"
+    },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "performed_at": { "type": "string", "format": "date-time" },
-    "duration_ms":  { "type": "integer", "minimum": 0 }
+    "performed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

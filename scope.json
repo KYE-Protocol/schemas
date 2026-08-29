@@ -3,50 +3,121 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["scope_id", "constraints"],
+  "required": [
+    "scope_id",
+    "constraints"
+  ],
   "properties": {
-    "scope_id": { "$ref": "common.json#/$defs/KyeId" },
-    "actions": { "$ref": "common.json#/$defs/StringArray" },
-    "resources": { "$ref": "common.json#/$defs/StringArray" },
+    "scope_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "actions": {
+      "$ref": "common.json#/$defs/StringArray"
+    },
+    "resources": {
+      "$ref": "common.json#/$defs/StringArray"
+    },
     "constraints": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "tenant": { "type": "string" },
-        "workspace": { "type": "string" },
-        "environment": { "enum": ["dev", "test", "stage", "prod", "airgapped"] },
-        "jurisdiction": { "type": "string" },
-        "region": { "type": "string" },
+        "tenant": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "environment": {
+          "enum": [
+            "dev",
+            "test",
+            "stage",
+            "prod",
+            "airgapped"
+          ]
+        },
+        "jurisdiction": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
         "time_window": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "valid_from": { "$ref": "common.json#/$defs/DateTime" },
-            "valid_until": { "$ref": "common.json#/$defs/DateTime" }
+            "valid_from": {
+              "$ref": "common.json#/$defs/DateTime"
+            },
+            "valid_until": {
+              "$ref": "common.json#/$defs/DateTime"
+            },
+            "entity_class": {
+              "type": "string",
+              "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+            }
           }
         },
         "limits": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "max_calls_per_minute": { "type": "integer", "minimum": 0 },
-            "max_calls_per_hour": { "type": "integer", "minimum": 0 },
-            "max_calls_per_day": { "type": "integer", "minimum": 0 },
-            "max_records_per_action": { "type": "integer", "minimum": 0 }
+            "max_calls_per_minute": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_calls_per_hour": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_calls_per_day": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_records_per_action": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "entity_class": {
+              "type": "string",
+              "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+            }
           }
         },
         "data_constraints": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "allowed_data_classes": { "$ref": "common.json#/$defs/StringArray" },
-            "redaction_required": { "type": "boolean" },
-            "external_send_allowed": { "type": "boolean" },
-            "export_allowed": { "type": "boolean" }
+            "allowed_data_classes": {
+              "$ref": "common.json#/$defs/StringArray"
+            },
+            "redaction_required": {
+              "type": "boolean"
+            },
+            "external_send_allowed": {
+              "type": "boolean"
+            },
+            "export_allowed": {
+              "type": "boolean"
+            },
+            "entity_class": {
+              "type": "string",
+              "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+            }
           }
         },
-        "obligations": { "$ref": "common.json#/$defs/StringArray" }
+        "obligations": {
+          "$ref": "common.json#/$defs/StringArray"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

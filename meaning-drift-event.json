@@ -14,10 +14,22 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.meaning_drift_event.v1" },
-    "meaning_drift_event_id": { "type": "string", "pattern": "^kye:meaning-drift:" },
-    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
-    "continuity_id": { "type": "string", "pattern": "^kye:continuity:" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.meaning_drift_event.v1"
+    },
+    "meaning_drift_event_id": {
+      "type": "string",
+      "pattern": "^kye:meaning-drift:"
+    },
+    "meaning_continuity_id": {
+      "type": "string",
+      "pattern": "^kye:meaning-continuity:"
+    },
+    "continuity_id": {
+      "type": "string",
+      "pattern": "^kye:continuity:"
+    },
     "drift_type": {
       "enum": [
         "constraint_loss",
@@ -33,17 +45,39 @@
         "meaning_expansion"
       ]
     },
-    "severity": { "enum": ["low", "medium", "high", "critical"] },
-    "detected_at": { "type": "string", "format": "date-time" },
-    "actor_entity_id": { "type": "string" },
-    "principal_entity_id": { "type": "string" },
-    "description": { "type": "string" },
+    "severity": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "detected_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actor_entity_id": {
+      "type": "string"
+    },
+    "principal_entity_id": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
     "affected_dimensions": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "original_meaning_fragment": { "type": "object" },
-    "observed_meaning_fragment": { "type": "object" },
+    "original_meaning_fragment": {
+      "type": "object"
+    },
+    "observed_meaning_fragment": {
+      "type": "object"
+    },
     "recommended_decision": {
       "enum": [
         "meaning_preserved",
@@ -78,7 +112,13 @@
     },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

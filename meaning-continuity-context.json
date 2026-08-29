@@ -17,49 +17,98 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.meaning_continuity_context.v1" },
-    "meaning_continuity_id": { "type": "string", "pattern": "^kye:meaning-continuity:" },
-    "continuity_id": { "type": "string", "pattern": "^kye:continuity:" },
-    "proposed_action_id": { "type": "string", "pattern": "^kye:proposed-action:" },
-    "actor_entity_id": { "type": "string" },
-    "principal_entity_id": { "type": "string" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.meaning_continuity_context.v1"
+    },
+    "meaning_continuity_id": {
+      "type": "string",
+      "pattern": "^kye:meaning-continuity:"
+    },
+    "continuity_id": {
+      "type": "string",
+      "pattern": "^kye:continuity:"
+    },
+    "proposed_action_id": {
+      "type": "string",
+      "pattern": "^kye:proposed-action:"
+    },
+    "actor_entity_id": {
+      "type": "string"
+    },
+    "principal_entity_id": {
+      "type": "string"
+    },
     "original_meaning": {
       "type": "object",
-      "required": ["source_intent_id", "declared_meaning"],
+      "required": [
+        "source_intent_id",
+        "declared_meaning"
+      ],
       "additionalProperties": false,
       "properties": {
-        "source_intent_id": { "type": "string", "pattern": "^kye:intent:" },
-        "declared_meaning": { "type": "string" },
+        "source_intent_id": {
+          "type": "string",
+          "pattern": "^kye:intent:"
+        },
+        "declared_meaning": {
+          "type": "string"
+        },
         "material_constraints": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "meaning_owner_entity_id": { "type": "string" }
+        "meaning_owner_entity_id": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "interpreted_meaning": {
       "type": "object",
-      "required": ["interpreted_by_entity_id", "interpreted_summary"],
+      "required": [
+        "interpreted_by_entity_id",
+        "interpreted_summary"
+      ],
       "additionalProperties": false,
       "properties": {
-        "interpreted_by_entity_id": { "type": "string" },
-        "interpreted_summary": { "type": "string" },
+        "interpreted_by_entity_id": {
+          "type": "string"
+        },
+        "interpreted_summary": {
+          "type": "string"
+        },
         "retained_constraints": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "lost_constraints": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "added_assumptions": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "interpretation_confidence": {
           "type": "number",
           "minimum": 0,
           "maximum": 1
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
         }
       }
     },
@@ -67,14 +116,33 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "memory_used": { "type": "boolean" },
+        "memory_used": {
+          "type": "boolean"
+        },
         "memory_refs": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "memory_state": { "enum": ["current", "stale", "missing", "unknown"] },
-        "memory_conflict_detected": { "type": "boolean" },
-        "memory_summary": { "type": "string" }
+        "memory_state": {
+          "enum": [
+            "current",
+            "stale",
+            "missing",
+            "unknown"
+          ]
+        },
+        "memory_conflict_detected": {
+          "type": "boolean"
+        },
+        "memory_summary": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "context_snapshot": {
@@ -83,51 +151,124 @@
       "properties": {
         "context_refs": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "context_state": { "enum": ["current", "stale", "missing", "unknown"] },
-        "context_lost": { "type": "boolean" },
-        "context_changed_since_intent": { "type": "boolean" }
+        "context_state": {
+          "enum": [
+            "current",
+            "stale",
+            "missing",
+            "unknown"
+          ]
+        },
+        "context_lost": {
+          "type": "boolean"
+        },
+        "context_changed_since_intent": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "incentive_context": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "commercial_incentive_detected": { "type": "boolean" },
-        "affiliate_incentive_detected": { "type": "boolean" },
-        "optimisation_goal": { "type": "string" },
-        "incentive_conflict_detected": { "type": "boolean" }
+        "commercial_incentive_detected": {
+          "type": "boolean"
+        },
+        "affiliate_incentive_detected": {
+          "type": "boolean"
+        },
+        "optimisation_goal": {
+          "type": "string"
+        },
+        "incentive_conflict_detected": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "timing_context": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "created_at": { "type": "string", "format": "date-time" },
-        "evaluated_at": { "type": "string", "format": "date-time" },
-        "delay_changed_meaning": { "type": "boolean" },
-        "state_changed_since_intent": { "type": "boolean" },
-        "time_sensitivity": { "enum": ["low", "normal", "high", "urgent"] }
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "delay_changed_meaning": {
+          "type": "boolean"
+        },
+        "state_changed_since_intent": {
+          "type": "boolean"
+        },
+        "time_sensitivity": {
+          "enum": [
+            "low",
+            "normal",
+            "high",
+            "urgent"
+          ]
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "handoff_context": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "handoff_count": { "type": "integer", "minimum": 0 },
+        "handoff_count": {
+          "type": "integer",
+          "minimum": 0
+        },
         "handoff_chain": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
-        "handoff_boundary_risk": { "enum": ["low", "medium", "high", "critical"] },
-        "handoff_drift_detected": { "type": "boolean" },
-        "handoff_trace_id": { "type": "string", "pattern": "^kye:handoff-trace:" }
+        "handoff_boundary_risk": {
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "handoff_drift_detected": {
+          "type": "boolean"
+        },
+        "handoff_trace_id": {
+          "type": "string",
+          "pattern": "^kye:handoff-trace:"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "meaning_continuity_result": {
       "type": "object",
-      "required": ["status"],
+      "required": [
+        "status"
+      ],
       "additionalProperties": false,
       "properties": {
         "status": {
@@ -143,10 +284,14 @@
           "minimum": 0,
           "maximum": 1
         },
-        "material_drift_detected": { "type": "boolean" },
+        "material_drift_detected": {
+          "type": "boolean"
+        },
         "reason_codes": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "recommended_decision": {
           "enum": [
@@ -161,13 +306,26 @@
             "route_to_admissibility",
             "route_to_authority_check"
           ]
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
         }
       }
     },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "created_at": { "type": "string", "format": "date-time" }
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

@@ -15,7 +15,9 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["kye.graph_edge.v1"]
+      "enum": [
+        "kye.graph_edge.v1"
+      ]
     },
     "edge_id": {
       "type": "string",
@@ -55,24 +57,50 @@
         "recovers"
       ]
     },
-    "source_node_id": { "type": "string", "pattern": "^kye:node:.+" },
-    "target_node_id": { "type": "string", "pattern": "^kye:node:.+" },
-    "state":          { "type": "string" },
-    "valid_from":     { "type": "string", "format": "date-time" },
-    "valid_until":    { "type": "string", "format": "date-time" },
-    "authority_ref":  { "type": "string" },
-    "scope_ref":      { "type": "string" },
+    "source_node_id": {
+      "type": "string",
+      "pattern": "^kye:node:.+"
+    },
+    "target_node_id": {
+      "type": "string",
+      "pattern": "^kye:node:.+"
+    },
+    "state": {
+      "type": "string"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authority_ref": {
+      "type": "string"
+    },
+    "scope_ref": {
+      "type": "string"
+    },
     "policy_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "metadata": {
       "type": "object",
       "additionalProperties": true
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

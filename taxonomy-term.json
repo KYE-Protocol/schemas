@@ -122,6 +122,10 @@
         "color_role"
       ],
       "description": "§7 Phase 1 row 14 — WHICH of the 19 canonical component classes this term is an instance of, DECLARED on the term rather than inferred from where it lives. The classes are the ones already in kye:taxonomy:component-graph (component-classes.terms.json); this field does not mint a second vocabulary, it binds each instance to the existing one. Placement today is decided by PROSE predicates in navigation-mapping.json ('Pages under /products/<sector>/ map to tier2_parent=sectors') — a rule a human applies, which is exactly what row 14 exists to replace with a machine-readable declaration. Absent means undeclared, counted by component_class__undeclared_terms; it is never defaulted, because a guessed class is worse than a known gap (§70)."
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

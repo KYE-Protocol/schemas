@@ -28,15 +28,46 @@
     "subject": {
       "type": "object",
       "description": "The Gateway under test.",
-      "required": ["gateway_url", "vendor", "release"],
+      "required": [
+        "gateway_url",
+        "vendor",
+        "release"
+      ],
       "additionalProperties": false,
       "properties": {
-        "gateway_url": { "type": "string", "format": "uri" },
-        "vendor": { "type": "string" },
-        "release": { "type": "string" },
-        "deployment_topology": { "type": "string", "enum": ["single-tenant", "multi-tenant", "self-hosted", "saas", "hybrid"] },
-        "kye_version_advertised": { "type": "string" },
-        "kye_profiles_advertised": { "type": "array", "items": { "type": "string" } }
+        "gateway_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "vendor": {
+          "type": "string"
+        },
+        "release": {
+          "type": "string"
+        },
+        "deployment_topology": {
+          "type": "string",
+          "enum": [
+            "single-tenant",
+            "multi-tenant",
+            "self-hosted",
+            "saas",
+            "hybrid"
+          ]
+        },
+        "kye_version_advertised": {
+          "type": "string"
+        },
+        "kye_profiles_advertised": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "conformance_pack_version": {
@@ -51,7 +82,11 @@
     },
     "tier_claimed": {
       "type": "string",
-      "enum": ["tier-1-bank", "tier-2-mid-market", "tier-3-reference"],
+      "enum": [
+        "tier-1-bank",
+        "tier-2-mid-market",
+        "tier-3-reference"
+      ],
       "description": "If the Gateway claims a quantitative SLA tier per the SLA conformance tier spec."
     },
     "fixtures": {
@@ -59,15 +94,38 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["fixture_id", "name", "outcome"],
+        "required": [
+          "fixture_id",
+          "name",
+          "outcome"
+        ],
         "additionalProperties": false,
         "properties": {
-          "fixture_id": { "type": "string" },
-          "name": { "type": "string" },
-          "category": { "type": "string" },
-          "outcome": { "type": "string", "enum": ["pass", "fail", "skip"] },
-          "duration_ms": { "type": "integer", "minimum": 0 },
-          "started_at": { "type": "string", "format": "date-time" },
+          "fixture_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "skip"
+            ]
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
           "evidence": {
             "type": "object",
             "description": "Optional evidence captured per step (response status codes, response hashes, audit event ids).",
@@ -75,39 +133,96 @@
           },
           "failures": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
     },
     "summary": {
       "type": "object",
-      "required": ["total", "passed", "failed", "skipped"],
+      "required": [
+        "total",
+        "passed",
+        "failed",
+        "skipped"
+      ],
       "additionalProperties": false,
       "properties": {
-        "total": { "type": "integer", "minimum": 0 },
-        "passed": { "type": "integer", "minimum": 0 },
-        "failed": { "type": "integer", "minimum": 0 },
-        "skipped": { "type": "integer", "minimum": 0 },
-        "started_at": { "type": "string", "format": "date-time" },
-        "ended_at": { "type": "string", "format": "date-time" },
-        "wall_clock_ms": { "type": "integer", "minimum": 0 }
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "skipped": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ended_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "wall_clock_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "verdict": {
       "type": "object",
-      "required": ["status"],
+      "required": [
+        "status"
+      ],
       "additionalProperties": false,
       "properties": {
-        "status": { "type": "string", "enum": ["conformant", "non-conformant", "partial"] },
-        "narrative": { "type": "string" },
-        "tier_claim_validated": { "type": "boolean" }
+        "status": {
+          "type": "string",
+          "enum": [
+            "conformant",
+            "non-conformant",
+            "partial"
+          ]
+        },
+        "narrative": {
+          "type": "string"
+        },
+        "tier_claim_validated": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "signature": {
       "type": "object",
       "description": "Optional detached signature over the canonical encoding of this report (excluding this field). Signing-suite construction is opaque to this schema and lives in the patent track.",
       "additionalProperties": true
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

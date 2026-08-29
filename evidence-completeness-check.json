@@ -59,6 +59,10 @@
     "checked_at": {
       "type": "string",
       "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

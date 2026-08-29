@@ -3,18 +3,56 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["transfer_id", "entity_id", "from_owner_entity_id", "to_owner_entity_id", "status"],
+  "required": [
+    "transfer_id",
+    "entity_id",
+    "from_owner_entity_id",
+    "to_owner_entity_id",
+    "status"
+  ],
   "properties": {
-    "transfer_id": { "$ref": "common.json#/$defs/KyeId" },
-    "entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "from_owner_entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "to_owner_entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "from_trust_domain_id": { "$ref": "common.json#/$defs/KyeId" },
-    "to_trust_domain_id": { "$ref": "common.json#/$defs/KyeId" },
-    "requires_reverification": { "type": "boolean" },
-    "requires_reissue": { "type": "boolean" },
-    "status": { "enum": ["pending", "accepted", "completed", "rejected", "rolled_back"] },
-    "requested_at": { "$ref": "common.json#/$defs/DateTime" },
-    "completed_at": { "$ref": "common.json#/$defs/DateTime" }
+    "transfer_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "from_owner_entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "to_owner_entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "from_trust_domain_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "to_trust_domain_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "requires_reverification": {
+      "type": "boolean"
+    },
+    "requires_reissue": {
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "accepted",
+        "completed",
+        "rejected",
+        "rolled_back"
+      ]
+    },
+    "requested_at": {
+      "$ref": "common.json#/$defs/DateTime"
+    },
+    "completed_at": {
+      "$ref": "common.json#/$defs/DateTime"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }
