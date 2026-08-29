@@ -4,52 +4,188 @@
   "title": "KYE Entity Authority Record",
   "description": "Living governance record for a delegated actor — AI agent, workflow, service, model, tool or connector. Records owner, accountable entity, purpose, lifecycle state, risk tier, approved + prohibited capabilities, authority grants, required gates, commit boundaries, current state vector, evidence refs, review schedule and revocation policy.",
   "type": "object",
-  "required": ["schema_version", "record_id", "entity_id", "entity_type", "display_name", "owner_entity_id", "purpose", "lifecycle_state", "risk_tier"],
+  "required": [
+    "schema_version",
+    "record_id",
+    "entity_id",
+    "entity_type",
+    "display_name",
+    "owner_entity_id",
+    "purpose",
+    "lifecycle_state",
+    "risk_tier"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.entity_authority_record.v1" },
-    "record_id": { "type": "string", "pattern": "^kye:authority-record:" },
-    "entity_id": { "type": "string" },
-    "entity_type": { "enum": ["ai_agent", "workflow", "service", "model", "tool", "connector", "human_in_the_loop"] },
-    "display_name": { "type": "string" },
-    "owner_entity_id": { "type": "string" },
-    "accountable_entity_id": { "type": "string" },
-    "purpose": { "type": "string" },
-    "lifecycle_state": { "enum": ["proposed", "pilot", "controlled_production", "production", "deprecated", "suspended", "revoked"] },
-    "risk_tier": { "enum": ["low", "medium", "high", "critical"] },
-    "approved_capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "prohibited_capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "authority_grants": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "required_gates": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "commit_boundaries": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.entity_authority_record.v1"
+    },
+    "record_id": {
+      "type": "string",
+      "pattern": "^kye:authority-record:"
+    },
+    "entity_id": {
+      "type": "string"
+    },
+    "entity_type": {
+      "enum": [
+        "ai_agent",
+        "workflow",
+        "service",
+        "model",
+        "tool",
+        "connector",
+        "human_in_the_loop"
+      ]
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "owner_entity_id": {
+      "type": "string"
+    },
+    "accountable_entity_id": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "lifecycle_state": {
+      "enum": [
+        "proposed",
+        "pilot",
+        "controlled_production",
+        "production",
+        "deprecated",
+        "suspended",
+        "revoked"
+      ]
+    },
+    "risk_tier": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    },
+    "approved_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "prohibited_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "authority_grants": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "required_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "commit_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
     "state": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "entity_state": { "type": "string" },
-        "credential_state": { "type": "string" },
-        "risk_state": { "type": "string" },
-        "certification_state": { "type": "string" }
+        "entity_state": {
+          "type": "string"
+        },
+        "credential_state": {
+          "type": "string"
+        },
+        "risk_state": {
+          "type": "string"
+        },
+        "certification_state": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "review": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "last_reviewed_at": { "type": "string", "format": "date-time" },
-        "next_review_due": { "type": "string", "format": "date-time" },
-        "review_frequency": { "enum": ["weekly", "monthly", "quarterly", "annual", "ad_hoc"] }
+        "last_reviewed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "next_review_due": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "review_frequency": {
+          "enum": [
+            "weekly",
+            "monthly",
+            "quarterly",
+            "annual",
+            "ad_hoc"
+          ]
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "revocation": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "revocable": { "type": "boolean" },
-        "cascade_revocation_required": { "type": "boolean" },
-        "revocation_signal_events": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        "revocable": {
+          "type": "boolean"
+        },
+        "cascade_revocation_required": {
+          "type": "boolean"
+        },
+        "revocation_signal_events": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

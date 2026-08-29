@@ -3,15 +3,48 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["trust_domain_id", "display_name", "status"],
+  "required": [
+    "trust_domain_id",
+    "display_name",
+    "status"
+  ],
   "properties": {
-    "trust_domain_id": { "$ref": "common.json#/$defs/KyeId" },
-    "display_name": { "type": "string" },
-    "jurisdiction": { "type": "string" },
-    "issuer_set": { "type": "array", "items": { "$ref": "common.json#/$defs/KyeId" } },
-    "transparency_service": { "$ref": "common.json#/$defs/KyeId" },
-    "jwks_uri": { "type": "string", "format": "uri" },
-    "federation_metadata_uri": { "type": "string", "format": "uri" },
-    "status": { "enum": ["active", "deprecated", "revoked"] }
+    "trust_domain_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "jurisdiction": {
+      "type": "string"
+    },
+    "issuer_set": {
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/$defs/KyeId"
+      }
+    },
+    "transparency_service": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "jwks_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "federation_metadata_uri": {
+      "type": "string",
+      "format": "uri"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "deprecated",
+        "revoked"
+      ]
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

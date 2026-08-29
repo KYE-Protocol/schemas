@@ -22,7 +22,9 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["kye.certification_record.v1"]
+      "enum": [
+        "kye.certification_record.v1"
+      ]
     },
     "certification_id": {
       "type": "string",
@@ -34,8 +36,14 @@
       "pattern": "^kye:(org|ent):.+",
       "description": "Vendor / organisation entity (KYE-governed identity of the certified party)."
     },
-    "product_name": { "type": "string", "minLength": 1 },
-    "product_version": { "type": "string", "minLength": 1 },
+    "product_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_version": {
+      "type": "string",
+      "minLength": 1
+    },
     "certification_level": {
       "type": "string",
       "enum": [
@@ -54,7 +62,9 @@
     },
     "profiles": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "minItems": 1,
       "description": "Profile-version refs covered by this certification (e.g. kye.core.v1.0, kye.authority.v1.0, kye.capability.v1.0)."
     },
@@ -83,27 +93,75 @@
       "description": "Vendor's signed declaration of which optional features are implemented.",
       "additionalProperties": true
     },
-    "badge_id": { "type": "string", "pattern": "^kye:badge:.+" },
-    "badge_url": { "type": "string", "format": "uri" },
-    "verification_url": { "type": "string", "format": "uri" },
-    "registry_listing_url": { "type": "string", "format": "uri" },
+    "badge_id": {
+      "type": "string",
+      "pattern": "^kye:badge:.+"
+    },
+    "badge_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "verification_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "registry_listing_url": {
+      "type": "string",
+      "format": "uri"
+    },
     "status": {
       "type": "string",
-      "enum": ["applied", "under_review", "active", "deprecated", "revoked", "expired"]
+      "enum": [
+        "applied",
+        "under_review",
+        "active",
+        "deprecated",
+        "revoked",
+        "expired"
+      ]
     },
-    "issued_at":   { "type": "string", "format": "date-time" },
-    "expires_at":  { "type": "string", "format": "date-time" },
-    "renewed_from": { "type": "string", "description": "Prior certification_id when this is a renewal." },
-    "revocation_reason": { "type": "string" },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "renewed_from": {
+      "type": "string",
+      "description": "Prior certification_id when this is a renewal."
+    },
+    "revocation_reason": {
+      "type": "string"
+    },
     "signature": {
       "type": "object",
-      "required": ["algorithm", "signature", "signed_by_credential_id"],
+      "required": [
+        "algorithm",
+        "signature",
+        "signed_by_credential_id"
+      ],
       "additionalProperties": false,
       "properties": {
-        "algorithm":               { "type": "string" },
-        "signature":               { "type": "string" },
-        "signed_by_credential_id": { "type": "string" }
+        "algorithm": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "signed_by_credential_id": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

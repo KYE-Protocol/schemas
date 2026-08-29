@@ -78,6 +78,10 @@
           "signature": {
             "type": "string",
             "description": "Detached signature over (id, type, payload_hash) by the engine or signer that produced this node."
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
@@ -111,6 +115,10 @@
               "satisfies"
             ],
             "description": "Edge semantics."
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
@@ -123,6 +131,10 @@
       "type": "string",
       "format": "date-time",
       "description": "Time the decision map was emitted."
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

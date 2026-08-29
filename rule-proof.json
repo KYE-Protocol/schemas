@@ -4,40 +4,105 @@
   "title": "KYE Rule Proof",
   "description": "Test result over a rule set checking enumerated consistency properties (no permission/prohibition conflict, obligations have satisfaction paths, all commit boundaries have gates, all high-risk actions have evidence requirements, revocation path exists, no circular delegation). Emitted by KYE Rule Prover™.",
   "type": "object",
-  "required": ["schema_version", "proof_id", "rule_set_id", "proof_status", "checked_properties", "generated_at"],
+  "required": [
+    "schema_version",
+    "proof_id",
+    "rule_set_id",
+    "proof_status",
+    "checked_properties",
+    "generated_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.rule_proof.v1" },
-    "proof_id": { "type": "string", "pattern": "^kye:rule-proof:" },
-    "rule_set_id": { "type": "string" },
-    "proof_status": { "enum": ["passed", "passed_with_warnings", "failed"] },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.rule_proof.v1"
+    },
+    "proof_id": {
+      "type": "string",
+      "pattern": "^kye:rule-proof:"
+    },
+    "rule_set_id": {
+      "type": "string"
+    },
+    "proof_status": {
+      "enum": [
+        "passed",
+        "passed_with_warnings",
+        "failed"
+      ]
+    },
     "checked_properties": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "no_permission_prohibition_conflict": { "type": "boolean" },
-        "obligations_have_satisfaction_paths": { "type": "boolean" },
-        "all_commit_boundaries_have_gates": { "type": "boolean" },
-        "all_high_risk_actions_have_evidence": { "type": "boolean" },
-        "revocation_path_exists": { "type": "boolean" },
-        "no_circular_delegation": { "type": "boolean" },
-        "no_unbounded_obligations": { "type": "boolean" },
-        "all_overrides_have_governance_rule": { "type": "boolean" }
+        "no_permission_prohibition_conflict": {
+          "type": "boolean"
+        },
+        "obligations_have_satisfaction_paths": {
+          "type": "boolean"
+        },
+        "all_commit_boundaries_have_gates": {
+          "type": "boolean"
+        },
+        "all_high_risk_actions_have_evidence": {
+          "type": "boolean"
+        },
+        "revocation_path_exists": {
+          "type": "boolean"
+        },
+        "no_circular_delegation": {
+          "type": "boolean"
+        },
+        "no_unbounded_obligations": {
+          "type": "boolean"
+        },
+        "all_overrides_have_governance_rule": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "warnings": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["reason_code", "message"],
+        "required": [
+          "reason_code",
+          "message"
+        ],
         "additionalProperties": false,
         "properties": {
-          "reason_code": { "type": "string" },
-          "message": { "type": "string" }
+          "reason_code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+          }
         }
       }
     },
-    "conflict_refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "generated_at": { "type": "string", "format": "date-time" }
+    "conflict_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

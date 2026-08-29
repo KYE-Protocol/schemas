@@ -4,41 +4,118 @@
   "title": "KYE Discovery Query",
   "description": "Policy-bound query against the KYE authority graph. Every query declares purpose, query_type, filters and result_policy. Audit-required by default.",
   "type": "object",
-  "required": ["schema_version", "query_id", "query_type", "requested_by_entity_id", "tenant_id", "purpose", "query", "created_at"],
+  "required": [
+    "schema_version",
+    "query_id",
+    "query_type",
+    "requested_by_entity_id",
+    "tenant_id",
+    "purpose",
+    "query",
+    "created_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.discovery_query.v1" },
-    "query_id": { "type": "string", "pattern": "^kye:discovery-query:" },
-    "query_type": { "enum": ["entity_search", "authority_path_search", "capability_search", "evidence_search", "risk_search", "connector_search", "profile_search", "certification_search"] },
-    "requested_by_entity_id": { "type": "string" },
-    "tenant_id": { "type": "string" },
-    "purpose": { "enum": ["security_review", "audit", "incident_response", "compliance", "procurement_review", "operations", "investigation"] },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.discovery_query.v1"
+    },
+    "query_id": {
+      "type": "string",
+      "pattern": "^kye:discovery-query:"
+    },
+    "query_type": {
+      "enum": [
+        "entity_search",
+        "authority_path_search",
+        "capability_search",
+        "evidence_search",
+        "risk_search",
+        "connector_search",
+        "profile_search",
+        "certification_search"
+      ]
+    },
+    "requested_by_entity_id": {
+      "type": "string"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "purpose": {
+      "enum": [
+        "security_review",
+        "audit",
+        "incident_response",
+        "compliance",
+        "procurement_review",
+        "operations",
+        "investigation"
+      ]
+    },
     "query": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "text": { "type": "string" },
-        "filters": { "type": "object" }
+        "text": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "object"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "result_policy": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "max_results": { "type": "integer", "minimum": 1, "maximum": 10000 },
-        "include_evidence_refs": { "type": "boolean" },
-        "include_decision_maps": { "type": "boolean" },
-        "mask_sensitive_fields": { "type": "boolean" }
+        "max_results": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "include_evidence_refs": {
+          "type": "boolean"
+        },
+        "include_decision_maps": {
+          "type": "boolean"
+        },
+        "mask_sensitive_fields": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "audit": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "audit_required": { "type": "boolean" },
-        "reason_code_required": { "type": "boolean" }
+        "audit_required": {
+          "type": "boolean"
+        },
+        "reason_code_required": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "created_at": { "type": "string", "format": "date-time" }
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

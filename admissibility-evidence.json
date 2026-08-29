@@ -4,47 +4,148 @@
   "title": "KYE Admissibility Evidence",
   "description": "Hash-chained record of the inputs and signals consulted at admission time. Bound to the admissibility decision; offline-verifiable against published JWKS so a third party can re-derive why a proposed action was admitted, rejected or quarantined.",
   "type": "object",
-  "required": ["schema_version", "evidence_id", "admissibility_decision_id", "proposed_action_id", "inputs_consulted", "signature", "generated_at"],
+  "required": [
+    "schema_version",
+    "evidence_id",
+    "admissibility_decision_id",
+    "proposed_action_id",
+    "inputs_consulted",
+    "signature",
+    "generated_at"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.admissibility_evidence.v1" },
-    "evidence_id": { "type": "string", "pattern": "^kye:admissibility-evidence:" },
-    "admissibility_decision_id": { "type": "string", "pattern": "^kye:admissibility-decision:" },
-    "proposed_action_id": { "type": "string", "pattern": "^kye:proposed-action:" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.admissibility_evidence.v1"
+    },
+    "evidence_id": {
+      "type": "string",
+      "pattern": "^kye:admissibility-evidence:"
+    },
+    "admissibility_decision_id": {
+      "type": "string",
+      "pattern": "^kye:admissibility-decision:"
+    },
+    "proposed_action_id": {
+      "type": "string",
+      "pattern": "^kye:proposed-action:"
+    },
     "inputs_consulted": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "intent_ref": { "type": "string" },
-        "interpreted_intent_ref": { "type": "string" },
-        "ontology_terms_consulted": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "formal_rules_consulted": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "continuity_signals_consulted": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "risk_signals_consulted": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        "intent_ref": {
+          "type": "string"
+        },
+        "interpreted_intent_ref": {
+          "type": "string"
+        },
+        "ontology_terms_consulted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "formal_rules_consulted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "continuity_signals_consulted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "risk_signals_consulted": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "checked_inadmissibility_classes": {
       "type": "array",
-      "items": { "enum": ["invalid_intent", "ambiguous_intent", "out_of_scope_proposal", "prohibited_action_class", "disallowed_data_source", "inadmissible_evidence", "inadmissible_memory", "unsafe_tool_path", "coercion_signal", "incentive_conflict", "continuity_break", "policy_ineligible_action", "missing_authority_context", "missing_principal", "missing_accountable_owner", "unsupported_jurisdiction"] },
+      "items": {
+        "enum": [
+          "invalid_intent",
+          "ambiguous_intent",
+          "out_of_scope_proposal",
+          "prohibited_action_class",
+          "disallowed_data_source",
+          "inadmissible_evidence",
+          "inadmissible_memory",
+          "unsafe_tool_path",
+          "coercion_signal",
+          "incentive_conflict",
+          "continuity_break",
+          "policy_ineligible_action",
+          "missing_authority_context",
+          "missing_principal",
+          "missing_accountable_owner",
+          "unsupported_jurisdiction"
+        ]
+      },
       "uniqueItems": true
     },
     "matched_inadmissibility_classes": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "uniqueItems": true
     },
-    "hash": { "type": "string" },
+    "hash": {
+      "type": "string"
+    },
     "signature": {
       "type": "object",
-      "required": ["algorithm", "key_id"],
+      "required": [
+        "algorithm",
+        "key_id"
+      ],
       "additionalProperties": false,
       "properties": {
-        "algorithm": { "enum": ["ed25519", "ecdsa-p256", "rs256"] },
-        "key_id": { "type": "string" },
-        "signature": { "type": "string" }
+        "algorithm": {
+          "enum": [
+            "ed25519",
+            "ecdsa-p256",
+            "rs256"
+          ]
+        },
+        "key_id": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "audit_chain_ref": { "type": "string" },
-    "generated_at": { "type": "string", "format": "date-time" }
+    "audit_chain_ref": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

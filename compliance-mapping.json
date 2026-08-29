@@ -4,12 +4,19 @@
   "title": "KYE Compliance Mapping Rail™",
   "description": "Single-document binding of one regulatory framework's controls / obligations to the KYE Protocol™ runtime events, audit events, and evidence packs that produce evidence for them. Used by the evidence-pack exporter, the conformance reporter, and the Notified-Body / auditor / GRC audit interface.",
   "type": "object",
-  "required": ["schema_version", "framework", "control_ref", "kye_controls"],
+  "required": [
+    "schema_version",
+    "framework",
+    "control_ref",
+    "kye_controls"
+  ],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["kye.compliance_mapping.v1"]
+      "enum": [
+        "kye.compliance_mapping.v1"
+      ]
     },
     "framework": {
       "type": "string",
@@ -38,13 +45,19 @@
         "LEI"
       ]
     },
-    "framework_version": { "type": "string" },
+    "framework_version": {
+      "type": "string"
+    },
     "control_ref": {
       "type": "string",
       "description": "Identifier of the obligation / control / article inside the named framework (e.g. AIA_HIGH_RISK_LOGGING, ISO27001_A_8_15, NIST_RMF_GOVERN_2_1, SOC2_CC1_5)."
     },
-    "control_title":   { "type": "string" },
-    "control_summary": { "type": "string" },
+    "control_title": {
+      "type": "string"
+    },
+    "control_summary": {
+      "type": "string"
+    },
     "kye_controls": {
       "type": "array",
       "minItems": 1,
@@ -56,7 +69,9 @@
     },
     "evidence_events": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "evidence_pack": {
       "type": "string",
@@ -66,22 +81,39 @@
     "kye_profiles_required": {
       "type": "array",
       "description": "Profile IDs that must be active for this mapping to be valid.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "policy_bundle_refs": {
       "type": "array",
       "description": "Rego / Cerbos policy bundle URNs that enforce the control at runtime.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "applicable_sector_profiles": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "applies_to_entity_types": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
-    "retention_minimum_days": { "type": "integer", "minimum": 0 },
-    "notes": { "type": "string" }
+    "retention_minimum_days": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

@@ -64,6 +64,10 @@
             ]
           },
           "uniqueItems": true
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
         }
       }
     },
@@ -102,7 +106,7 @@
           "qualification": {
             "type": "string",
             "pattern": "^[a-z][a-z0-9_]*$",
-            "description": "Competence this involvement point requires of the human. MUST resolve to a term in kye:dictionary:competences (internal) \u2014 the SAME vocabulary kye.decision_right.v1 limits.requires_competence resolves to. Previously an unconstrained string carrying prose such as 'Authorised payment approver', which no resolver could evaluate against a holder: a competence requirement that cannot be checked is a competence requirement that is not enforced."
+            "description": "Competence this involvement point requires of the human. MUST resolve to a term in kye:dictionary:competences (internal) — the SAME vocabulary kye.decision_right.v1 limits.requires_competence resolves to. Previously an unconstrained string carrying prose such as 'Authorised payment approver', which no resolver could evaluate against a holder: a competence requirement that cannot be checked is a competence requirement that is not enforced."
           },
           "involvement_type": {
             "enum": [
@@ -138,6 +142,10 @@
             "items": {
               "type": "string"
             }
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
@@ -155,6 +163,10 @@
         },
         "emit_signal_event": {
           "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
         }
       }
     },
@@ -164,6 +176,10 @@
         "active",
         "deprecated"
       ]
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

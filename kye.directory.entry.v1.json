@@ -5,7 +5,15 @@
   "description": "Public directory record for a KYE-registered entity. The minimum projection that lets a counterparty discover, classify, and verify another entity without leaking sensitive metadata. Indexed by Discovery; gated by Discoverability policy.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["kyeid", "class", "trust_domain", "certification_tier", "jurisdiction", "public", "indexed_at"],
+  "required": [
+    "kyeid",
+    "class",
+    "trust_domain",
+    "certification_tier",
+    "jurisdiction",
+    "public",
+    "indexed_at"
+  ],
   "properties": {
     "kyeid": {
       "type": "string",
@@ -23,13 +31,22 @@
     },
     "certification_tier": {
       "type": "string",
-      "enum": ["none", "self_attested", "bronze", "silver", "gold", "platinum"],
+      "enum": [
+        "none",
+        "self_attested",
+        "bronze",
+        "silver",
+        "gold",
+        "platinum"
+      ],
       "description": "Certification tier currently held by the entity. Determines downstream policy treatment."
     },
     "jurisdiction": {
       "type": "array",
       "minItems": 1,
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "ISO-3166 jurisdictions the entity is legally seated/registered in."
     },
     "public": {
@@ -51,7 +68,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["kind", "url"],
+        "required": [
+          "kind",
+          "url"
+        ],
         "properties": {
           "kind": {
             "type": "string",
@@ -61,9 +81,17 @@
             "type": "string",
             "format": "uri",
             "description": "Endpoint URL."
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

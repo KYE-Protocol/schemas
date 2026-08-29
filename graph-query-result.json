@@ -16,7 +16,9 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["kye.graph_query_result.v1"]
+      "enum": [
+        "kye.graph_query_result.v1"
+      ]
     },
     "query_id": {
       "type": "string",
@@ -43,19 +45,45 @@
       "additionalProperties": true,
       "description": "Echo of the originating request parameters (source URN, target URN, depth, filters)."
     },
-    "issued_at": { "type": "string", "format": "date-time" },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
     "nodes": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["node_id", "node_type"],
+        "required": [
+          "node_id",
+          "node_type"
+        ],
         "additionalProperties": false,
         "properties": {
-          "node_id":   { "type": "string" },
-          "node_type": { "type": "string" },
-          "ref":       { "type": "string" },
-          "labels":    { "type": "array", "items": { "type": "string" } },
-          "state":     { "type": "object", "additionalProperties": { "type": "string" } }
+          "node_id": {
+            "type": "string"
+          },
+          "node_type": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "state": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+          }
         }
       }
     },
@@ -63,15 +91,41 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["from", "to", "edge_type"],
+        "required": [
+          "from",
+          "to",
+          "edge_type"
+        ],
         "additionalProperties": false,
         "properties": {
-          "from":         { "type": "string" },
-          "to":           { "type": "string" },
-          "edge_type":    { "type": "string" },
-          "state":        { "type": "string" },
-          "policy_refs":  { "type": "array", "items": { "type": "string" } },
-          "evidence_refs":{ "type": "array", "items": { "type": "string" } }
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "edge_type": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "policy_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+          }
         }
       }
     },
@@ -79,15 +133,42 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "node_count":   { "type": "integer", "minimum": 0 },
-        "edge_count":   { "type": "integer", "minimum": 0 },
-        "max_depth":    { "type": "integer", "minimum": 0 },
-        "result_status":{ "type": "string", "enum": ["complete", "truncated", "no_path", "error"] }
+        "node_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "edge_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_depth": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "result_status": {
+          "type": "string",
+          "enum": [
+            "complete",
+            "truncated",
+            "no_path",
+            "error"
+          ]
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "evidence_refs": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
     }
   }
 }

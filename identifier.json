@@ -3,16 +3,48 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["identifier_id", "entity_id", "identifier_type", "value_hash", "status"],
+  "required": [
+    "identifier_id",
+    "entity_id",
+    "identifier_type",
+    "value_hash",
+    "status"
+  ],
   "properties": {
-    "identifier_id": { "$ref": "common.json#/$defs/KyeId" },
-    "entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "identifier_type": { "type": "string" },
-    "value_hash": { "$ref": "common.json#/$defs/Hash" },
-    "display_hint": { "type": "string" },
-    "verified": { "type": "boolean" },
-    "verification_basis": { "type": "string" },
-    "status": { "enum": ["active", "superseded", "revoked"] },
-    "created_at": { "$ref": "common.json#/$defs/DateTime" }
+    "identifier_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "identifier_type": {
+      "type": "string"
+    },
+    "value_hash": {
+      "$ref": "common.json#/$defs/Hash"
+    },
+    "display_hint": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "verification_basis": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "superseded",
+        "revoked"
+      ]
+    },
+    "created_at": {
+      "$ref": "common.json#/$defs/DateTime"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

@@ -5,36 +5,94 @@
     "Statement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["statement_id", "subject_type", "subject_id", "issuer_entity_id", "statement_hash", "submitted_at"],
+      "required": [
+        "statement_id",
+        "subject_type",
+        "subject_id",
+        "issuer_entity_id",
+        "statement_hash",
+        "submitted_at"
+      ],
       "properties": {
-        "statement_id": { "$ref": "common.json#/$defs/KyeId" },
-        "subject_type": { "type": "string" },
-        "subject_id": { "$ref": "common.json#/$defs/KyeId" },
-        "issuer_entity_id": { "$ref": "common.json#/$defs/KyeId" },
-        "statement_hash": { "$ref": "common.json#/$defs/Hash" },
-        "payload": { "type": "object" },
-        "submitted_at": { "$ref": "common.json#/$defs/DateTime" }
+        "statement_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
+        "subject_type": {
+          "type": "string"
+        },
+        "subject_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
+        "issuer_entity_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
+        "statement_hash": {
+          "$ref": "common.json#/$defs/Hash"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "submitted_at": {
+          "$ref": "common.json#/$defs/DateTime"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "Receipt": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["receipt_id", "statement_id", "transparency_service_id", "issued_at"],
+      "required": [
+        "receipt_id",
+        "statement_id",
+        "transparency_service_id",
+        "issued_at"
+      ],
       "properties": {
-        "receipt_id": { "$ref": "common.json#/$defs/KyeId" },
-        "statement_id": { "$ref": "common.json#/$defs/KyeId" },
-        "transparency_service_id": { "$ref": "common.json#/$defs/KyeId" },
+        "receipt_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
+        "statement_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
+        "transparency_service_id": {
+          "$ref": "common.json#/$defs/KyeId"
+        },
         "inclusion_proof": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "tree_size": { "type": "integer", "minimum": 0 },
-            "leaf_hash": { "$ref": "common.json#/$defs/Hash" },
-            "proof_nodes": { "type": "array", "items": { "$ref": "common.json#/$defs/Hash" } }
+            "tree_size": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "leaf_hash": {
+              "$ref": "common.json#/$defs/Hash"
+            },
+            "proof_nodes": {
+              "type": "array",
+              "items": {
+                "$ref": "common.json#/$defs/Hash"
+              }
+            },
+            "entity_class": {
+              "type": "string",
+              "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+            }
           }
         },
-        "issued_at": { "$ref": "common.json#/$defs/DateTime" },
-        "signature": { "$ref": "common.json#/$defs/Signature" }
+        "issued_at": {
+          "$ref": "common.json#/$defs/DateTime"
+        },
+        "signature": {
+          "$ref": "common.json#/$defs/Signature"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     }
   }

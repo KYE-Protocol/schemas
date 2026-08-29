@@ -4,25 +4,74 @@
   "title": "KYE Prohibition",
   "description": "Standing rule — actor MUST NOT perform the prohibited capability under stated conditions. Stronger than a runtime deny: a deny is 'not allowed now', a prohibition is 'this class of action is forbidden under this authority model'.",
   "type": "object",
-  "required": ["schema_version", "prohibition_id", "subject_entity_id", "prohibited_capability", "effect", "status"],
+  "required": [
+    "schema_version",
+    "prohibition_id",
+    "subject_entity_id",
+    "prohibited_capability",
+    "effect",
+    "status"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.prohibition.v1" },
-    "prohibition_id": { "type": "string", "pattern": "^kye:prohibition:" },
-    "subject_entity_id": { "type": "string" },
-    "prohibited_capability": { "type": "string" },
-    "condition": { "type": "object", "additionalProperties": true },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.prohibition.v1"
+    },
+    "prohibition_id": {
+      "type": "string",
+      "pattern": "^kye:prohibition:"
+    },
+    "subject_entity_id": {
+      "type": "string"
+    },
+    "prohibited_capability": {
+      "type": "string"
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "effect": {
       "type": "object",
-      "required": ["decision", "reason_code"],
+      "required": [
+        "decision",
+        "reason_code"
+      ],
       "additionalProperties": false,
       "properties": {
-        "decision": { "enum": ["deny", "prohibited", "quarantine"] },
-        "reason_code": { "type": "string" },
-        "quarantine_request": { "type": "boolean" },
-        "generate_evidence_pack": { "type": "boolean" }
+        "decision": {
+          "enum": [
+            "deny",
+            "prohibited",
+            "quarantine"
+          ]
+        },
+        "reason_code": {
+          "type": "string"
+        },
+        "quarantine_request": {
+          "type": "boolean"
+        },
+        "generate_evidence_pack": {
+          "type": "boolean"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "status": { "enum": ["draft", "active", "deprecated"] }
+    "status": {
+      "enum": [
+        "draft",
+        "active",
+        "deprecated"
+      ]
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

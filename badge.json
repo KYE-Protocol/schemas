@@ -4,24 +4,90 @@
   "title": "KYE Conformance Badge",
   "description": "Public badge metadata for a KYE Conformance & Certification Program™ award. Issued only when backed by a signed certification-record.json. Verifiable via GET /v1/badges/{badge_id}/verify.",
   "type": "object",
-  "required": ["schema_version", "badge_id", "level", "product_name", "product_version", "issued_at", "expires_at", "verification_url", "status"],
+  "required": [
+    "schema_version",
+    "badge_id",
+    "level",
+    "product_name",
+    "product_version",
+    "issued_at",
+    "expires_at",
+    "verification_url",
+    "status"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version":     { "type": "string", "enum": ["kye.badge.v1"] },
-    "badge_id":           { "type": "string", "pattern": "^kye:badge:.+" },
-    "level":              { "type": "string" },
-    "label":              { "type": "string", "description": "Human label, e.g. 'KYE Authority Conformant™'" },
-    "product_name":       { "type": "string" },
-    "product_version":    { "type": "string" },
-    "organisation_entity_id": { "type": "string" },
-    "certification_id":   { "type": "string", "pattern": "^kye:cert:.+" },
-    "protocol_version":   { "type": "string" },
-    "profiles":           { "type": "array", "items": { "type": "string" } },
-    "issued_at":          { "type": "string", "format": "date-time" },
-    "expires_at":         { "type": "string", "format": "date-time" },
-    "status":             { "type": "string", "enum": ["valid", "expired", "revoked", "self_attested"] },
-    "badge_svg_url":      { "type": "string", "format": "uri" },
-    "verification_url":   { "type": "string", "format": "uri" },
-    "registry_listing_url":{ "type": "string", "format": "uri" }
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "kye.badge.v1"
+      ]
+    },
+    "badge_id": {
+      "type": "string",
+      "pattern": "^kye:badge:.+"
+    },
+    "level": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string",
+      "description": "Human label, e.g. 'KYE Authority Conformant™'"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "product_version": {
+      "type": "string"
+    },
+    "organisation_entity_id": {
+      "type": "string"
+    },
+    "certification_id": {
+      "type": "string",
+      "pattern": "^kye:cert:.+"
+    },
+    "protocol_version": {
+      "type": "string"
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "valid",
+        "expired",
+        "revoked",
+        "self_attested"
+      ]
+    },
+    "badge_svg_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "verification_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "registry_listing_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

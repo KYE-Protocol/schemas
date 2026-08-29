@@ -3,16 +3,51 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["relationship_id", "source_entity_id", "relationship_type", "target_entity_id", "status"],
+  "required": [
+    "relationship_id",
+    "source_entity_id",
+    "relationship_type",
+    "target_entity_id",
+    "status"
+  ],
   "properties": {
-    "relationship_id": { "$ref": "common.json#/$defs/KyeId" },
-    "source_entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "relationship_type": { "type": "string" },
-    "target_entity_id": { "$ref": "common.json#/$defs/KyeId" },
-    "evidence_refs": { "$ref": "common.json#/$defs/StringArray" },
-    "confidence": { "type": "integer", "minimum": 0, "maximum": 100 },
-    "valid_from": { "$ref": "common.json#/$defs/DateTime" },
-    "valid_until": { "$ref": "common.json#/$defs/DateTime" },
-    "status": { "enum": ["active", "pending", "revoked", "expired"] }
+    "relationship_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "source_entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "relationship_type": {
+      "type": "string"
+    },
+    "target_entity_id": {
+      "$ref": "common.json#/$defs/KyeId"
+    },
+    "evidence_refs": {
+      "$ref": "common.json#/$defs/StringArray"
+    },
+    "confidence": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "valid_from": {
+      "$ref": "common.json#/$defs/DateTime"
+    },
+    "valid_until": {
+      "$ref": "common.json#/$defs/DateTime"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "pending",
+        "revoked",
+        "expired"
+      ]
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

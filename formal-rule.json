@@ -4,50 +4,186 @@
   "title": "KYE Formal Rule",
   "description": "One canonical formal rule of any family (permission, obligation, prohibition, power, immunity, exception, meta_governance). Carries the normative effect, applicability scope, trigger condition, violation effect and required evidence.",
   "type": "object",
-  "required": ["schema_version", "rule_id", "rule_type", "display_name", "applies_to", "normative_effect", "status"],
+  "required": [
+    "schema_version",
+    "rule_id",
+    "rule_type",
+    "display_name",
+    "applies_to",
+    "normative_effect",
+    "status"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "type": "string", "const": "kye.formal_rule.v1" },
-    "rule_id": { "type": "string", "pattern": "^kye:rule:" },
-    "rule_type": { "enum": ["permission", "obligation", "prohibition", "power", "immunity", "exception", "meta_governance"] },
-    "display_name": { "type": "string" },
-    "description": { "type": "string" },
+    "schema_version": {
+      "type": "string",
+      "const": "kye.formal_rule.v1"
+    },
+    "rule_id": {
+      "type": "string",
+      "pattern": "^kye:rule:"
+    },
+    "rule_type": {
+      "enum": [
+        "permission",
+        "obligation",
+        "prohibition",
+        "power",
+        "immunity",
+        "exception",
+        "meta_governance"
+      ]
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
     "applies_to": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "actor_types": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "principal_entity_ids": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "capabilities": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "profiles": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-        "sector": { "type": "string" }
+        "actor_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "principal_entity_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "sector": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "condition": { "type": "object", "additionalProperties": true },
+    "condition": {
+      "type": "object",
+      "additionalProperties": true
+    },
     "normative_effect": {
       "type": "object",
-      "required": ["operator", "meaning"],
+      "required": [
+        "operator",
+        "meaning"
+      ],
       "additionalProperties": false,
       "properties": {
-        "operator": { "enum": ["P", "O", "F", "Pow", "Imm", "Ex"] },
-        "meaning": { "enum": ["permission", "obligation", "prohibition", "power", "immunity", "exception"] },
-        "required_action": { "type": "string" },
-        "permitted_action": { "type": "string" },
-        "prohibited_action": { "type": "string" }
+        "operator": {
+          "enum": [
+            "P",
+            "O",
+            "F",
+            "Pow",
+            "Imm",
+            "Ex"
+          ]
+        },
+        "meaning": {
+          "enum": [
+            "permission",
+            "obligation",
+            "prohibition",
+            "power",
+            "immunity",
+            "exception"
+          ]
+        },
+        "required_action": {
+          "type": "string"
+        },
+        "permitted_action": {
+          "type": "string"
+        },
+        "prohibited_action": {
+          "type": "string"
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
     "violation_effect": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "decision": { "enum": ["allow", "deny", "prohibited", "require_approval", "require_step_up", "quarantine"] },
-        "reason_code": { "type": "string" },
-        "obligations": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        "decision": {
+          "enum": [
+            "allow",
+            "deny",
+            "prohibited",
+            "require_approval",
+            "require_step_up",
+            "quarantine"
+          ]
+        },
+        "reason_code": {
+          "type": "string"
+        },
+        "obligations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
       }
     },
-    "evidence_requirements": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
-    "priority": { "type": "integer", "minimum": 0, "maximum": 1000 },
-    "status": { "enum": ["draft", "active", "deprecated"] },
-    "created_at": { "type": "string", "format": "date-time" }
+    "evidence_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "active",
+        "deprecated"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "entity_class": {
+      "type": "string",
+      "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    }
   }
 }

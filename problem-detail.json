@@ -4,7 +4,12 @@
   "title": "KYE Problem Detail (RFC 7807) — Canonical HTTP Error Response Envelope",
   "description": "CANONICAL: the single error-response envelope every KYE™ API surface (gateway-worker, pep-express, pages-functions, rules-gateway, estate-engine, admin Functions) returns on every non-2xx HTTP response, with Content-Type: application/problem+json. Extends RFC 7807 with KYE-specific members for trace correlation, decision provenance, reason codes, field-level validation feedback, retry guidance, support links, and category-grouping. Per §0 (Zero Competing Systems) + §41 (Error Horizons) + §43 (Machine-Readable by Default), the per-error-code → http_status / category / sdk_throw_class / retry_class binding lives in internal; the reason_code enum (a.k.a. error code) lives in internal (extended with http_status + category columns). Wave-ErrorsEnvelope (2026-05-30) consolidated four divergent runtime shapes — `{error, detail}` (gateway-worker), `{error: {code, reason}}` (pep-express), `{error, message}` (estate-engine), `{ok: false, error}` (pages-functions / admin Functions) — into this envelope and added field_errors / category / occurred_at / request_id / support_url / trace_id for SDK ergonomics.",
   "type": "object",
-  "required": ["type", "title", "status", "reason_code"],
+  "required": [
+    "type",
+    "title",
+    "status",
+    "reason_code"
+  ],
   "additionalProperties": true,
   "properties": {
     "type": {
@@ -52,12 +57,16 @@
     "supported_versions": {
       "type": "array",
       "description": "Set on 406 with reason_code=version_not_acceptable. Lists negotiable versions.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "supported_crypto_suites": {
       "type": "array",
       "description": "Set on 406 with reason_code=crypto_suite_not_acceptable.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "retry_after_seconds": {
       "type": "integer",
@@ -66,16 +75,30 @@
     },
     "see_also": {
       "type": "array",
-      "items": { "type": "string", "format": "uri" }
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
     },
     "obligations_violated": {
       "type": "array",
       "description": "When the error is an obligation enforcement failure, the obligation IDs that failed.",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     },
     "category": {
       "type": "string",
-      "enum": ["auth", "validation", "authority", "rate_limit", "dependency", "internal", "capacity", "deprecated"],
+      "enum": [
+        "auth",
+        "validation",
+        "authority",
+        "rate_limit",
+        "dependency",
+        "internal",
+        "capacity",
+        "deprecated"
+      ],
       "description": "Wave-ErrorsEnvelope: coarse-grained grouping used by SDKs to choose a throw class, by dashboards to colour-code, and by SLO scoring. MUST agree with the row in internal for this reason_code."
     },
     "request_id": {
@@ -103,7 +126,11 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["field", "code", "message"],
+        "required": [
+          "field",
+          "code",
+          "message"
+        ],
         "properties": {
           "field": {
             "type": "string",
@@ -116,6 +143,10 @@
           "message": {
             "type": "string",
             "description": "Human-readable message for the offending field. Safe to render in a form."
+          },
+          "entity_class": {
+            "type": "string",
+            "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
           }
         }
       }
