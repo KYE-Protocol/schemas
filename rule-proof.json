@@ -23,7 +23,8 @@
       "pattern": "^kye:rule-proof:"
     },
     "rule_set_id": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^kye:[a-z0-9-]+:[a-z0-9][a-z0-9:._-]*$"
     },
     "proof_status": {
       "enum": [

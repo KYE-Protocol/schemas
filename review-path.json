@@ -77,7 +77,8 @@
         "additionalProperties": false,
         "properties": {
           "step_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*$"
           },
           "required_role": {
             "type": "string"
