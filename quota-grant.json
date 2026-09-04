@@ -8,8 +8,8 @@
   "properties": {
     "quota_id":            { "type": "string", "pattern": "^kye:quota:[A-Za-z0-9_:.-]+$" },
     "schema_version":      { "const": "kye.quota_grant.v1" },
-    "principal_entity_id": { "type": "string" },
-    "authority_grant_id":  { "type": "string", "description": "Optional: bind the quota to a specific authority grant. Cascade revocation invalidates the quota." },
+    "principal_entity_id": { "type": "string", "pattern": "^kye:[a-z][a-z0-9-]*:[A-Za-z0-9_.:-]+$" },
+    "authority_grant_id":  { "type": "string", "pattern": "^kye:authority:[A-Za-z0-9_.:-]+$", "description": "Optional: bind the quota to a specific authority grant. Cascade revocation invalidates the quota." },
     "metric_name":         { "type": "string" },
     "limit":               { "type": "number", "exclusiveMinimum": 0 },
     "unit":                { "type": "string", "enum": ["count", "byte", "second", "millisecond", "request", "decision", "pack"] },
@@ -19,7 +19,7 @@
     "state":               { "enum": ["active", "exhausted", "frozen", "expired", "revoked"] },
     "valid_from":          { "type": "string", "format": "date-time" },
     "valid_until":         { "type": "string", "format": "date-time" },
-    "external_meter_id":   { "type": "string" },
+    "external_meter_id":   { "type": "string", "pattern": "^[A-Za-z0-9_.:-]{1,128}$", "description": "The meter id in the EXTERNAL provider's namespace (Stripe/Lago/Metronome/Orb), never a KYE URN. Bounded by charset and length so an empty, padded or injected value is rejected at the boundary it enters (§0.9)." },
     "external_meter_provider": { "type": "string", "enum": ["stripe", "lago", "metronome", "orb", "internal"] }
   }
 }
