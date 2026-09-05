@@ -164,6 +164,58 @@
     "entity_class": {
       "type": "string",
       "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+    },
+    "agent_of_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "designation_state",
+        "accountable_owner"
+      ],
+      "description": "OPTIONAL of-record DESIGNATION over this grant — which agent is ANSWERABLE for the authority this grant confers. Applies where `grantee` is an agent-class principal (kye:agent:*). §0 non-competition: this is NOT a second authority model and NOT a parallel holder registry — the grant itself remains the one source of authority truth (who may act, over what scope, until when, revocable via revocation_chain). This object adds only the singular-accountability question the grant deliberately does not answer, because a grant is many-to-one: several agents may each hold a valid, unrevoked grant over the same action scope, and exactly one of them is of record for it (the merchant-of-record shape). Vocabulary: kye:dictionary:agent-native-principal (agent_of_record · agent_of_record_designation_state · agent_of_record_accountable_owner · agent_of_record_singularity). §0.30 · §52.",
+      "properties": {
+        "designation_state": {
+          "type": "string",
+          "enum": [
+            "of-record",
+            "delegate",
+            "standby",
+            "superseded"
+          ],
+          "description": "Term from kye:dictionary:agent-native-principal `agent_of_record_designation_state`. Only `of-record` asserts accountability; `delegate` and `standby` hold a valid grant without it; `superseded` records a past designation so the accountability timeline stays walkable (§13 replay) instead of being overwritten."
+        },
+        "accountable_owner": {
+          "$ref": "#/$defs/principalId",
+          "description": "KYEID of the named human or role principal who remains personally accountable for what this agent does. Accountability does not transfer to the AI (§0.30). Expected to match the `accountable_owner` already declared for this agent in internal — this field POINTS at that owner, it does not mint a second one (§0.49)."
+        },
+        "of_record_for": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "description": "The authority scope this designation is of record FOR, as action verbs drawn from this grant's own `scope.actions`. Present so a designation narrower than the grant is expressible; absent means the designation covers the whole of `scope.actions`."
+        },
+        "agent_of_record_ref": {
+          "type": "string",
+          "pattern": "^kye:authority:[A-Za-z0-9._:-]+$",
+          "description": "REQUIRED IN MEANING when designation_state is `delegate` or `standby`: the grant id carrying the `of-record` designation this grant defers to. A delegate that names no agent of record leaves the authority with a permission and no answerable party, which is the state this designation exists to abolish."
+        },
+        "superseded_by": {
+          "type": "string",
+          "pattern": "^kye:authority:[A-Za-z0-9._:-]+$",
+          "description": "For designation_state=`superseded`: the grant id that took over the of-record designation. Makes a handover an ordered transition rather than an overwrite (`agent_of_record_singularity`)."
+        },
+        "designated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When this designation took effect. Distinct from `issued_at`: an agent can be granted authority before it becomes the agent of record for it."
+        },
+        "entity_class": {
+          "type": "string",
+          "description": "§0.36 limb (c) self-declared artefact class — a term in kye:dictionary:entity-id-classes (membership enforced by admission-control; §0.49)."
+        }
+      }
     }
   },
   "$defs": {
