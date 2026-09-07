@@ -34,7 +34,8 @@
         "additionalProperties": false,
         "properties": {
           "model_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^kye:model:[a-z0-9][a-z0-9._-]*$"
           },
           "version": {
             "type": "string"
@@ -65,7 +66,8 @@
         "additionalProperties": false,
         "properties": {
           "dataset_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^kye:dataset:[a-z0-9][a-z0-9._:/-]*$"
           },
           "version": {
             "type": "string"
@@ -112,7 +114,8 @@
         "additionalProperties": false,
         "properties": {
           "supplier_id": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^kye:supplier:[a-z0-9][a-z0-9_-]*$"
           },
           "verified": {
             "type": "boolean"
