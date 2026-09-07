@@ -19,6 +19,10 @@
     "revocation_chain"
   ],
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The instance names its contract (\u00a743 \u00b7 \u00a70.18 contract-first at t=0). Carried INSIDE the signed payload of an issued record so a verifier that reconstructs record-minus-signature still verifies."
+    },
     "id": {
       "type": "string",
       "pattern": "^kye:authority:[A-Za-z0-9._:-]+$",
