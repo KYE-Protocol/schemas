@@ -91,7 +91,29 @@
       }
     },
     "context": {
-      "type": "object"
+      "type": "object",
+      "description": "Decision context the rules read (amount, jurisdiction, …). `units_by_metric` declares what the action would consume, keyed by quota metric_name, for the PDP's consumption stage."
+    },
+    "purpose_class_id": {
+      "type": "string",
+      "description": "Purpose class the action is claimed under. Checked by the PDP's purpose stage against the purpose classes the tenant's active policy set declares; a class the policy set does not declare is refused (purpose_class_not_found).",
+      "pattern": "^kye:purpose-class:[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "authority_grant_id": {
+      "type": "string",
+      "description": "The mandate this action is taken under, so the PDP's consumption stage can find the quota grants bounding it.",
+      "pattern": "^kye:authority(?:_grant)?:[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "policy_set_id": {
+      "type": "string",
+      "description": "Pin the decision to one of the tenant's policy sets. Absent: the tenant's most recently created, unrevoked policy set.",
+      "pattern": "^kye:(?:policy-set|pol):[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "request_id": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Caller correlation id. Recorded on the evidence; it is NOT part of decision identity, so two identical questions share one decision_id.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]*$"
     },
     "entity_class": {
       "type": "string",
